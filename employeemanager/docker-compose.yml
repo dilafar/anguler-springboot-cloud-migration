@@ -1,0 +1,30 @@
+services:
+  employeedb:
+    image: mysql
+    container_name: employeedb
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      MYSQL_DATABASE: employeemanager
+      MYSQL_ROOT_PASSWORD: root
+
+  employees:
+    image: "fadhiljr/nginxapp:employee-backend-v9"
+    container_name: employee
+    ports:
+      - "8080:8080"
+    depends_on:
+      employeedb:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "employee"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://employeedb:3306/employeemanager"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+
