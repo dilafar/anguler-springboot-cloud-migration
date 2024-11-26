@@ -14,14 +14,14 @@
 
     - name: clone github repository
       git:
-        repo: 'git@github.com:dilafar/angular-aws-cloud.git'
+        repo: 'git@github.com:dilafar/anguler-springboot-aws-migration.git'
         dest: ./app-repo
         version: master
       register: git_status
 
     - name: Replace apiServerUrl with the new value
       lineinfile:
-        path: "/home/ubuntu/app-repo/src/environments/environment.ts"
+        path: "/home/ubuntu/app-repo/employeemanagerfrontend/src/environments/environment.ts"
         regexp: '^(\s*apiServerUrl:\s*").*(?=")'
         line: '  apiServerUrl: "{{eb_dns_output.stdout}}/api"'
         backup: yes
