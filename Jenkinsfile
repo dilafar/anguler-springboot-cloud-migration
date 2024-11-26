@@ -16,7 +16,7 @@ pipeline{
     stages{
         stage("Build"){
             steps{
-                dir('backend') {
+                dir('employeemanager') {
                      sh 'mvn clean package'
                 }
             }
@@ -24,7 +24,7 @@ pipeline{
 
         stage("Checkstyle Analysis"){
             steps{
-                 dir('backend') {
+                 dir('employeemanager') {
                         sh 'mvn checkstyle:checkstyle'
                  }
                
@@ -36,7 +36,7 @@ pipeline{
                 scannerHome = tool 'sonar6.2'
             }
             steps{
-                dir('backend') {
+                dir('employeemanager') {
                     script {
                         withSonarQubeEnv('sonar') {
                                 sh '''${scannerHome}/bin/sonar-scanner \
@@ -58,7 +58,7 @@ pipeline{
 
         stage("Quality Gate"){
             steps{
-                dir('backend') {
+                dir('employeemanager') {
                     timeout(time: 1, unit: 'HOURS'){
                     waitForQualityGate abortPipeline: true
                 }
@@ -68,7 +68,7 @@ pipeline{
 
         stage("Upload Artifacts"){
             steps {
-                dir('backend') {
+                dir('employeemanager') {
                     nexusArtifactUploader(
                                 nexusVersion: 'nexus3',
                                 protocol: 'http',
@@ -91,7 +91,7 @@ pipeline{
 
         stage("Deploy to stage bean"){
            steps {
-                dir('backend') {
+                dir('employeemanager') {
                     withAWS(credentials: 'awsbeancreds', region: 'us-east-1') {
                     sh 'aws s3 cp ./target/employeemanager-0.0.1-SNAPSHOT.jar s3://$AWS_S3_BUCKET/$ARTIFACT_NAME'
                     sh 'aws elasticbeanstalk create-application-version --application-name $AWS_EB_APP_NAME --version-label $AWS_EB_APP_VERSION --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$ARTIFACT_NAME'
