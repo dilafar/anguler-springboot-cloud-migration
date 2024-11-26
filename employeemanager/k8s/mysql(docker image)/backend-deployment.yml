@@ -29,7 +29,7 @@ spec:
             - name: SPRING_APPLICATION_NAME
               value: "employee"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://mysql:3306/employeemanager"
+              value: "jdbc:mysql://mysql-service:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
               value: "root"
             - name: SPRING_DATASOURCE_PASSWORD
