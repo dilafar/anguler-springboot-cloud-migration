@@ -158,12 +158,14 @@ pipeline{
             steps {
                 script {
                     sshagent(['git-ssh-auth']) {
-                        sh '''
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
                                 git add .
-                                git commit -m "latest commit changes"
-                                git push origin HEAD:master                              
-                          '''
+                                git commit -m "change added"
+                                git push origin HEAD:master
+                            '''
                     }
                 }
             }
