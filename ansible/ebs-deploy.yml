@@ -24,4 +24,3 @@
         path: "/home/ubuntu/app-repo/employeemanagerfrontend/src/environments/environment.ts"
         regexp: '^(\s*apiServerUrl:\s*").*(?=")'
         line: '  apiServerUrl: "{{eb_dns_output.stdout}}/api"'
-        backup: yes
