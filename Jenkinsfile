@@ -134,9 +134,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v17 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v18 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v17'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v18'
                         }         
                     }
               }
@@ -147,12 +147,30 @@ pipeline{
             steps{
                 dir('k8s') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v17#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v18#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"       
                     }
               }
            }
         }
+
+        stage("Kubernetes Apply"){
+            environment {
+                AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
+                AZURE_CLIENT_ID = credentials('azure-client-id')
+                AZURE_CLIENT_SECRET = credentials('azure-client-secret')
+                AZURE_TENANT_ID = credentials('azure-tenant-id')
+            }
+            steps{
+                    script {
+                         sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
+                         sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
+                         sh "kubectl apply -k kustomization/"
+                    }
+                }
+
+        }
+
 
         stage("commit change") {
             steps {
