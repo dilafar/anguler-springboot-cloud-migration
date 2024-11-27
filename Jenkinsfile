@@ -134,9 +134,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v16 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v17 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v16'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v17'
                         }         
                     }
               }
@@ -147,7 +147,7 @@ pipeline{
             steps{
                 dir('k8s') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v16#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v17#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"       
                     }
               }
@@ -155,13 +155,20 @@ pipeline{
         }
 
         stage("commit change") {
-            steps{
-                    script {
-                        sh 'git add .'    
-                        sh 'git commit -m "latest commit changes"'
-                        sh 'git push -u origin master'    
-                    }
-           }
+            steps {
+                script {
+                    sh '''
+                        git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                        if [[ $(git status --porcelain) ]]; then
+                            git add .
+                            git commit -m "latest commit changes"
+                            git push -u origin master
+                        else
+                            echo "No changes to commit."
+                        fi
+                    '''
+                }
+            }
         }
 
     }
