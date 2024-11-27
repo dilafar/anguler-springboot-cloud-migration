@@ -154,5 +154,15 @@ pipeline{
            }
         }
 
+        stage("commit change") {
+            steps{
+                    script {
+                        sh 'git add .'    
+                        sh 'git commit -m "latest commit changes"'
+                        sh 'git push -u origin master'    
+                    }
+           }
+        }
+
     }
 }
