@@ -134,8 +134,8 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withDockerRegistry(credentialsId: 'docker', url: '') {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v13 .'
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v13'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v14 .'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v14'
                         }           
                     }
               }
