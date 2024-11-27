@@ -162,7 +162,7 @@ pipeline{
                         if [[ $(git status --porcelain) ]]; then
                             git add .
                             git commit -m "latest commit changes"
-                            git push -u origin master
+                            git push origin HEAD:master
                         else
                             echo "No changes to commit."
                         fi
