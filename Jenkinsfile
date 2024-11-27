@@ -133,10 +133,11 @@ pipeline{
             steps{
                 dir('employeemanagerfrontend') {
                     script {
-                        withDockerRegistry(credentialsId: 'docker', url: '') {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v14 .'
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v14'
-                        }           
+                        withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v15 .'
+                            sh "echo $PASS | docker login -u $USER --password-stdin"
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v15'
+                        }         
                     }
               }
            }
