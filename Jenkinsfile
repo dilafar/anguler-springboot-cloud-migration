@@ -160,13 +160,9 @@ pipeline{
                     sshagent(['git-ssh-auth']) {
                         sh '''
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                if [[ $(git status --porcelain) ]]; then
-                                    git add .
-                                    git commit -m "latest commit changes"
-                                    git push origin HEAD:master
-                                else
-                                    echo "No changes to commit."
-                                fi
+                                git add .
+                                git commit -m "latest commit changes"
+                                git push origin HEAD:master                              
                           '''
                     }
                 }
