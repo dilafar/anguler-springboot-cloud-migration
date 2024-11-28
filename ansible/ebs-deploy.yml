@@ -23,4 +23,4 @@
       lineinfile:
         path: "/home/ubuntu/app-repo/employeemanagerfrontend/src/environments/environment.ts"
         regexp: '^(\s*apiServerUrl:\s*").*(?=")'
-        line: '  apiServerUrl: "{{eb_dns_output.stdout}}/api"'
+        line: '  apiServerUrl: "http://{{eb_dns_output.stdout}}/api"'
