@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiServerUrl: "http://employee-test.us-east-1.elasticbeanstalk.com/api"
+  apiServerUrl: "http://localhost:8080/api"
 };
