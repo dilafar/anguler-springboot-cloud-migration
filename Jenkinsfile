@@ -134,9 +134,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v19 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v20 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v19'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v20'
                         }         
                     }
               }
@@ -145,9 +145,9 @@ pipeline{
 
         stage("change image in kubeconfig") {
             steps{
-                dir('k8s') {
+                dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v19#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v20#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"       
                     }
               }
