@@ -21,6 +21,8 @@ kubectl config current-context
 
 echo "Test kubeconfig.................."
 
-kubectl auth can-i create service --as=system:serviceaccount:employee:jenkins -n employee
+kubectl auth can-i get pods --as=system:serviceaccount:employee:jenkins
+kubectl auth can-i get service --as=system:serviceaccount:employee:jenkins
+kubectl auth can-i create service --as=system:serviceaccount:employee:jenkins
 
 kubectl get pods -n employee
