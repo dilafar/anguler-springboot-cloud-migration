@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
         - name: employee-frontend
-          image: replace
+          image: fadhiljr/nginxapp:employee-frontend-v27
           ports:
             - containerPort: 80
