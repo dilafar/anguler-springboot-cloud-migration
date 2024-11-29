@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubectl apply -f jenkins-setup.yaml
+kubectl apply -f jenkins-setup.yml
 
 JENKINS_TOKEN=$(kubectl get secret jenkins-token -n employee -o jsonpath='{.data.token}' | base64 --decode)
 
