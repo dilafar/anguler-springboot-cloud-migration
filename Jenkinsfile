@@ -134,9 +134,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v27 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v28 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v27'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v28'
                         }         
                     }
               }
@@ -147,7 +147,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v27#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v28#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -194,6 +194,10 @@ pipeline{
                     '''
                     sh "./kubernetes-script.sh"
                     sh "kubectl config view"
+                    sh "cat kustomization/frontend-deployment.yml"
+                    sh "cat kustomization/frontend-service.yml"
+                    sh "kubectl apply -k kustomization/"
+                    sh "kubectl get pods -n employee"
                 }
             }
         }
