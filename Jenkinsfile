@@ -134,9 +134,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v28 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v29 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v28'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v29'
                         }         
                     }
               }
@@ -147,7 +147,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v28#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v29#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }

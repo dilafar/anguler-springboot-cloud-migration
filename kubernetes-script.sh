@@ -18,4 +18,9 @@ kubectl config set-context ${JENKINS_USER}@${CLUSTER_NAME} \
 kubectl config use-context ${JENKINS_USER}@${CLUSTER_NAME}
 
 kubectl config current-context
+
+echo "Test kubeconfig.................."
+
+kubectl auth can-i create service --as=system:serviceaccount:employee:jenkins -n employee
+
 kubectl get pods -n employee
