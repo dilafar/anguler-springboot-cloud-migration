@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check-suppression.1.4.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-check-suppression.1.4.xsd https://jeremylong.github.io/DependencyCheck/dependency-check-suppression.1.4.xsd">
+
     <!-- Suppression for specific CVEs -->
     <suppress>
         <cve>CVE-2024-45801</cve>
@@ -33,4 +36,5 @@
         <cve>CVE-2024-45801</cve>
         <cve>CVE-2024-47875</cve>
     </suppress>
+
 </suppressions>
