@@ -183,7 +183,7 @@ pipeline{
                 script {
                     sshagent(['git-ssh-auth']) {
                             sh '''
-                                sudo rm -rf trivy
+                                rm -rf trivy
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
