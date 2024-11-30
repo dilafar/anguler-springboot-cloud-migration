@@ -134,20 +134,19 @@ pipeline{
         }
 
         stage("Vulnerability Scan - Docker") {
-                parallel (
-                    "Dependency Scan": {
-                        dir('employeemanager') {
-                            sh "mvn org.owasp:dependency-check-maven:check"
-                        }
-                    },
-                    "Trivy Scan": {
-                        dir('employeemanager') {
-                            sh "bash trivy-docker-image-scan.sh"
-                        }
+            parallel(
+                "Dependency Scan": {
+                    dir('employeemanager') {
+                        sh "mvn org.owasp:dependency-check-maven:check"
                     }
-                )
+                },
+                "Trivy Scan": {
+                    dir('employeemanager') {
+                        sh "bash trivy-docker-image-scan.sh"
+                    }
+                }
+            )
         }
-
 
         stage("nodejs image build") {
             steps{
