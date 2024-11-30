@@ -11,8 +11,10 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $WORKSPACE:/root
     if [[ "${exit_code}" == 1 ]]; then
         echo "Image scanning failed. Vulnerabilities found"
         rm -rf $WORKSPACE/.cache/trivy  
+        sudo rm -rf /var/lib/jenkins/workspace/my-pipeline/trivy
         exit 1
     else
         echo "Image scanning passed. No CRITICAL vulnerabilities found"
-        rm -rf $WORKSPACE/.cache/trivy  
+        rm -rf $WORKSPACE/.cache/trivy
+        sudo rm -rf /var/lib/jenkins/workspace/my-pipeline/trivy 
     fi;
