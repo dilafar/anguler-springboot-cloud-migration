@@ -149,7 +149,11 @@ pipeline{
                         },
                         "OPA Conftest":{
                             dir('employeemanager') {
-                                sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
+                                sh '''
+                                    docker run --rm \
+                                        -v $(pwd):/project \
+                                        openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile
+                                '''
                             }
                         },
                         "lint dockerfile":{
