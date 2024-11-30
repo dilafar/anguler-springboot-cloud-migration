@@ -134,11 +134,6 @@ pipeline{
         }
 
         stage("Vulnerability Scan - Docker") {
-            agent {
-                    docker {
-                        image 'hadolint/hadolint:latest-debian'
-                    }
-            }
             steps {
                 script {
                     parallel(
@@ -153,15 +148,15 @@ pipeline{
                             }
                         },
                         "OPA Conftest":{
-                            docker.image('hadolint/hadolint:latest-debian').inside {
-                                        dir('employeemanager') {
-                                            sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
-                                        }
+                            dir('employeemanager') {
+                                sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
                             }
                         },
                         "lint dockerfile":{
-                            dir('employeemanager') {
-                                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                            docker.image('hadolint/hadolint:latest-debian').inside {
+                                dir('employeemanager') {
+                                    sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                                }
                             }
                         }
                     )
