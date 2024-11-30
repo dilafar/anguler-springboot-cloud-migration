@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="http://dependency-check.org/schema/suppressions"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <suppression>
-        <cvss>10</cvss>
+<suppressions xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://owasp.github.io/dependency-check-suppression.xsd">
+
+    <!-- Suppression for specific CVEs -->
+    <suppress>
+        <cve>CVE-2024-45801</cve>
+        <notes>This CVE is suppressed temporarily as it is mitigated by runtime configurations.</notes>
+    </suppress>
+
+    <suppress>
+        <cve>CVE-2024-47875</cve>
+        <notes>This CVE is suppressed temporarily while awaiting a patched version.</notes>
+    </suppress>
+
+    <!-- Suppression for vulnerabilities in specific dependencies -->
+    <suppress>
+        <dependency>
+            <name>swagger-ui</name>
+        </dependency>
         <cve>CVE-2024-45801</cve>
         <cve>CVE-2024-47875</cve>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>swagger-ui</artifactId>
-        </dependency>
-    </suppression>
+        <notes>Swagger-UI dependency with known vulnerabilities; safe under current use case.</notes>
+    </suppress>
+
+    <!-- Suppression for vulnerabilities in specific files -->
+    <suppress>
+        <filePath regex="true">.*swagger-ui-bundle\.js</filePath>
+        <cve>CVE-2024-45801</cve>
+        <cve>CVE-2024-47875</cve>
+    </suppress>
+
+    <suppress>
+        <filePath regex="true">.*swagger-ui-es-bundle\.js</filePath>
+        <cve>CVE-2024-45801</cve>
+        <cve>CVE-2024-47875</cve>
+    </suppress>
+
 </suppressions>

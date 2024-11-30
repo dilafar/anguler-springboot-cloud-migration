@@ -94,10 +94,12 @@
 				<artifactId>dependency-check-maven</artifactId>
 				<version>11.1.0</version>
 				<configuration>
-        			<jvmArguments>-Djavax.xml.accessExternalSchema=all</jvmArguments>
 					<nvdApiKey>5f8e6fcf-001d-491b-a731-c4fbfc681cba</nvdApiKey>
 					<failBuildOnCVSS>8</failBuildOnCVSS>
-					<suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+					
+					 <suppressionFiles>
+       						 <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+    				</suppressionFiles>
 					<formats>
 						<format>HTML</format>
 						<format>JSON</format>
