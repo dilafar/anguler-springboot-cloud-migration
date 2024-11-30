@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions>
+    <suppress>
+        <cvss>10</cvss>
+        <cve>CVE-2024-45801</cve>
+        <cve>CVE-2024-47875</cve>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+        </dependency>
+    </suppress>
+</suppressions>
