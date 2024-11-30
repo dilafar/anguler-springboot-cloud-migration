@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="http://dependency-check.org/schema/suppressions"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://dependency-check.org/schema/suppressions http://dependency-check.org/schema/suppressions.xsd">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <suppression>
         <cvss>10</cvss>
         <cve>CVE-2024-45801</cve>
