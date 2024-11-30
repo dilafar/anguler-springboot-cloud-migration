@@ -95,6 +95,7 @@
 				<version>11.1.0</version>
 				<configuration>
 					<nvdApiKey>5f8e6fcf-001d-491b-a731-c4fbfc681cba</nvdApiKey>
+					<suppressionFile>dependency-check-suppressions.xml</suppressionFile>
 					<failBuildOnCVSS>11</failBuildOnCVSS>
 					<formats>
 						<format>HTML</format>
