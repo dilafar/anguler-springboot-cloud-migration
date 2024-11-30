@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions>
-    <suppress>
+    <suppression>
         <cvss>10</cvss>
         <cve>CVE-2024-45801</cve>
         <cve>CVE-2024-47875</cve>
@@ -8,5 +8,5 @@
             <groupId>org.webjars</groupId>
             <artifactId>swagger-ui</artifactId>
         </dependency>
-    </suppress>
+    </suppression>
 </suppressions>
