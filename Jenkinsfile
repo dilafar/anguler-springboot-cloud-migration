@@ -153,8 +153,10 @@ pipeline{
                             }
                         },
                         "OPA Conftest":{
-                            dir('employeemanager') {
-                                sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
+                            docker.image('hadolint/hadolint:latest-debian').inside {
+                                        dir('employeemanager') {
+                                            sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
+                                        }
                             }
                         },
                         "lint dockerfile":{
