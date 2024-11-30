@@ -10,7 +10,5 @@ RUN ng build --configuration production
 
 FROM nginx:stable
 WORKDIR /usr/share/nginx/html
-RUN addgroup --system pipeline && adduser --system --ingroup pipeline k8s-pipeline
-USER k8s-pipeline
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ .
 COPY --from=build /app/generated_openssl_cert/default.conf /etc/nginx/conf.d/default.conf

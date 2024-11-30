@@ -136,7 +136,7 @@ pipeline{
         stage("Vulnerability Scan - Docker") {
             steps {
                 dir('employeemanager') {
-                        sh "mvn org.owasp:dependency-check-maven:check -X"
+                        sh "mvn org.owasp:dependency-check-maven:check"
                 }
             }
         }
@@ -146,9 +146,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v32 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v33 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v32'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v33'
                         }         
                     }
               }
@@ -159,7 +159,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v32#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v33#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
