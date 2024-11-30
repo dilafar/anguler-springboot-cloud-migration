@@ -134,6 +134,11 @@ pipeline{
         }
 
         stage("Vulnerability Scan - Docker") {
+            agent {
+                    docker {
+                        image 'hadolint/hadolint:latest-debian'
+                    }
+            }
             steps {
                 script {
                     parallel(
@@ -146,6 +151,16 @@ pipeline{
                             dir('employeemanager') {
                                 sh "bash trivy-docker-image-scan.sh"
                             }
+                        },
+                        "OPA Conftest":{
+                            dir('employeemanager') {
+                                sh 'docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
+                            }
+                        },
+                        "lint dockerfile":{
+                            dir('employeemanager') {
+                                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                            }
                         }
                     )
                 }
@@ -157,9 +172,9 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v35 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v36 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v35'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v36'
                         }         
                     }
               }
@@ -170,7 +185,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v35#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v36#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -227,5 +242,12 @@ pipeline{
 
       
 
+    }
+
+    post {
+        always {
+            archiveArtifacts 'hadolint_lint.txt'
+            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
     }
 }
