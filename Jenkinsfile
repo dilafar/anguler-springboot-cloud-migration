@@ -22,6 +22,20 @@ pipeline{
             }
         }
 
+        stage('Unit Tests - JUnit and JaCoCo'){
+            steps {
+                dir('employeemanager') {
+                    sh "mvn test"
+                }
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    jacoco execPattern: 'target/jacoco.exec'
+                }
+            }
+        }
+
         stage("Checkstyle Analysis"){
             steps{
                  dir('employeemanager') {
@@ -46,25 +60,21 @@ pipeline{
                                             -Dsonar.sources=src/ \
                                             -Dsonar.host.url=http://172.48.16.144/ \
                                             -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
+                                            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                                            -Dsonar.junit.reportsPath=target/surefire-reports/ \
                                             -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
                                         '''
-                             }            
+                             }   
+                        timeout(time: 1, unit: 'HOURS'){
+                                    waitForQualityGate abortPipeline: true
+                        }         
                     }
             }
         }
 
             }
 
-        stage("Quality Gate"){
-            steps{
-                dir('employeemanager') {
-                    timeout(time: 1, unit: 'HOURS'){
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-            }
-        }
 
         stage("Upload Artifacts"){
             steps {
@@ -129,14 +139,22 @@ pipeline{
             }
         }
 
+        stage("Vulnerability Scan - Docker") {
+            steps {
+                dir('employeemanager') {
+                        sh "mvn dependency-check:check"
+                }
+            }
+        }
+
         stage("nodejs image build") {
             steps{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v31 .'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v32 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v31'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v32'
                         }         
                     }
               }
@@ -147,7 +165,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v31#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v32#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
