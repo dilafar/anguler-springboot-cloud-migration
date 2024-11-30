@@ -136,7 +136,7 @@ pipeline{
         stage("Vulnerability Scan - Docker") {
             steps {
                 dir('employeemanager') {
-                        sh "mvn org.owasp:dependency-check-maven:check"
+                        sh "mvn org.owasp:dependency-check-maven:check -X"
                 }
             }
         }

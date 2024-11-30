@@ -98,7 +98,7 @@
 					<failBuildOnCVSS>8</failBuildOnCVSS>
 					
 					 <suppressionFiles>
-       						 <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+       						 <suppressionFile>${project.basedir}/dependency-check-suppressions.xml</suppressionFile>
     				</suppressionFiles>
 					<formats>
 						<format>HTML</format>
