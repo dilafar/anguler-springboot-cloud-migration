@@ -14,14 +14,27 @@ pipeline{
         COSIGN_PASSWORD = credentials('cosign-password') 
         COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
+        SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
+        SEMGREP_PR_ID = "${env.CHANGE_ID}"
     }
 
     stages{
         stage("Build"){
             steps {
-                dir('employeemanager') {
-                     sh 'mvn clean package'
-                }
+                  script {
+                    parallel(
+                        "MVN Build": {
+                            dir('employeemanager') {
+                                    sh 'mvn clean package'
+                            }
+                        },
+                        "NPM Build": {
+                            dir('employeemanagerfrontend') {
+                                    sh 'npm install'
+                            }
+                        }
+                    )
+                  }
             }
         }
 
@@ -33,40 +46,67 @@ pipeline{
             }
         }
 
-        stage("Checkstyle Analysis"){
+        stage("Code Quality Analysis"){
             steps {
-                 dir('employeemanager') {
-                        sh 'mvn checkstyle:checkstyle'
-                 }
+                script {
+                    parallel(
+                        "Checkstyle Analysis": {
+                            dir('employeemanager') {
+                                sh 'mvn checkstyle:checkstyle'
+                            }
+                        },
+                        "njsscan": {
+                            dir('employeemanagerfrontend') {
+                                sh '''
+                                        pip3 install --upgrade njsscan
+                                        njsscan --exit-warning .
+                                   '''
+                            }
+                        }
+                    )    
+                    }
+                }
+                 
                
             }
-        }
+        
 
-        stage("sonar Analysis"){
+        stage("SAST - sonar Analysis"){
             environment {
                 scannerHome = tool 'sonar6.2'
             }
             steps {
-                dir('employeemanager') {
-                    script {
-                        withSonarQubeEnv('sonar') {
-                                sh '''${scannerHome}/bin/sonar-scanner \
-                                            -Dsonar.projectKey=employee \
-                                            -Dsonar.projectName=employee \
-                                            -Dsonar.projectVersion=1.0 \
-                                            -Dsonar.sources=src/ \
-                                            -Dsonar.host.url=http://172.48.16.144/ \
-                                            -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
-                                            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                                            -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                script {
+                    parallel(
+                         "sonar Analysis": {
+                                    dir('employeemanager') {
+                                                withSonarQubeEnv('sonar') {
+                                                    sh '''${scannerHome}/bin/sonar-scanner \
+                                                                -Dsonar.projectKey=employee \
+                                                                -Dsonar.projectName=employee \
+                                                                -Dsonar.projectVersion=1.0 \
+                                                                -Dsonar.sources=src/ \
+                                                                -Dsonar.host.url=http://172.48.16.144/ \
+                                                                -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
+                                                                -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                                                                -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                                                                -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                        '''
-                             }   
-                        timeout(time: 1, unit: 'HOURS'){
-                                    waitForQualityGate abortPipeline: true
-                        }         
-                    }
+                                                            '''
+                                                }   
+                                                timeout(time: 1, unit: 'HOURS'){
+                                                            waitForQualityGate abortPipeline: true
+                                                }         
+                                    }
+                                },
+                                "Semgrep": {
+                                    dir('employeemanagerfrontend') {
+                                            sh 'pip3 install semgrep'
+                                            sh 'semgrep ci'
+                                    }
+                                }
+
+                    )
             }
         }
 
@@ -175,13 +215,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v2 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v3 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v2'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v3'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v2)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v3)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -196,7 +236,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v2#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v3#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -291,3 +331,4 @@ pipeline{
         }
     }
 }
+
