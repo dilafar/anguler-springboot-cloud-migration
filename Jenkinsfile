@@ -18,7 +18,7 @@ pipeline{
 
     stages{
         stage("Build"){
-            steps{
+            steps {
                 dir('employeemanager') {
                      sh 'mvn clean package'
                 }
@@ -34,7 +34,7 @@ pipeline{
         }
 
         stage("Checkstyle Analysis"){
-            steps{
+            steps {
                  dir('employeemanager') {
                         sh 'mvn checkstyle:checkstyle'
                  }
@@ -46,7 +46,7 @@ pipeline{
             environment {
                 scannerHome = tool 'sonar6.2'
             }
-            steps{
+            steps {
                 dir('employeemanager') {
                     script {
                         withSonarQubeEnv('sonar') {
@@ -172,7 +172,7 @@ pipeline{
         }
 
         stage("nodejs image build") {
-            steps{
+            steps {
                 dir('employeemanagerfrontend') {
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
@@ -191,11 +191,12 @@ pipeline{
                                 '''
                             }
                     }
+               }
            }
         }
 
         stage("change image in kubeconfig") {
-            steps{
+            steps {
                 dir('kustomization') {
                     script {
                         sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v37#g' frontend-deployment.yml" 
