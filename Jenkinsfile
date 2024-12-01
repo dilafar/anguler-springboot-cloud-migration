@@ -160,11 +160,9 @@ pipeline{
                             }
                         },
                         "lint dockerfile":{
-                            docker.image('hadolint/hadolint:latest-debian').inside {
                                 dir('employeemanager') {
-                                    sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                                    sh 'docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint.txt'
                                 }
-                            }
                         }
                     )
                 }
@@ -177,13 +175,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v46 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v2 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v46'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v2'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v46)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v2)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -198,7 +196,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v46#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v2#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -209,13 +207,22 @@ pipeline{
         stage("Vulnerability Scan - kubernetes") {
             steps {
                 script {
-                   
-                             sh '''
-                                    docker run --rm \
-                                        -v $(pwd):/project \
-                                        openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
-                               '''
-                        }
+                        parallel (
+                            "Dependency Scan": {
+                                    sh '''
+                                        docker run --rm \
+                                            -v $(pwd):/project \
+                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                                    '''
+                            },
+                            "Trivy Scan": {
+                                    echo "trivy scan of docker file"
+                            },
+                            "docker CSI benchmark": {
+                                    echo "csi benchmark for build docker file using trivy"
+                            }
+                        )
+                    }
             }
         }
 

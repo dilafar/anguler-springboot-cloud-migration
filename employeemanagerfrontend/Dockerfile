@@ -1,4 +1,4 @@
-FROM node:23.3.0-slim AS build
+FROM 18.20-alpine3.19 AS build
 WORKDIR /app
 
 COPY package*.json ./
