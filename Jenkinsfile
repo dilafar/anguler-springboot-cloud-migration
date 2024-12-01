@@ -242,8 +242,6 @@ pipeline{
                                 '''
                                 sh "./kubernetes-script.sh"
                                 sh "kubectl config view"
-                                sh "kubectl version --client"
-                                sh "kubectl version --short"
                                 sh "cat kustomization/frontend-deployment.yml"
                                 sh "cat kustomization/frontend-service.yml"
                                 sh "kubectl apply -k kustomization/"
