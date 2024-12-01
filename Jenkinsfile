@@ -11,6 +11,9 @@ pipeline{
         AWS_EB_ENVIRONMENT = 'Employee-test-env'
         AWS_EB_APP_VERSION = "${BUILD_ID}"
         ARTIFACT_NAME = "employeemanager-v${BUILD_ID}.jar"
+        COSIGN_PASSWORD = credentials('cosign-password') 
+        COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
+        COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
     }
 
     stages{
@@ -173,9 +176,13 @@ pipeline{
                 dir('employeemanagerfrontend') {
                     script {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v36 .'
+                            sh 'docker system prune -a --volumes --force'
+                            sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v37 .'
                             sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v36'
+                            sh 'docker push fadhiljr/nginxapp:employee-frontend-v37'
+                            sh 'cosign version'
+                            sh 'cosign sign --key $COSIGN_PRIVATE_KEY fadhiljr/nginxapp:employee-frontend-v37'
+                            sh 'cosign verify --key $COSIGN_PUBLIC_KEY fadhiljr/nginxapp:employee-frontend-v37'
                         }         
                     }
               }
@@ -186,7 +193,7 @@ pipeline{
             steps{
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v36#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v37#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -247,7 +254,6 @@ pipeline{
 
     post {
         always {
-            archiveArtifacts 'hadolint_lint.txt'
             dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
         }
     }
