@@ -177,14 +177,16 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v39 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v40 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v39'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v40'
                                 sh 'cosign version'
 
                                 sh '''
-                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY fadhiljr/nginxapp:employee-frontend-v39
-                                    cosign verify --key $COSIGN_PUBLIC_KEY fadhiljr/nginxapp:employee-frontend-v39
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v37)
+                                    echo "Image Digest: $IMAGE_DIGEST"
+                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                 '''
                             }
                     }
@@ -196,7 +198,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v39#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v40#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -207,12 +209,13 @@ pipeline{
         stage("Vulnerability Scan - kubernetes") {
             steps {
                 script {
-                        sh '''
-                                docker run --rm \
-                                    -v $(pwd):/project \
-                                    openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
-                           '''
-                }
+                   
+                             sh '''
+                                    docker run --rm \
+                                        -v $(pwd):/project \
+                                        openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                               '''
+                        }
             }
         }
 
@@ -225,22 +228,30 @@ pipeline{
             }
             steps {
                 script {
-                    sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                    sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
-                    sh '''
-                        if [ ! -f kubernetes-script.sh ]; then
-                            echo "kubernetes-script.sh file is missing!" >&2
-                            exit 1
-                        fi
+                     parallel (
+                        "K8 - Deployment": {
+                                sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
+                                sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
+                                sh '''
+                                    if [ ! -f kubernetes-script.sh ]; then
+                                        echo "kubernetes-script.sh file is missing!" >&2
+                                        exit 1
+                                    fi
 
-                        chmod +x kubernetes-script.sh
-                    '''
-                    sh "./kubernetes-script.sh"
-                    sh "kubectl config view"
-                    sh "cat kustomization/frontend-deployment.yml"
-                    sh "cat kustomization/frontend-service.yml"
-                    sh "kubectl apply -k kustomization/"
-                    sh "kubectl get pods -n employee"
+                                    chmod +x kubernetes-script.sh
+                                '''
+                                sh "./kubernetes-script.sh"
+                                sh "kubectl config view"
+                                sh "cat kustomization/frontend-deployment.yml"
+                                sh "cat kustomization/frontend-service.yml"
+                                sh "kubectl apply -k kustomization/"
+                                sh "kubectl get pods -n employee"
+                        },
+                        "Rollout Status": {
+                                sh "bash k8s-deployment-rollout-status.sh"
+                        }
+
+                    )
                 }
             }
         }
