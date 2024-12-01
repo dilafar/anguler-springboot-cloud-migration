@@ -1,4 +1,4 @@
-FROM 18.20-alpine3.19 AS build
+FROM node:20.18-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
@@ -8,7 +8,7 @@ RUN npm install --no-cache && npm install -g @angular/cli
 COPY . .
 RUN ng build --configuration production
 
-FROM nginx:stable
+FROM nginx:stable-alpine-slim
 WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ .
