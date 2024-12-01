@@ -177,17 +177,14 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v37 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v38 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v37'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v38'
                                 sh 'cosign version'
 
-                                // Retrieve image digest
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v37)
-                                    echo "Image Digest: $IMAGE_DIGEST"
-                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY fadhiljr/nginxapp:employee-frontend-v38
+                                    cosign verify --key $COSIGN_PUBLIC_KEY fadhiljr/nginxapp:employee-frontend-v38
                                 '''
                             }
                     }
@@ -199,7 +196,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v37#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v38#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -260,7 +257,7 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            dependencyCheckPublisher pattern: 'target/dependency-check-report/dependency-check-report.json'
         }
     }
 }
