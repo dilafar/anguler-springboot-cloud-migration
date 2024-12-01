@@ -59,6 +59,7 @@ pipeline{
                             dir('employeemanagerfrontend') {
                                 sh '''
                                          sudo pip3 install --upgrade njsscan
+                                         export PATH=$PATH:$HOME/.local/bin
                                          njsscan --exit-warning .
                                    '''
                             }
