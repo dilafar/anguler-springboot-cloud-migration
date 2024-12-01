@@ -102,8 +102,11 @@ pipeline{
                                 },
                                 "Semgrep": {
                                     dir('employeemanagerfrontend') {
-                                            sh 'pip3 install semgrep'
-                                            sh 'semgrep ci'
+                                           sh '''
+                                                    pip3 install --user --upgrade semgrep
+                                                    export PATH=$PATH:$HOME/.local/bin
+                                                    semgrep ci
+                                              '''
                                     }
                                 }
 
