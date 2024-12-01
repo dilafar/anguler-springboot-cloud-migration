@@ -58,8 +58,8 @@ pipeline{
                         "njsscan": {
                             dir('employeemanagerfrontend') {
                                 sh '''
-                                        pip3 install --upgrade njsscan
-                                        njsscan --exit-warning .
+                                         sudo pip3 install --upgrade njsscan
+                                         njsscan --exit-warning .
                                    '''
                             }
                         }
