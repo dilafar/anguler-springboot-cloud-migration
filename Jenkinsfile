@@ -177,13 +177,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v43 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v44 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v43'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v44'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v43)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v44)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -198,7 +198,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v43#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v44#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -280,7 +280,7 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: '**/dependency-check-report.json'
+            dependencyCheckPublisher pattern: '**/dependency-check-report.html'
         }
     }
 }
