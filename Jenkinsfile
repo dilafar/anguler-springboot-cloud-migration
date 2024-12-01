@@ -177,14 +177,14 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v38 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v39 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v38'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v39'
                                 sh 'cosign version'
 
                                 sh '''
-                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY fadhiljr/nginxapp:employee-frontend-v38
-                                    cosign verify --key $COSIGN_PUBLIC_KEY fadhiljr/nginxapp:employee-frontend-v38
+                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY fadhiljr/nginxapp:employee-frontend-v39
+                                    cosign verify --key $COSIGN_PUBLIC_KEY fadhiljr/nginxapp:employee-frontend-v39
                                 '''
                             }
                     }
@@ -196,7 +196,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v38#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v39#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
@@ -204,20 +204,14 @@ pipeline{
            }
         }
 
-          stage("commit change") {
+        stage("Vulnerability Scan - kubernetes") {
             steps {
                 script {
-                    sshagent(['git-ssh-auth']) {
-                            sh '''
-                                mkdir -p ~/.ssh
-                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin master || true
-                                git add .
-                                git commit -m "change added"
-                                git push origin HEAD:master
-                            '''
-                    }
+                        sh '''
+                                docker run --rm \
+                                    -v $(pwd):/project \
+                                    openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                           '''
                 }
             }
         }
@@ -251,13 +245,31 @@ pipeline{
             }
         }
 
+        stage("commit change") {
+            steps {
+                script {
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin master || true
+                                git add .
+                                git commit -m "change added"
+                                git push origin HEAD:master
+                            '''
+                    }
+                }
+            }
+        }
+
       
 
     }
 
     post {
         always {
-            dependencyCheckPublisher pattern: 'target/dependency-check-report/dependency-check-report.json'
+            dependencyCheckPublisher pattern: '**/dependency-check-report.json'
         }
     }
 }
