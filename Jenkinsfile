@@ -186,7 +186,7 @@ pipeline{
                                 sh '''
                                     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v37)
                                     echo "Image Digest: $IMAGE_DIGEST"
-                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                 '''
                             }
