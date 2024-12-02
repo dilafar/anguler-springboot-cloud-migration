@@ -69,7 +69,7 @@ pipeline{
                 }
                 post {
                     always {
-                        archiveArtifacts artifacts: 'njsscan.sarif', allowEmptyArchive: true
+                        archiveArtifacts artifacts: '**/employeemanagerfrontend/njsscan.sarif', allowEmptyArchive: true
                         archiveArtifacts artifacts: '**/target/checkstyle-result.xml', allowEmptyArchive: true
                     }
                 }             
@@ -122,7 +122,7 @@ pipeline{
             }
             post {
                     always {
-                        archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
+                        archiveArtifacts artifacts: '**/employeemanagerfrontend/semgrep.json', allowEmptyArchive: true
                     }
                 }   
 
@@ -159,7 +159,6 @@ pipeline{
                             pip3 install --user urllib3==1.26.16
                             pip3 install --user --upgrade awscli botocore
                             export PATH=$HOME/.local/bin:$PATH
-                            aws s3 cp ./target/employeemanager-0.0.1-SNAPSHOT.jar s3://cicdbeans3/employeemanager-v72.jar
                         '''
                         sh 'aws s3 cp ./target/employeemanager-0.0.1-SNAPSHOT.jar s3://$AWS_S3_BUCKET/$ARTIFACT_NAME'
                         sh 'aws elasticbeanstalk create-application-version --application-name $AWS_EB_APP_NAME --version-label $AWS_EB_APP_VERSION --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$ARTIFACT_NAME'
@@ -236,13 +235,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v4 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v5 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v4'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v5'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v4)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v5)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -257,7 +256,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v4#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v5#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
