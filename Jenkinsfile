@@ -95,6 +95,9 @@ pipeline{
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                                                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                                                -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
+                                                                -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
                                                                 -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
                                                             '''
