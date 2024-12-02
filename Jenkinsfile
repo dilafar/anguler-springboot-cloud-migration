@@ -272,13 +272,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v9 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v10 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v9'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v10'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v9)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v10)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -296,7 +296,7 @@ pipeline{
                         "Change image": {           
                                 dir('kustomization') {
                                     script {
-                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v9#g' frontend-deployment.yml" 
+                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v10#g' frontend-deployment.yml" 
                                         sh "cat frontend-deployment.yml"                                
                                     }
                                 }
@@ -309,7 +309,7 @@ pipeline{
                                             python3 upload-reports.py semgrep.json 
                                             python3 upload-reports.py njsscan.sarif
                                             python3 upload-reports.py retire.json
-                                            cd ../employeemanager/target/dependency-check-report/ && python3 upload-reports.py dependency-check-report.json
+                                            python3 upload-reports.py ../employeemanager/target/dependency-check-report/dependency-check-report.json
                                         '''
                                 }
                         }
