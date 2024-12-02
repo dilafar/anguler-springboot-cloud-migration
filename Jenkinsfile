@@ -238,9 +238,9 @@ pipeline{
                         "RetireJs":{
                                 dir('employeemanagerfrontend') {
                                     sh '''
-                                        npm install -g retire
+                                        npm install  retire
                                         npm install
-                                        retire --path . --outputformat json --outputpath retire.json
+                                        npx retire --path . --outputformat json --outputpath retire.json
                                     '''
                                 }
                         }
