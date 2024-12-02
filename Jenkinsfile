@@ -326,7 +326,7 @@ pipeline{
                                     dir('employeemanager') {
                                         script {
                                             sh '''
-                                                python3 upload-reports.py dependency-check-report.json
+                                                python3 upload-reports.py target/dependency-check-report/dependency-check-report.json
                                             '''
                                         }
                                     }
