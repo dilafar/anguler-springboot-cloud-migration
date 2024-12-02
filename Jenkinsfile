@@ -351,7 +351,18 @@ pipeline{
                                     '''
                             },
                             "Trivy Scan": {
-                                    sh "bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v13"
+                                parallel(
+                                    "trivy scan": {    
+                                        sh ''' 
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v13
+                                        '''
+                                    },
+                                    "kubescape scan": {
+                                        sh ''' 
+                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v13 --format json --output results.json
+                                        '''  
+                                    }
+                                )
                             },
                             "docker CSI benchmark": {
                                     echo "bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v13"
