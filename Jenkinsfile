@@ -30,7 +30,17 @@ pipeline{
                         },
                         "NPM Build": {
                             dir('employeemanagerfrontend') {
-                                    sh 'npm install'
+                                    writeFile file: "next-lock.cache", text: "$GIT_COMMIT"
+ 
+                                    cache(caches: [
+                                        arbitraryFileCache(
+                                            path: "node_modules",
+                                            includes: "**/*",
+                                            cacheValidityDecidingFile: "package-lock.json"
+                                        )
+                                    ]) {
+                                        sh "npm install"
+                                    }
                             }
                         }
                     )
@@ -131,10 +141,8 @@ pipeline{
         stage("Upload Artifacts"){
             steps {
                 script {
-                    parallel(
-                        "Nexus Uploader": {
-                            dir('employeemanager') {
-                                    nexusArtifactUploader(
+                        dir('employeemanager') {
+                                nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
                                             protocol: 'http',
                                             nexusUrl: '172.48.16.120:8081',
@@ -148,23 +156,11 @@ pipeline{
                                                     file: 'target/employeemanager-0.0.1-SNAPSHOT.jar',
                                                     type: 'jar']
                                                 ]
-                                    )
-                            }
-                        },
-                        "DefectDojo Uploader": {
-                                dir('employeemanagerfrontend') {
-                                        sh '''
-                                            pip install --upgrade urllib3 chardet
-                                            pip install --upgrade requests
-                                            python3 upload-reports.py semgrep.json 
-                                            python3 upload-reports.py njsscan.sarif
-                                        '''
-                                }
+                                )
+                            }               
                         }
-                    )               
+                    }
                 }
-            }
-        }
 
         stage("Deploy to stage bean"){
            steps {
@@ -238,10 +234,24 @@ pipeline{
                                 dir('employeemanager') {
                                     sh 'docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint.txt'
                                 }
+                        },
+                        "RetireJs":{
+                                dir('employeemanagerfrontend') {
+                                    sh '''
+                                        npm install -g retire
+                                        npm install
+                                        retire --path . --outputformat json --outputpath retire.json
+                                    '''
+                                }
                         }
                     )
                 }
             }
+            post {
+                    always {
+                        archiveArtifacts artifacts: '**/employeemanagerfrontend/retire.json', allowEmptyArchive: true
+                    }
+                } 
         }
 
         stage("nodejs image build") {
@@ -250,13 +260,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v7 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v8 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v7'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v8'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v7)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v8)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -269,13 +279,31 @@ pipeline{
 
         stage("change image in kubeconfig") {
             steps {
-                dir('kustomization') {
-                    script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v7#g' frontend-deployment.yml" 
-                        sh "cat frontend-deployment.yml"   
-                               
-                    }
-              }
+                script {
+                    parallel(
+                        "Change image": {           
+                                dir('kustomization') {
+                                    script {
+                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v8#g' frontend-deployment.yml" 
+                                        sh "cat frontend-deployment.yml"                                
+                                    }
+                                }
+                        },
+                        "DefectDojo Uploader": {
+                                dir('employeemanagerfrontend') {
+                                        sh '''
+                                            pip install --upgrade urllib3 chardet
+                                            pip install --upgrade requests
+                                            python3 upload-reports.py semgrep.json 
+                                            python3 upload-reports.py njsscan.sarif
+                                            python3 upload-reports.py retire.json
+                                        '''
+                                }
+                        }
+                    )
+                        
+                }
+                    
            }
         }
 
@@ -295,6 +323,9 @@ pipeline{
                             },
                             "docker CSI benchmark": {
                                     echo "csi benchmark for build docker file using trivy"
+                            },
+                            "kubescape": {
+                                    echo "kubescape scan"
                             }
                         )
                     }
