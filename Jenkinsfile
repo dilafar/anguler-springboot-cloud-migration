@@ -152,13 +152,13 @@ pipeline{
                             }
                         },
                         "DefectDojo Uploader": {
-                                dir('employeemanagerfrontend') {
+                        
                                     sh '''
                                         pip3 install requests
-                                        python3 upload-reports semgrep.json 
-                                        python3 upload-reports njsscan.sarif
+                                        python3 upload-reports employeemanagerfrontend/semgrep.json 
+                                        python3 upload-reports employeemanagerfrontend/njsscan.sarif
                                     '''
-                                } 
+                                
                         }
                     )               
                 }
