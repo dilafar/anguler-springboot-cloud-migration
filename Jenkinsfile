@@ -309,7 +309,7 @@ pipeline{
                                             python3 upload-reports.py semgrep.json 
                                             python3 upload-reports.py njsscan.sarif
                                             python3 upload-reports.py retire.json
-                                            python3 upload-reports.py ../employeemanager/target/dependency-check-report/dependency-check-report.json
+                                            cd ../employeemanager/target/dependency-check-report/ && python3 upload-reports.py dependency-check-report.json
                                         '''
                                 }
                         }
