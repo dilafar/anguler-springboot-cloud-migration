@@ -273,13 +273,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v11 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v12 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v11'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v12'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v11)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v12)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -298,7 +298,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v11#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v12#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -351,13 +351,15 @@ pipeline{
                                     '''
                             },
                             "Trivy Scan": {
-                                    sh "bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v11"
+                                    sh "bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v12"
                             },
                             "docker CSI benchmark": {
-                                    echo "bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v11"
+                                    echo "bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v12"
                             },
                             "kubescape": {
-                                    sh "kubescape scan framework nsa --file kustomization/"
+                                    sh '''
+                                        kubescape scan framework nsa --file kustomization/
+                                    '''
                             }
                         )
                     }
@@ -373,20 +375,21 @@ pipeline{
             }
             steps {
                 script {
+                    sh '''
+                            az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
+                            az aks get-credentials --resource-group aks-rg1 --name aks-demo"
+                            if [ ! -f kubernetes-script.sh ]; then
+                                echo "kubernetes-script.sh file is missing!" >&2
+                                exit 1
+                            fi
+                            chmod +x kubernetes-script.sh
+                            sh "./kubernetes-script.sh"
+                            sh "kubectl config view"
+                         
+                       '''
                      parallel (
                         "K8 - Deployment": {
-                                sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                                sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
-                                sh '''
-                                    if [ ! -f kubernetes-script.sh ]; then
-                                        echo "kubernetes-script.sh file is missing!" >&2
-                                        exit 1
-                                    fi
-
-                                    chmod +x kubernetes-script.sh
-                                '''
-                                sh "./kubernetes-script.sh"
-                                sh "kubectl config view"
+                                
                                 sh "cat kustomization/frontend-deployment.yml"
                                 sh "cat kustomization/frontend-service.yml"
                                 sh "kubectl apply -k kustomization/"
