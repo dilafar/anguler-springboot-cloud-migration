@@ -130,24 +130,38 @@ pipeline{
 
         stage("Upload Artifacts"){
             steps {
-                dir('employeemanager') {
-                    nexusArtifactUploader(
-                                nexusVersion: 'nexus3',
-                                protocol: 'http',
-                                nexusUrl: '172.48.16.120:8081',
-                                groupId: 'QA',
-                                version: "${BUILD_ID}",
-                                repository: 'employee-repo',
-                                credentialsId: 'nexus',
-                                artifacts: [
-                                        [artifactId: 'employeemgmt',
-                                        classifier: '',
-                                        file: 'target/employeemanager-0.0.1-SNAPSHOT.jar',
-                                        type: 'jar']
-                                    ]
-                )
+                script {
+                    parallel(
+                        "Nexus Uploader": {
+                            dir('employeemanager') {
+                                    nexusArtifactUploader(
+                                            nexusVersion: 'nexus3',
+                                            protocol: 'http',
+                                            nexusUrl: '172.48.16.120:8081',
+                                            groupId: 'QA',
+                                            version: "${BUILD_ID}",
+                                            repository: 'employee-repo',
+                                            credentialsId: 'nexus',
+                                            artifacts: [
+                                                    [artifactId: 'employeemgmt',
+                                                    classifier: '',
+                                                    file: 'target/employeemanager-0.0.1-SNAPSHOT.jar',
+                                                    type: 'jar']
+                                                ]
+                                    )
+                            }
+                        },
+                        "DefectDojo Uploader": {
+                                dir('employeemanagerfrontend') {
+                                    sh '''
+                                        pip3 install requests
+                                        python3 upload-reports semgrep.json 
+                                        python3 upload-reports njsscan.sarif
+                                    '''
+                                } 
+                        }
+                    )               
                 }
-                    
             }
         }
 
@@ -235,13 +249,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v5 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v6 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v5'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v6'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v5)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v6)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -256,7 +270,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v5#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v6#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
