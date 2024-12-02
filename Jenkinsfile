@@ -60,15 +60,19 @@ pipeline{
                                 sh '''
                                          pip3 install --upgrade njsscan
                                          export PATH=$PATH:$HOME/.local/bin
-                                         njsscan --exit-warning .
+                                         njsscan --exit-warning . --sarif -o njsscan.sarif
                                    '''
                             }
                         }
                     )    
                     }
                 }
-                 
-               
+                post {
+                    always {
+                        archiveArtifacts artifacts: 'njsscan.sarif', allowEmptyArchive: true
+                        archiveArtifacts artifacts: '**/target/checkstyle-result.xml', allowEmptyArchive: true
+                    }
+                }             
             }
         
 
@@ -105,17 +109,21 @@ pipeline{
                                            sh '''
                                                     pip3 install --user --upgrade semgrep
                                                     export PATH=$PATH:$HOME/.local/bin
-                                                    semgrep ci
+                                                    semgrep ci --json --output semgrep.json
                                               '''
                                     }
                                 }
 
                     )
+                }
             }
+            post {
+                    always {
+                        archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
+                    }
+                }   
+
         }
-
-            }
-
 
         stage("Upload Artifacts"){
             steps {
@@ -225,13 +233,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v3 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v4 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v3'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v4'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v3)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v4)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -246,7 +254,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v3#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v4#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
