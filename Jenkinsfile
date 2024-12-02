@@ -30,17 +30,19 @@ pipeline{
                         },
                         "NPM Build": {
                             dir('employeemanagerfrontend') {
-                                    writeFile file: "next-lock.cache", text: "$GIT_COMMIT"
+                                    writeFile file: "node-lock.cache", text: "$GIT_COMMIT"
  
-                                    cache(caches: [
-                                        arbitraryFileCache(
-                                            path: "node_modules",
-                                            includes: "**/*",
-                                            cacheValidityDecidingFile: "package-lock.json"
-                                        )
-                                    ]) {
+                                    cache(
+                                            maxCacheSize: 250, 
+                                            caches: [
+                                                arbitraryFileCache(
+                                                    path: 'node_modules', 
+                                                    cacheValidityDecidingFile: 'package-lock.json' 
+                                                )
+                                            ]
+                                ) {
                                         sh "npm install"
-                                    }
+                                }
                             }
                         }
                     )
@@ -237,15 +239,25 @@ pipeline{
                         },
                         "RetireJs":{
                                 dir('employeemanagerfrontend') {
-                                    sh '''
-                                        npm install  retire
-                                        npm install
-                                        npx retire --path . --outputformat json --outputpath retire.json
-                                    '''
+                                    cache(
+                                            maxCacheSize: 250, 
+                                            caches: [
+                                                arbitraryFileCache(
+                                                    path: 'node_modules', 
+                                                    cacheValidityDecidingFile: 'package-lock.json' 
+                                                )
+                                            ]
+                                    ) {
+                                         sh '''
+                                            npm install  retire
+                                            npm install
+                                            npx retire --path . --outputformat json --outputpath retire.json
+                                        '''
+                                    }
                                 }
-                        }
-                    )
-                }
+                            }
+                        )
+                    }
             }
             post {
                     always {
@@ -260,13 +272,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v8 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v9 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v8'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v9'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v8)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v9)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -284,7 +296,7 @@ pipeline{
                         "Change image": {           
                                 dir('kustomization') {
                                     script {
-                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v8#g' frontend-deployment.yml" 
+                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v9#g' frontend-deployment.yml" 
                                         sh "cat frontend-deployment.yml"                                
                                     }
                                 }
@@ -297,6 +309,7 @@ pipeline{
                                             python3 upload-reports.py semgrep.json 
                                             python3 upload-reports.py njsscan.sarif
                                             python3 upload-reports.py retire.json
+                                            python3 upload-reports.py ../employeemanager/target/dependency-check-report/dependency-check-report.json
                                         '''
                                 }
                         }
@@ -393,7 +406,7 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: '**/dependency-check-report.html'
+            dependencyCheckPublisher pattern: '**/employeemanager/target/dependency-check-report/dependency-check-report.json'
         }
     }
 }
