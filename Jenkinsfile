@@ -262,6 +262,7 @@ pipeline{
             post {
                     always {
                         archiveArtifacts artifacts: '**/employeemanagerfrontend/retire.json', allowEmptyArchive: true
+                        archiveArtifacts artifacts: '**/employeemanager/target/dependency-check-report/dependency-check-report.json', allowEmptyArchive: true
                     }
                 } 
         }
@@ -272,13 +273,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v10 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v11 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v10'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v11'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v10)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v11)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -294,29 +295,48 @@ pipeline{
                 script {
                     parallel(
                         "Change image": {           
-                                dir('kustomization') {
-                                    script {
-                                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v10#g' frontend-deployment.yml" 
-                                        sh "cat frontend-deployment.yml"                                
-                                    }
+                            dir('kustomization') {
+                                script {
+                                    sh '''
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v11#g' frontend-deployment.yml
+                                        cat frontend-deployment.yml
+                                    '''
                                 }
+                            }
                         },
                         "DefectDojo Uploader": {
-                                dir('employeemanagerfrontend') {
-                                        sh '''
-                                            pip install --upgrade urllib3 chardet
-                                            pip install --upgrade requests
-                                            python3 upload-reports.py semgrep.json 
-                                            python3 upload-reports.py njsscan.sarif
-                                            python3 upload-reports.py retire.json
-                                            python3 upload-reports.py ../employeemanager/target/dependency-check-report/dependency-check-report.json
-                                        '''
+                            script {
+                                sh '''
+                                    pip install --upgrade urllib3 chardet requests
+                                '''
+                            }
+                            parallel(
+                                "Frontend Reports Upload": {
+                                    dir('employeemanagerfrontend') {
+                                        script {
+                                            sh '''
+                                                python3 upload-reports.py semgrep.json 
+                                                python3 upload-reports.py njsscan.sarif
+                                                python3 upload-reports.py retire.json
+                                            '''
+                                        }
+                                    }
+                                },
+                                "Backend Reports Upload": {
+                                    dir('employeemanager') {
+                                        script {
+                                            sh '''
+                                                python3 upload-reports.py dependency-check-report.json
+                                            '''
+                                        }
+                                    }
                                 }
+                            )
                         }
                     )
-                        
-                }               
-           }
+                }
+            }
+
         }
 
         stage("Vulnerability Scan - kubernetes") {
@@ -331,13 +351,13 @@ pipeline{
                                     '''
                             },
                             "Trivy Scan": {
-                                    echo "trivy scan of docker file"
+                                    sh "bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v11"
                             },
                             "docker CSI benchmark": {
-                                    echo "csi benchmark for build docker file using trivy"
+                                    echo "bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v11"
                             },
                             "kubescape": {
-                                    echo "kubescape scan"
+                                    sh "kubescape scan framework nsa --file kustomization/"
                             }
                         )
                     }
