@@ -155,8 +155,8 @@ pipeline{
                         
                                     sh '''
                                         pip3 install requests
-                                        python3 upload-reports employeemanagerfrontend/semgrep.json 
-                                        python3 upload-reports employeemanagerfrontend/njsscan.sarif
+                                        python3 upload-reports.py employeemanagerfrontend/semgrep.json 
+                                        python3 upload-reports.py employeemanagerfrontend/njsscan.sarif
                                     '''
                                 
                         }
