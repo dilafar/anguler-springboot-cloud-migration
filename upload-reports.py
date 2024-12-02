@@ -10,7 +10,7 @@ elif file_name == 'semgrep.json':
     scan_type = 'Semgrep JSON Report'
 
 headers = {
-            'Authorization': 'Token 4131c3506fef19c06b2ac924850b665a50ae1b58'
+            'Authorization': 'Token 548afd6fab3bea9794a41b31da0e9404f733e222'
           }
 
 url = 'https://demo.defectdojo.org/api/v2/import-scan/'
