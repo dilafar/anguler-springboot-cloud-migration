@@ -152,13 +152,14 @@ pipeline{
                             }
                         },
                         "DefectDojo Uploader": {
-                        
-                                    sh '''
-                                        pip3 install requests
-                                        python3 upload-reports.py employeemanagerfrontend/semgrep.json 
-                                        python3 upload-reports.py employeemanagerfrontend/njsscan.sarif
-                                    '''
-                                
+                                dir('employeemanagerfrontend') {
+                                        sh '''
+                                            pip install --upgrade urllib3 chardet
+                                            pip install --upgrade requests
+                                            python3 upload-reports.py semgrep.json 
+                                            python3 upload-reports.py njsscan.sarif
+                                        '''
+                                }
                         }
                     )               
                 }
@@ -249,13 +250,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v6 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v7 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v6'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v7'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v6)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v7)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -270,7 +271,7 @@ pipeline{
             steps {
                 dir('kustomization') {
                     script {
-                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v6#g' frontend-deployment.yml" 
+                        sh "sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v7#g' frontend-deployment.yml" 
                         sh "cat frontend-deployment.yml"   
                                
                     }
