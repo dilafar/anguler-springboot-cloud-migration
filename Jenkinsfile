@@ -236,12 +236,7 @@ pipeline{
                             parallel(
                                 "Trivy Scan": {
                                     dir('employeemanager') {
-                                        sh '''
-                                            trivy --version
-                                            dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                            trivy image -f json -o trivy.json  --severity HIGH --exit-code 0 $dockerImageName
-                                            trivy image -f json -o trivy.json  --severity CRITICAL --exit-code 1 $dockerImageName
-                                        '''
+                                        sh "bash trivy-docker-image-scan.sh"
                                     }
                                 },
                                 "kubescape Scan": {
