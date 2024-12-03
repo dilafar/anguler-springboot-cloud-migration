@@ -226,7 +226,20 @@ pipeline{
                             parallel(
                                 "Trivy Scan": {
                                     dir('employeemanager') {
-                                       sh "trivy image --severity HIGH,CRITICAL maven:3.9.9-amazoncorretto-17-alpine"
+                                       sh '''
+                                        dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
+                                        trivy image --severity HIGH,CRITICAL --exit-code 1 -q $dockerImageName
+
+                                        exit_code=$?
+
+                                        
+                                            if [[ $exit_code -eq 1 ]]; then
+                                                echo "Image scanning failed. HIGH or CRITICAL vulnerabilities found."
+                                                exit 1
+                                            else
+                                                echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
+                                            fi
+                                       '''
                                     }
                                 },
                                 "kubescape Scan": {
