@@ -23,7 +23,7 @@ pipeline{
             steps {
                 script {
                    sh '''
-                        docker run --rm -it -v $(pwd):/pwd trufflesecurity/trufflehog:latest github --org=trufflesecurity
+                        docker run --rm -v $(pwd):/pwd trufflesecurity/trufflehog:latest github --org=trufflesecurity
 
                    '''
                 }
