@@ -16,6 +16,10 @@ pipeline{
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
         SEMGREP_PR_ID = "${env.CHANGE_ID}"
+        AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
+        AZURE_CLIENT_ID = credentials('azure-client-id')
+        AZURE_CLIENT_SECRET = credentials('azure-client-secret')
+        AZURE_TENANT_ID = credentials('azure-tenant-id')
     }
 
     stages{
@@ -295,13 +299,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v17 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v18 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v17'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v18'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v17)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v18)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -320,7 +324,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v17#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v18#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -376,21 +380,21 @@ pipeline{
                                 parallel(
                                     "trivy scan": {    
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v17
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v18
                                         '''
                                     },
                                     "kubescape scan": {
                                         sh ''' 
-                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v17 --format json --output results.json
+                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v18 --format json --output results.json
                                         '''  
                                     }
                                 )
                             },
-                            "docker CSI benchmark": {
-                                    sh ''' 
-                                            bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v17
-                                    '''
-                            },
+                           // "docker CSI benchmark": {
+                           //         sh ''' 
+                           //                 bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v17
+                           //         '''
+                           // },
                             "kubescape": {
                                 dir('kustomization') {
                                         script {
@@ -406,12 +410,6 @@ pipeline{
         }
 
         stage("Kubernetes Apply") {
-            environment {
-                AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
-                AZURE_CLIENT_ID = credentials('azure-client-id')
-                AZURE_CLIENT_SECRET = credentials('azure-client-secret')
-                AZURE_TENANT_ID = credentials('azure-tenant-id')
-            }
             steps {
                 script {
                         sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
@@ -438,6 +436,32 @@ pipeline{
                         }
 
                     )
+                }
+            }
+        }
+
+        stage ("kubernetes cluster check") {
+            steps {
+                script {
+                    parallel (
+                        "kubernetes CIS benchmark": {
+                            sh '''
+                                kubescape scan framework all
+                            '''
+                        },
+                        "kubernetes cluster scan": {
+                             sh '''
+                                kubescape scan
+                            '''
+                        },
+                        "kubenetes resource scan": {
+                             sh '''
+                                kubescape scan workload Deployment/employee-frontend --namespace employee
+                            '''
+                        }
+                    )
+                            
+
                 }
             }
         }
