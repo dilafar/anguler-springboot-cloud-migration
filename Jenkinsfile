@@ -44,19 +44,9 @@ pipeline{
                         },
                         "NPM Build": {
                             dir('employeemanagerfrontend') {
-                                    writeFile file: "node-lock.cache", text: "$GIT_COMMIT"
- 
-                                    cache(
-                                            maxCacheSize: 250, 
-                                            caches: [
-                                                arbitraryFileCache(
-                                                    path: 'node_modules', 
-                                                    cacheValidityDecidingFile: 'package-lock.json' 
-                                                )
-                                            ]
-                                ) {
+                                
                                         sh "npm install"
-                                }
+                                
                             }
                         }
                     )
