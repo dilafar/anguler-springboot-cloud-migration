@@ -283,13 +283,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v24 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v25 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v24'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v25'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v24)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v25)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -308,7 +308,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v24#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v25#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -361,24 +361,10 @@ pipeline{
                                     '''
                             },
                             "Trivy Scan": {
-                                //parallel(
-                                   // "trivy scan": {    
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v24
-                                        '''
-                                  //  }
-                                   // "kubescape scan": {
-                                   //     sh ''' 
-                                   //          kubescape scan  image fadhiljr/nginxapp:employee-frontend-v21 --format json --output results.json
-                                   //     '''  
-                                  //  }
-                              //  )
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v25
+                                       '''                           
                             },
-                            "docker CSI benchmark": {
-                                    sh ''' 
-                                            trivy image --compliance docker-cis-1.6.0 fadhiljr/nginxapp:employee-frontend-v24
-                                    '''
-                           },
                             "kubescape": {
                                 dir('kustomization') {
                                         script {
