@@ -226,16 +226,15 @@ pipeline{
                             parallel(
                                 "Trivy Scan": {
                                     dir('employeemanager') {
-                                        sh '''
-                                            bash trivy-docker-image-scan.sh
-                                        '''
+                                       sh "bash trivy-docker-image-scan.sh"
                                     }
                                 },
                                 "kubescape Scan": {
                                     dir('employeemanager') {
                                         sh '''
                                             dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                            kubescape scan  image $dockerImageName --format "pretty-printer"
+                                            export PATH=$PATH:/usr/local/bin
+                                            kubescape scan $dockerImageName
                                         '''
                                     }
                                 }
