@@ -6,14 +6,14 @@ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v $WORKSPACE:/root/.cache/ \
     aquasec/trivy:0.57.1 -q \
-    image --exit-code 0 --severity HIGH --light --compliance docker-cis \
-    $1
+    image --exit-code 0 --severity HIGH --light --compliance docker-cis-1.6.0 \
+    $1 
 
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v $WORKSPACE:/root/.cache/ \
     aquasec/trivy:0.57.1 -q \
-    image --exit-code 1 --severity CRITICAL --light --compliance docker-cis \
+    image --exit-code 1 --severity CRITICAL --light --compliance docker-cis-1.6.0 \
     $1
 
     exit_code=$?
