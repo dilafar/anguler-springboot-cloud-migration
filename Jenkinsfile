@@ -361,18 +361,18 @@ pipeline{
                                     '''
                             },
                             "Trivy Scan": {
-                                parallel(
-                                    "trivy scan": {    
+                                //parallel(
+                                   // "trivy scan": {    
                                         sh ''' 
                                             bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v21
                                         '''
-                                    },
-                                    "kubescape scan": {
-                                        sh ''' 
-                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v21 --format json --output results.json
-                                        '''  
-                                    }
-                                )
+                                  //  }
+                                   // "kubescape scan": {
+                                   //     sh ''' 
+                                   //          kubescape scan  image fadhiljr/nginxapp:employee-frontend-v21 --format json --output results.json
+                                   //     '''  
+                                  //  }
+                              //  )
                             },
                            // "docker CSI benchmark": {
                            //         sh ''' 
