@@ -228,7 +228,7 @@ pipeline{
                                     dir('employeemanager') {
                                        sh '''
                                         dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                        trivy image --severity HIGH,CRITICAL --exit-code 1 -q $dockerImageName
+                                        trivy image --severity HIGH,CRITICAL --exit-code 1 $dockerImageName
 
                                         exit_code=$?
 
