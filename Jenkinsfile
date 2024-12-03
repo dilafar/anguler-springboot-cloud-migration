@@ -227,18 +227,7 @@ pipeline{
                                 "Trivy Scan": {
                                     dir('employeemanager') {
                                        sh '''
-                                        dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                        trivy image --severity HIGH,CRITICAL --exit-code 1 $dockerImageName
-
-                                        exit_code=$?
-
-                                        
-                                            if [[ $exit_code -eq 1 ]]; then
-                                                echo "Image scanning failed. HIGH or CRITICAL vulnerabilities found."
-                                                exit 1
-                                            else
-                                                echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
-                                            fi
+                                           bash trivy-docker-image-scan.sh
                                        '''
                                     }
                                 }
@@ -294,13 +283,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v20 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v21 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v20'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v21'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v20)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v21)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -319,7 +308,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v20#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v21#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -375,12 +364,12 @@ pipeline{
                                 parallel(
                                     "trivy scan": {    
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v20
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v21
                                         '''
                                     },
                                     "kubescape scan": {
                                         sh ''' 
-                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v20 --format json --output results.json
+                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v21 --format json --output results.json
                                         '''  
                                     }
                                 )
