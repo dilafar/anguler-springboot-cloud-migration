@@ -23,7 +23,7 @@ pipeline{
             steps {
                 script {
                    sh '''
-                        docker run --rm -v $(pwd):/pwd trufflesecurity/trufflehog:latest github --org=trufflesecurity
+                        docker run --rm -v $(pwd):/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/dilafar/anguler-springboot-aws-migration.git
 
                    '''
                 }
@@ -295,13 +295,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v15 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v16 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v15'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v16'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v15)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v16)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -320,7 +320,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v15#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v16#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -376,18 +376,20 @@ pipeline{
                                 parallel(
                                     "trivy scan": {    
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v15
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v16
                                         '''
                                     },
                                     "kubescape scan": {
                                         sh ''' 
-                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v15 --format json --output results.json
+                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v16 --format json --output results.json
                                         '''  
                                     }
                                 )
                             },
                             "docker CSI benchmark": {
-                                    echo "bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v15"
+                                    sh ''' 
+                                            bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v16
+                                    '''
                             },
                             "kubescape": {
                                 dir('kustomization') {
