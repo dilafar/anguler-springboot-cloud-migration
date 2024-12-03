@@ -241,15 +241,6 @@ pipeline{
                                             fi
                                        '''
                                     }
-                                },
-                                "kubescape Scan": {
-                                    dir('employeemanager') {
-                                        sh '''
-                                            dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                            export PATH=$PATH:/usr/local/bin
-                                            kubescape scan $dockerImageName
-                                        '''
-                                    }
                                 }
                             )
                         },
