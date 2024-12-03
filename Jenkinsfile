@@ -226,7 +226,7 @@ pipeline{
                             parallel(
                                 "Trivy Scan": {
                                     dir('employeemanager') {
-                                       sh "bash trivy-docker-image-scan.sh"
+                                       sh "trivy image --severity HIGH,CRITICAL maven:3.9.9-amazoncorretto-17-alpine"
                                     }
                                 },
                                 "kubescape Scan": {
