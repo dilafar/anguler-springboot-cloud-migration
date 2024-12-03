@@ -235,7 +235,7 @@ pipeline{
                                     dir('employeemanager') {
                                         sh '''
                                             dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
-                                            kubescape scan  image $dockerImageName --format json --output results.json
+                                            kubescape scan  image $dockerImageName --format "pretty-printer"
                                         '''
                                     }
                                 }
