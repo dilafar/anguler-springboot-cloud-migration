@@ -6,16 +6,17 @@ echo $dockerImageName
 
 
 trivy image -f json -o trivy.json --severity HIGH --exit-code 0 $dockerImageName
-
-trivy image -f json -o trivy_critical.json --severity CRITICAL --exit-code 1 $dockerImageName
-
 exit_code=$?
+echo "Trivy HIGH Severity Exit Code: $exit_code"
 
-echo "Exit Code : $exit_code"
+     
+trivy image -f json -o trivy_critical.json --severity CRITICAL --exit-code 1 $dockerImageName
+critical_exit_code=$?
+echo "Trivy CRITICAL Severity Exit Code: $critical_exit_code"
 
-if [[ "${exit_code}" -eq 1 ]]; then
-    echo "Image scanning failed. CRITICAL vulnerabilities found."
-    exit 1
+if [[ "${critical_exit_code}" -eq 1 ]]; then
+        echo "Image scanning failed. CRITICAL vulnerabilities found."
+        exit 1
 else
-    echo "Image scanning passed. No CRITICAL vulnerabilities found."
+        echo "Image scanning passed. No CRITICAL vulnerabilities found."
 fi
