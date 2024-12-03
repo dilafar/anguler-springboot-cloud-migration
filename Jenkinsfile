@@ -299,13 +299,13 @@ pipeline{
                     script {
                             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v18 .'
+                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v19 .'
                                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v18'
+                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v19'
                                 sh 'cosign version'
 
                                 sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v18)
+                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v19)
                                     echo "Image Digest: $IMAGE_DIGEST"
                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -324,7 +324,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v18#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v19#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -380,19 +380,19 @@ pipeline{
                                 parallel(
                                     "trivy scan": {    
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v18
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v19
                                         '''
                                     },
                                     "kubescape scan": {
                                         sh ''' 
-                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v18 --format json --output results.json
+                                             kubescape scan  image fadhiljr/nginxapp:employee-frontend-v19 --format json --output results.json
                                         '''  
                                     }
                                 )
                             },
                            // "docker CSI benchmark": {
                            //         sh ''' 
-                           //                 bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v17
+                           //                 bash trivy-docker-bench.sh fadhiljr/nginxapp:employee-frontend-v19
                            //         '''
                            // },
                             "kubescape": {
@@ -443,6 +443,9 @@ pipeline{
         stage ("kubernetes cluster check") {
             steps {
                 script {
+                        sh '''
+                            kubectl config use-context aks-demo
+                        '''
                     parallel (
                         "kubernetes CIS benchmark": {
                             sh '''
@@ -457,6 +460,7 @@ pipeline{
                         "kubenetes resource scan": {
                              sh '''
                                 kubescape scan workload Deployment/employee-frontend --namespace employee
+                                kubescape scan workload service/employee-frontend-service --namespace employee
                             '''
                         }
                     )
