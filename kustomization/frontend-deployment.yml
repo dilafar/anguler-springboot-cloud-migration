@@ -24,6 +24,7 @@ spec:
           securityContext:
              runAsNonRoot: true
              runAsUser: 101
+             fsGroup: 101
           resources:
             requests:
               memory: "400Mi"

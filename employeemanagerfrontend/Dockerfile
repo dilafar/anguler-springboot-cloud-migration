@@ -1,28 +1,29 @@
 FROM node:20.18-alpine AS build
 WORKDIR /app
 
+
 COPY package*.json ./
 COPY generated_openssl_cert/ ./generated_openssl_cert
 RUN npm install --no-cache && npm install -g @angular/cli
 
-COPY . .
+
+COPY . . 
 RUN ng build --configuration production
 USER node
 
 FROM nginx:stable-alpine-slim
 WORKDIR /app
 
-RUN chown -R nginx:nginx /app && chmod -R 755 /app && \
-        chown -R nginx:nginx /var/cache/nginx && \
-        chown -R nginx:nginx /var/log/nginx && \
-        chown -R nginx:nginx /etc/nginx/conf.d 
+RUN mkdir -p /var/cache/nginx /var/log/nginx /etc/nginx/conf.d && \
+    chown -R nginx:nginx /var/cache/nginx /var/log/nginx /etc/nginx/conf.d /app && \
+    chmod -R 755 /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
 
 RUN touch /var/run/nginx.pid && \
-        chown -R nginx:nginx /var/run/nginx.pid
+    chown -R nginx:nginx /var/run/nginx.pid
 
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ /usr/share/nginx/html
 COPY --from=build /app/generated_openssl_cert/default.conf /etc/nginx/conf.d/default.conf
 
-RUN chown -R nginx:nginx /app
+RUN chown -R nginx:nginx /usr/share/nginx/html /app
 
 USER nginx
