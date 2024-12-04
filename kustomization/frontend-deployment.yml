@@ -21,6 +21,9 @@ spec:
           image: fadhiljr/nginxapp:employee-frontend-v43
           ports:
             - containerPort: 80
+          securityContext:
+             runAsNonRoot: true
+             runAsUser: 101
           resources:
             requests:
               memory: "400Mi"
