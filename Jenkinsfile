@@ -230,22 +230,41 @@ pipeline{
                                            bash trivy-docker-image-scan.sh
                                        '''
                                     }
+                                },
+                                "Trivy Scan frontend": {
+                                    dir('employeemanagerfrontend') {
+                                       sh '''
+                                           bash trivy-docker-image-scan.sh
+                                       '''
+                                    }
                                 }
                             )
                         },
                         "OPA Conftest":{
-                            dir('employeemanager') {
+                            //dir('employeemanager') {
                                 sh '''
                                     docker run --rm \
                                         -v $(pwd):/project \
-                                        openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile
+                                        openpolicyagent/conftest test --policy dockerfile-security.rego employeemanager/Dockerfile &
+
+                                    docker run --rm \
+                                        -v $(pwd):/project \
+                                        openpolicyagent/conftest test --policy dockerfile-security.rego employeemanagerfrontend/Dockerfile &
+
+                                    wait
                                 '''
-                            }
+
+                          //  }
                         },
                         "lint dockerfile":{
-                                dir('employeemanager') {
-                                    sh 'docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint.txt'
-                                }
+                               // dir('employeemanager') {
+                                    sh '''
+                                        docker run --rm -i hadolint/hadolint < employeemanager/Dockerfile | tee hadolint_lint.txt &
+                                        docker run --rm -i hadolint/hadolint < employeemanagerfrontend/Dockerfile | tee hadolint_lint_front.txt &
+
+                                        wait
+                                    '''
+                               // }
                         },
                         "RetireJs":{
                                 dir('employeemanagerfrontend') {
@@ -279,24 +298,53 @@ pipeline{
 
         stage("nodejs image build") {
             steps {
-                dir('employeemanagerfrontend') {
-                    script {
-                            withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                                sh 'docker system prune -a --volumes --force'
-                                sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v25 .'
-                                sh "echo $PASS | docker login -u $USER --password-stdin"
-                                sh 'docker push fadhiljr/nginxapp:employee-frontend-v25'
-                                sh 'cosign version'
+                 script {
+                    parallel(
+                        "frontend-image-scan": {
+                                dir('employeemanagerfrontend') {
+                                        script {
+                                                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                                    sh 'docker system prune -a --volumes --force'
+                                                    sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v26 .'
+                                                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                                                    sh 'docker push fadhiljr/nginxapp:employee-frontend-v26'
+                                                    sh 'cosign version'
 
-                                sh '''
-                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v25)
-                                    echo "Image Digest: $IMAGE_DIGEST"
-                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                '''
+                                                    sh '''
+                                                        IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v26)
+                                                        echo "Image Digest: $IMAGE_DIGEST"
+                                                        echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                        cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    '''
+                                                    }
+                                                }
+                                }
+
+                        },
+                            "backend-image-scan": {
+                                dir('employeemanager') {
+                                                script {
+                                                        withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                                            sh 'docker system prune -a --volumes --force'
+                                                            sh 'docker build -t fadhiljr/nginxapp:employee-backend-v26 .'
+                                                            sh "echo $PASS | docker login -u $USER --password-stdin"
+                                                            sh 'docker push fadhiljr/nginxapp:employee-backend-v26'
+                                                            sh 'cosign version'
+
+                                                            sh '''
+                                                                IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v26)
+                                                                echo "Image Digest: $IMAGE_DIGEST"
+                                                                echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                                cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                            '''
+                                                            }
+                                                        }
+                                        }
                             }
-                    }
-               }
+                                
+                    )
+                        
+                }
            }
         }
 
@@ -308,7 +356,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v25#g' frontend-deployment.yml
+                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v26#g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -362,7 +410,10 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v25
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v26 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v26 &
+
+                                            wait
                                        '''                           
                             },
                             "kubescape": {
@@ -432,9 +483,6 @@ pipeline{
                                 kubescape scan workload Deployment/employee-frontend --namespace employee
                                 kubescape scan workload service/employee-frontend-service --namespace employee
                             '''
-                        },
-                        "resource report":{
-                            sh "trivy k8s --report=summary"
                         }
                     )
                             
