@@ -311,57 +311,56 @@ pipeline{
                 } 
         }
 
-        stage("nodejs image build") {
-            steps {
-                 script {
-                    parallel(
-                        "frontend-image-scan": {
-                                dir('employeemanagerfrontend') {
-                                        script {
-                                                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                                                    sh 'docker system prune -a --volumes --force'
-                                                    sh 'docker build -t fadhiljr/nginxapp:employee-frontend-v26 .'
-                                                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                                                    sh 'docker push fadhiljr/nginxapp:employee-frontend-v26'
-                                                    sh 'cosign version'
+        stage("Node.js Image Build") {
+                steps {
+                        script {
+                            // Clean up unused Docker resources
+                            sh 'docker system prune -a --volumes --force || true'
 
-                                                    sh '''
-                                                        IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v26)
-                                                        echo "Image Digest: $IMAGE_DIGEST"
-                                                        echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                        cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                    '''
-                                                    }
-                                                }
-                                }
-
-                        },
-                            "backend-image-scan": {
-                                dir('employeemanager') {
-                                                script {
-                                                        withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                                                            sh 'docker system prune -a --volumes --force'
-                                                            sh 'docker build -t fadhiljr/nginxapp:employee-backend-v26 .'
-                                                            sh "echo $PASS | docker login -u $USER --password-stdin"
-                                                            sh 'docker push fadhiljr/nginxapp:employee-backend-v26'
-                                                            sh 'cosign version'
-
-                                                            sh '''
-                                                                IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v26)
-                                                                echo "Image Digest: $IMAGE_DIGEST"
-                                                                echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                                cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                            '''
-                                                            }
-                                                        }
+                            withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                parallel(
+                                    "frontend-image-scan": {
+                                        dir('employeemanagerfrontend') {
+                                            script {
+                                                sh '''
+                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v26 .
+                                                    echo $PASS | docker login -u $USER --password-stdin
+                                                    docker push fadhiljr/nginxapp:employee-frontend-v26
+                                                '''
+                                                sh 'cosign version'
+                                                sh '''
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v26)
+                                                    echo "Image Digest: $IMAGE_DIGEST"
+                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                '''
+                                            }
                                         }
+                                    },
+                                    "backend-image-scan": {
+                                        dir('employeemanager') {
+                                            script {
+                                                sh '''
+                                                    docker build -t fadhiljr/nginxapp:employee-backend-v26 .
+                                                    echo $PASS | docker login -u $USER --password-stdin
+                                                    docker push fadhiljr/nginxapp:employee-backend-v26
+                                                '''
+                                                sh 'cosign version'
+                                                sh '''
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v26)
+                                                    echo "Image Digest: $IMAGE_DIGEST"
+                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                '''
+                                            }
+                                        }
+                                    }
+                                )
                             }
-                                
-                    )
-                        
+                        }
+                    }
                 }
-           }
-        }
+
 
         stage("change image in kubeconfig") {
             steps {
