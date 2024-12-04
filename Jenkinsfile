@@ -323,13 +323,13 @@ pipeline{
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v28 .
+                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v29 .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v28 
+                                                    docker push fadhiljr/nginxapp:employee-frontend-v29 
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v28)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v29)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -341,13 +341,13 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v28 .
+                                                    docker build -t fadhiljr/nginxapp:employee-backend-v29 .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v28
+                                                    docker push fadhiljr/nginxapp:employee-backend-v29
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v28)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v29)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -370,7 +370,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's#replace#fadhiljr/nginxapp:employee-frontend-v28#g' frontend-deployment.yml
+                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-backend-v29|g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -424,8 +424,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v28 &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v28 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v29 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v29 &
 
                                             wait
                                        '''                           
@@ -447,32 +447,35 @@ pipeline{
         stage("Kubernetes Apply") {
             steps {
                 script {
-                        sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                        sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
-                        sh '''
-                                    if [ ! -f kubernetes-script.sh ]; then
-                                        echo "kubernetes-script.sh file is missing!" >&2
-                                        exit 1
-                                    fi
-                                    chmod +x kubernetes-script.sh
-                        '''
-                        sh "./kubernetes-script.sh"
-                        sh "kubectl config view"
-                     parallel (
-                        "K8 - Deployment": {
-                                
-                                sh "cat kustomization/frontend-deployment.yml"
-                                sh "cat kustomization/frontend-service.yml"
-                                sh "kubectl apply -k kustomization/"
-                                sh "kubectl get pods -n employee"
-                        },
-                        "Rollout Status": {
-                                sh "bash k8s-deployment-rollout-status.sh"
-                        }
+                            sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
+                            sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
+                            sh '''
+                                        if [ ! -f kubernetes-script.sh ]; then
+                                            echo "kubernetes-script.sh file is missing!" >&2
+                                            exit 1
+                                        fi
+                                        chmod +x kubernetes-script.sh
+                            '''
+                            sh "./kubernetes-script.sh"
+                            sh "kubectl config view"
+                            sh "cat kustomization/frontend-deployment.yml"
+                            sh "cat kustomization/frontend-service.yml"
+                            sh "kubectl apply -k kustomization/"
+                            sh "kubectl get pods -n employee"
 
-                    )
+                             def rolloutStatus = sh(script: "kubectl rollout status deployment/employee-frontend -n employee", returnStatus: true)
+    
+                            if (rolloutStatus != 0) {
+                                echo "Deployment rollout failed. Rolling back..."
+                                sh "kubectl describe deployment/employee-frontend -n employee"
+                                sh "kubectl rollout undo deployment/employee-frontend -n employee"
+                            } else {
+                                echo "Deployment successful."
+                            }
+
+                        }
                 }
-            }
+            
         }
 
         stage ("kubernetes cluster check") {

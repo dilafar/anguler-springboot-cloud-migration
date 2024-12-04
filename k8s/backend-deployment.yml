@@ -18,11 +18,11 @@ spec:
     spec:
       initContainers:
         - name: mydb-available
-          image: busybox:1.28
+          image: nginx
           command: ['sh','-c',"until nslookup mysql-service; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
-          image: fadhiljr/nginxapp:employee-backend-v9
+          image: nginx
           ports:
             - containerPort: 8080
           env:
