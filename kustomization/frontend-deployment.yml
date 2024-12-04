@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: employee-frontend
-          image: fadhiljr/nginxapp:employee-frontend-v42
+          image: fadhiljr/nginxapp:employee-frontend-v43
           ports:
             - containerPort: 80
           resources:

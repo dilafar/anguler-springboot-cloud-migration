@@ -1,2 +1,3 @@
 -:6 DL3016 [1m[93mwarning[0m: Pin versions in npm. Instead of `npm install <package>` use `npm install <package>@<version>`
 -:6 DL3059 [92minfo[0m: Multiple consecutive `RUN` instructions. Consider consolidation.
+-:11 DL3059 [92minfo[0m: Multiple consecutive `RUN` instructions. Consider consolidation.
