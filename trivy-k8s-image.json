@@ -1,9 +1,9 @@
 [
   {
-    "Target": "fadhiljr/nginxapp:employee-frontend-v41 (alpine 3.20.3)",
+    "Target": "fadhiljr/nginxapp:employee-backend-v42 (alpine 3.20.3)",
     "Type": "alpine"
-  }
-] {
+  },
+  {
     "Target": "app/app.jar",
     "Type": "jar"
   },
