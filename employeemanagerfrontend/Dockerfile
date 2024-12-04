@@ -8,9 +8,6 @@ RUN npm install -g @angular/cli
 COPY . . 
 RUN ng build --configuration production
 
-RUN chown -R node:node /app
-USER node
-
 FROM nginx:stable-alpine-slim
 
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ /usr/share/nginx/html

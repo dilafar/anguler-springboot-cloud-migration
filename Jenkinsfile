@@ -323,13 +323,13 @@ pipeline{
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v38 .
+                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v39 .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v38 
+                                                    docker push fadhiljr/nginxapp:employee-frontend-v39 
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v38)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v39)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -341,13 +341,13 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v38 .
+                                                    docker build -t fadhiljr/nginxapp:employee-backend-v39 .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v38
+                                                    docker push fadhiljr/nginxapp:employee-backend-v39
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v38)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v39)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -370,7 +370,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-frontend-v38|g' frontend-deployment.yml
+                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-frontend-v39|g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -424,8 +424,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v38 &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v38 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v39 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v39 &
 
                                             wait
                                        '''                           
