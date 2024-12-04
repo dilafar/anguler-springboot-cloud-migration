@@ -241,32 +241,45 @@ pipeline{
                             )
                         },
                         "OPA Conftest":{
-                            dir('employeemanager') {
-                                sh '''
-                                    docker run --rm \
-                                        -v $(pwd):/project \
-                                        openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile 
-                                '''
-                            },
-                            dir("employeemanagerfrontend") {
-                                sh '''
-                                    docker run --rm \
-                                        -v $(pwd):/project \
-                                        openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile
-                                '''
-                            }
+                             parallel(
+                                "opa-front": {
+                                       dir('employeemanager') {
+                                        sh '''
+                                            docker run --rm \
+                                                -v $(pwd):/project \
+                                                openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile 
+                                        '''
+                                    }     
+                                },
+                                "opa-back": {
+                                                dir("employeemanagerfrontend") {
+                                                sh '''
+                                                    docker run --rm \
+                                                        -v $(pwd):/project \
+                                                        openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile
+                                                '''
+                                    }
+
+                                }
+                             )
                         },
                         "lint dockerfile":{
-                                dir('employeemanager') {
-                                    sh '''
-                                        docker run --rm -i hadolint/hadolint < employeemanager/Dockerfile | tee hadolint_lint.txt
-                                    '''
+                             parallel(
+                                "opa-front-lint": {
+                                    dir('employeemanager') {
+                                        sh '''
+                                            docker run --rm -i hadolint/hadolint < employeemanager/Dockerfile | tee hadolint_lint.txt
+                                        '''
+                                    }
                                 },
-                                dir("employeemanagerfrontend") {
+                                "opa-back-lint": {
+                                    dir("employeemanagerfrontend") {
                                     sh '''
                                         docker run --rm -i hadolint/hadolint < employeemanagerfrontend/Dockerfile | tee hadolint_lint_front.tx
                                     '''
                                 }
+                            }
+                             )     
                         },
                         "RetireJs":{
                                 dir('employeemanagerfrontend') {
