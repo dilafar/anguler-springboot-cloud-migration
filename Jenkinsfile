@@ -268,14 +268,14 @@ pipeline{
                                 "opa-front-lint": {
                                     dir('employeemanager') {
                                         sh '''
-                                            docker run --rm -i hadolint/hadolint < employeemanager/Dockerfile | tee hadolint_lint.txt
+                                            docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint.txt
                                         '''
                                     }
                                 },
                                 "opa-back-lint": {
                                     dir("employeemanagerfrontend") {
                                     sh '''
-                                        docker run --rm -i hadolint/hadolint < employeemanagerfrontend/Dockerfile | tee hadolint_lint_front.tx
+                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.tx
                                     '''
                                 }
                             }
