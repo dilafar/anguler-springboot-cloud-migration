@@ -1,4 +1,5 @@
 package main
+import rego.v1
 
 deny contains msg if {
 	input.kind == "Service"
@@ -8,7 +9,7 @@ deny contains msg if {
   not input.spec.type == "ExternalName"
 
 	msg := "Service type must be LoadBalancer or ClusterIP"
-  
+
 }
 
 #deny[msg] {
