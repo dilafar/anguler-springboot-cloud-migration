@@ -12,7 +12,7 @@ exit_code=$?
 
                                         
 if [[ $exit_code -eq 1 ]]; then
-    echo "Image scanning failed. HIGH or CRITICAL vulnerabilities found."
+    echo "Image scanning failed on $dockerImageName. HIGH or CRITICAL vulnerabilities found."
     exit 1
 else
     echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
