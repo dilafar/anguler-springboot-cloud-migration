@@ -2,7 +2,7 @@ package main
 
 deny[msg] {
   input.kind == "Service"
-  not (input.spec.type == "LoadBalancer" || input.spec.type == "ClusterIP")
+  not input.spec.type in {"LoadBalancer", "ClusterIP"}
   msg = "Service type must be LoadBalancer or ClusterIP"
 }
 
@@ -11,3 +11,5 @@ deny[msg] {
 #  not input.spec.template.spec.containers[0].securityContext.runAsNonRoot = true
 #  msg = "Containers must not run as root - use runAsNonRoot wihin container security context"
 #}
+
+
