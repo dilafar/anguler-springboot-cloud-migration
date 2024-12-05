@@ -1,6 +1,6 @@
 [
   {
-    "Target": "fadhiljr/nginxapp:employee-frontend-v3.3.5-168 (alpine 3.20.3)",
+    "Target": "fadhiljr/nginxapp:employee-frontend-v3.3.5-169 (alpine 3.20.3)",
     "Type": "alpine"
   }
 ] {
