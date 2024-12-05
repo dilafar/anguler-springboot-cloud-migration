@@ -66,14 +66,13 @@ pipeline{
                 }
             }
         }
-        stage("Build & Test"){
+        stage("Build"){
             steps {
                   script {
                     parallel(
                         "MVN Build": {
                             dir('employeemanager') {
                                     sh 'mvn clean package'
-                                    sh "mvn test"
                             }
                         },
                         "NPM Build": {
@@ -88,13 +87,13 @@ pipeline{
             }
         }
 
-        //stage('Unit Tests - JUnit and JaCoCo'){
-           // steps {
-           //     dir('employeemanager') {
-           //         sh "mvn test"
-           //     }
-          //  }
-      //  }
+        stage('Unit Tests - JUnit and JaCoCo'){
+           steps {
+               dir('employeemanager') {
+                    sh "mvn test"
+                }
+            }
+        }
 
         stage("Code Quality Analysis"){
             steps {
