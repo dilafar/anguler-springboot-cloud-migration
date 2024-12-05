@@ -493,22 +493,7 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                             '''
                             sh "./kubernetes-script.sh"
-                            sh "kubectl config view"
-                            sh "cat kustomization/frontend-deployment.yml"
-                            sh "cat kustomization/frontend-service.yml"
-                            sh "kubectl apply -k kustomization/"
-                            sh "kubectl get pods -n employee"
-
-                          //  def rolloutStatus = sh(script: "kubectl rollout status deployment/employee-frontend -n employee", returnStatus: true)
-                            //echo "$rolloutStatus"
-                            //if (rolloutStatus != 0) {
-                              //  echo "Deployment rollout failed. Rolling back..."
-                             //   sh "kubectl describe deployment/employee-frontend -n employee"
-                            //    sh "kubectl rollout undo deployment/employee-frontend -n employee"
-                          //  } else {
-                          //      echo "Deployment successful."
-                         //   }
-
+                            sh "./kubernetes-apply.sh"
 
                         }
                 }
