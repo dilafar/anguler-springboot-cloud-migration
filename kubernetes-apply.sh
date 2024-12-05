@@ -4,10 +4,6 @@ kubectl config view
 cat kustomization/frontend-deployment.yml
 cat kustomization/frontend-service.yml
 
-kubectl apply -k kustomization/
-
-kubectl get pods -n employee
-
 if kubectl get deploy -n employee | grep -q 'employee-frontend'; then
     
     CURRENT_IMAGE=$(kubectl get deploy employee-frontend -n employee -o=jsonpath='{.spec.template.spec.containers[0].image}')
@@ -36,7 +32,7 @@ if kubectl get deploy -n employee | grep -q 'employee-frontend'; then
             exit 1
         fi
     fi
-
+    echo "deployment successfull"
 else
 
     kubectl apply -k kustomization/
@@ -60,4 +56,5 @@ else
             exit 1
         fi
     fi
+    echo "deployment successfull"
 fi
