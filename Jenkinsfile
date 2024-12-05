@@ -33,13 +33,44 @@ pipeline{
                 }
             }
         }
-        stage("Build"){
+        stage("increment version"){
+            steps {
+                script {
+                    parallel(
+                        "Maven Increment": {
+                            dir('employeemanager') {
+                                    echo "incrimenting app version ..."
+                                    sh 'mvn build-helper:parse-version versions:set \
+                                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                                        versions:commit'
+                                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                                    def version = matcher[0][1]       
+                                    env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
+                            }
+                        },
+                        "NPM Increment": {
+                            dir('employeemanagerfrontend') {                          
+                                    sh 'npm version patch --no-git-tag-version'
+                                    def packageFile = readFile('package.json')
+                                    def jsonParser = new JsonSlurper()
+                                    def packageJson = jsonParser.parseText(packageFile)
+                                    def appVersion = packageJson.version
+                                    echo "Application version: ${appVersion}"    
+                            }
+                        }
+                    )
+                         
+                }
+            }
+        }
+        stage("Build & Test"){
             steps {
                   script {
                     parallel(
                         "MVN Build": {
                             dir('employeemanager') {
                                     sh 'mvn clean package'
+                                    sh "mvn test"
                             }
                         },
                         "NPM Build": {
@@ -54,13 +85,13 @@ pipeline{
             }
         }
 
-        stage('Unit Tests - JUnit and JaCoCo'){
-            steps {
-                dir('employeemanager') {
-                    sh "mvn test"
-                }
-            }
-        }
+        //stage('Unit Tests - JUnit and JaCoCo'){
+           // steps {
+           //     dir('employeemanager') {
+           //         sh "mvn test"
+           //     }
+          //  }
+      //  }
 
         stage("Code Quality Analysis"){
             steps {
@@ -323,13 +354,13 @@ pipeline{
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v44 .
+                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v44 
+                                                    docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v44)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -341,13 +372,13 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v44 .
+                                                    docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
                                                     echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v44
+                                                    docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v44)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -425,7 +456,7 @@ pipeline{
                             "Trivy Scan": {
                                         sh ''' 
                                             bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v44 &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v44 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
 
                                             wait
                                        '''                           

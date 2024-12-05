@@ -6,7 +6,7 @@ metadata:
     tier: backend
     app: employee-backend
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: employee-backend
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: employee-backend
-          image: fadhiljr/nginxapp:employee-backend-v9
+          image: nginx
           ports:
             - containerPort: 8080
           env:
@@ -45,8 +45,8 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: "600m"
-              memory: "250Mi"
+              cpu: "500m"
+              memory: "128Mi"
             limits:
               cpu: "1000m"
               memory: "500Mi"
