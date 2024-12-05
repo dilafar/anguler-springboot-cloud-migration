@@ -1,9 +1,9 @@
 [
   {
-    "Target": "fadhiljr/nginxapp:employee-backend-v3.3.5-166 (alpine 3.20.3)",
+    "Target": "fadhiljr/nginxapp:employee-frontend-v3.3.5-167 (alpine 3.20.3)",
     "Type": "alpine"
-  },
-  {
+  }
+] {
     "Target": "home/k8-user/app.jar",
     "Type": "jar"
   }
