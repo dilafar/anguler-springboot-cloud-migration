@@ -406,7 +406,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-frontend-v44|g' frontend-deployment.yml
+                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g' frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
@@ -460,7 +460,7 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v44 &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
                                             bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
 
                                             wait
