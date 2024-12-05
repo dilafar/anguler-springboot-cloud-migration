@@ -1,12 +1,14 @@
 package main
 
 deny contains msg if {
-  input.kind == "Service"
+	input.kind == "Service"
 
-  not input.spec.type == "LoadBalancer"
-  not input.spec.type == "ClusterIP"
+	not input.spec.type == "LoadBalancer"
+	not input.spec.type == "ClusterIP"
+  not input.spec.type == "ExternalName"
 
-  msg := "Service type must be LoadBalancer or ClusterIP"
+	msg := "Service type must be LoadBalancer or ClusterIP"
+  
 }
 
 #deny[msg] {
