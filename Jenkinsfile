@@ -49,6 +49,8 @@ pipeline{
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[0][1]       
                                     env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
+                                    env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
+                                    echo "Found JAR File: ${jarFile}"
                             }
                         },
                         "NPM Increment": {
@@ -180,7 +182,6 @@ pipeline{
         stage("Upload Artifacts"){
             steps {
                 script {
-                        env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                         dir('employeemanager') {
                                 nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
