@@ -491,6 +491,7 @@ pipeline{
                                             exit 1
                                         fi
                                         chmod +x kubernetes-script.sh
+                                        chmod +x kubernetes-apply.sh
                             '''
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
