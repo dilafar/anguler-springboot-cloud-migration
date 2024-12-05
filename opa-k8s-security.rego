@@ -2,7 +2,7 @@ package main
 
 deny[msg] {
   input.kind == "Service"
-  not (input.spec.type == "LoadBalancer" or input.spec.type == "ClusterIP")
+  not (input.spec.type == "LoadBalancer" || input.spec.type == "ClusterIP")
   msg = "Service type must be LoadBalancer or ClusterIP"
 }
 
