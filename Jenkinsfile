@@ -406,7 +406,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g' frontend-deployment.yml
+                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
                                         cat frontend-deployment.yml
                                     '''
                                 }
