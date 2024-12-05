@@ -451,7 +451,7 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "Dependency Scan": {
+                            "OPA Scan": {
                                     sh '''
                                         docker run --rm \
                                             -v $(pwd):/project \
