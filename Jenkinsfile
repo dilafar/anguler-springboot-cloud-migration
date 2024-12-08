@@ -452,7 +452,8 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                 
                             '''
-                            sh "./kubernetes-script.sh"
+                         //   sh "./kubernetes-script.sh"
+                            sh "kubectl config current-context"
                             sh "kubectl apply -k kustomization/"
                             sh "kubectl get all -n employee"
 
