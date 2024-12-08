@@ -443,7 +443,7 @@ pipeline{
             steps {
                 script {
                             sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                            sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo"
+                            sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo --overwrite-existing"
                             sh '''
                                         if [ ! -f kubernetes-script.sh ]; then
                                             echo "kubernetes-script.sh file is missing!" >&2
