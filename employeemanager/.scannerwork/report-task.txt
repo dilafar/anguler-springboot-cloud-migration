@@ -2,5 +2,5 @@ projectKey=employee
 serverUrl=http://172.48.16.144
 serverVersion=9.9.2.77730
 dashboardUrl=http://172.48.16.144/dashboard?id=employee
-ceTaskId=AZOmZM1zxg_hLs3UiOWi
-ceTaskUrl=http://172.48.16.144/api/ce/task?id=AZOmZM1zxg_hLs3UiOWi
+ceTaskId=AZOmdFm9xg_hLs3UiOWj
+ceTaskUrl=http://172.48.16.144/api/ce/task?id=AZOmdFm9xg_hLs3UiOWj
