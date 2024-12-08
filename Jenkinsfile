@@ -453,6 +453,7 @@ pipeline{
                                 
                             '''
                          //   sh "./kubernetes-script.sh"
+                            sh "kubectl config use-context aks-demo"
                             sh "kubectl config current-context"
                             sh "kubectl apply -k kustomization/"
                             sh "kubectl get all -n employee"
