@@ -139,41 +139,9 @@ helm install \
   --version v1.16.2 \
   --set installCRDs=true
 
-## SAMPLE OUTPUT
-Kalyans-Mac-mini:azure-aks-kubernetes-masterclass-internal24 kalyanreddy$ helm install \
->   cert-manager jetstack/cert-manager \
->   --namespace ingress-basic \
->   --version v1.13.3 \
->   --set installCRDs=true
-NAME: cert-manager
-LAST DEPLOYED: Fri Dec 29 12:47:27 2023
-NAMESPACE: ingress-basic
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-cert-manager v1.13.3 has been deployed successfully!
 
-In order to begin issuing certificates, you will need to set up a ClusterIssuer
-or Issuer resource (for example, by creating a 'letsencrypt-staging' issuer).
 
-More information on the different types of issuers and how to configure them
-can be found in our documentation:
 
-https://cert-manager.io/docs/configuration/
-
-For information on how to configure cert-manager to automatically provision
-Certificates for Ingress resources, take a look at the `ingress-shim`
-documentation:
-
-https://cert-manager.io/docs/usage/ingress/
-Kalyans-Mac-mini:azure-aks-kubernetes-masterclass-internal24 kalyanreddy$ 
-
-# Verify Cert Manager pods
-kubectl get pods --namespace ingress-basic
-
-# Verify Cert Manager Services
-kubectl get svc --namespace ingress-basic
 
 issuer - lets encrypt
 
