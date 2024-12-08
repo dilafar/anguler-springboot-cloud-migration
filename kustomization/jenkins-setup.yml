@@ -24,9 +24,9 @@ metadata:
   name: jenkins-role
   namespace: employee
 rules:
-  - apiGroups: [""] 
-    resources: ["pods", "services", "replicationcontrollers","secrets"]
-    verbs: ["get", "list", "create", "delete","update", "patch"]
+  - apiGroups: [""]
+    resources: ["pods", "services", "replicationcontrollers", "secrets"]
+    verbs: ["get", "list", "create", "delete", "update", "patch"]
   - apiGroups: ["apps"]
     resources: ["deployments", "daemonsets", "statefulsets"]
     verbs: ["get", "list", "create", "delete", "patch", "update"]
