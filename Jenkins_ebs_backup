@@ -204,9 +204,50 @@ pipeline{
                     }
                 }
 
+        stage("Deploy to stage bean"){
+           steps {
+                dir('employeemanager') {
+                    withAWS(credentials: 'awsbeancreds', region: 'us-east-1') {
+                        sh '''
+                            pip3 install --user urllib3==1.26.16
+                            pip3 install --user --upgrade awscli botocore
+                            export PATH=$HOME/.local/bin:$PATH
+                        '''
+                        sh "aws s3 cp ${env.JAR_FILE} s3://$AWS_S3_BUCKET/$ARTIFACT_NAME"
+                        sh 'aws elasticbeanstalk create-application-version --application-name $AWS_EB_APP_NAME --version-label $AWS_EB_APP_VERSION --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$ARTIFACT_NAME'
+                        sh 'aws elasticbeanstalk update-environment --application-name $AWS_EB_APP_NAME --environment-name $AWS_EB_ENVIRONMENT --version-label $AWS_EB_APP_VERSION'
+                }
+            }
+             
+           }
+        }
 
+        stage("ansible deployment") {
+                    steps {
+                       ansiblePlaybook([
+                                playbook: 'ansible/ebs-deploy.yml',
+                                inventory: 'ansible/stage.inventory',
+                                installation: 'ansible',
+                                credentialsId: 'ec2-server-key',
+                                colorized: true,
+                                disableHostKeyChecking: true,
+                                ]
+                               )
+                    }
+                }
 
-
+        stage("ssh agent") {
+            steps {
+                script {
+                    def command = 'bash ./git-command.sh'
+                    sshagent(['ec2-server-key']) {
+                        sh "scp git-command.sh ubuntu@172.48.16.90:/home/ubuntu"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.48.16.90 sudo chmod +x git-command.sh"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@172.48.16.90 '${command}'"
+                    }
+                }
+            }
+        }
 
         stage("Vulnerability Scan - Docker") {
             steps {
@@ -365,8 +406,8 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i '/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g' backend-deployment.yml
-                                        cat backend-deployment.yml
+                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
+                                        cat frontend-deployment.yml
                                     '''
                                 }
                             }
@@ -450,11 +491,10 @@ pipeline{
                                             exit 1
                                         fi
                                         chmod +x kubernetes-script.sh
-                                
+                                        chmod +x kubernetes-apply.sh
                             '''
                             sh "./kubernetes-script.sh"
-                            sh "kubectl apply -k kustomization/"
-                            sh "kubectl get all -n employee"
+                            sh "./kubernetes-apply.sh"
 
                         }
                 }

@@ -16,9 +16,13 @@ spec:
         tier: backend
         app: employee-backend
     spec:
+      initContainers:
+        - name: mydb-available
+          image: busybox:1.28
+          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
-          image: nginx
+          image: nginx-v2.3.5
           ports:
             - containerPort: 8080
           env:
@@ -27,12 +31,15 @@ spec:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://mysql:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
-              value: "root"
+              value: "admin"
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
                   name: mysql-db-password
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
           livenessProbe:
             tcpSocket:
               port: 8080
@@ -45,8 +52,8 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: "500m"
+              cpu: "200m"
               memory: "128Mi"
             limits:
-              cpu: "1000m"
-              memory: "500Mi"
+              cpu: "250m"
+              memory: "250Mi"
