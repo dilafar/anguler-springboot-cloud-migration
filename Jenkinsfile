@@ -365,7 +365,7 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i '/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g' backend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g" backend-deployment.yml
                                         cat backend-deployment.yml
                                     '''
                                 }
