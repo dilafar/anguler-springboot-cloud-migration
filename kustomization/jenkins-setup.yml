@@ -25,7 +25,7 @@ metadata:
   namespace: employee
 rules:
   - apiGroups: [""] 
-    resources: ["pods", "services", "replicationcontrollers"]
+    resources: ["pods", "services", "replicationcontrollers","secrets"]
     verbs: ["get", "list", "create", "delete"]
   - apiGroups: ["apps"]
     resources: ["deployments", "daemonsets", "statefulsets"]
