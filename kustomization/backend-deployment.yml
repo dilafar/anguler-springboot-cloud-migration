@@ -16,20 +16,24 @@ spec:
         tier: backend
         app: employee-backend
     spec:
+      initContainers:
+        - name: mydb-available
+          image: busybox:1.28
+          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
-          image: fadhiljr/nginxapp:employee-backend-v0.0.11-183
+          image: nginx-v2.3.5
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_APPLICATION_NAME
               value: "employee"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://employeemanager.c9iouucc2x0o.us-east-1.rds.amazonaws.com:3306/employeemanager"
+              value: "jdbc:mysql://mysql:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
-              value: "admin"
+              value: "employee"
             - name: SPRING_DATASOURCE_PASSWORD
-              value: "AhwRrvWIdTupcSKRHRZO"
+              value: "fadhil1234#"
           securityContext:
             runAsNonRoot: true
             runAsUser: 100
