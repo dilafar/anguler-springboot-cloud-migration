@@ -33,10 +33,7 @@ spec:
             - name: SPRING_DATASOURCE_USERNAME
               value: "admin"
             - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: mysql-db-password
+              value: "AhwRrvWIdTupcSKRHRZO"
           securityContext:
             runAsNonRoot: true
             runAsUser: 100
