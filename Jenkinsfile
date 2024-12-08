@@ -482,8 +482,8 @@ pipeline{
                         },
                         "kubenetes resource scan": {
                              sh '''
-                                kubescape scan workload Deployment/employee-frontend --namespace employee
-                                kubescape scan workload service/employee-frontend-service --namespace employee
+                                kubescape scan workload Deployment/employee-backend --namespace employee
+                                kubescape scan workload service/employee-backend-service --namespace employee
                             '''
                         }
                     )
