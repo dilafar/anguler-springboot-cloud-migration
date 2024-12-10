@@ -15,7 +15,7 @@ variables:
   dockerfilePathFrontEnd: '$(Build.SourcesDirectory)/employeemanagerfrontend/Dockerfile'
   tag: '$(Build.BuildId)'
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  #vmImageName: 'ubuntu-latest'
 stages:
 - stage: Build
   displayName: Build and push stage
@@ -23,7 +23,7 @@ stages:
   - job: BuildBackend
     displayName: Build backend image
     pool:
-      vmImage: $(vmImageName)
+      name: Default
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -37,7 +37,7 @@ stages:
   - job: BuildFrontend
     displayName: Build frontend image
     pool:
-      vmImage: $(vmImageName)
+      name: Default
     steps:        
     - task: Docker@2
       displayName: Build and push an image to frontend container registry
