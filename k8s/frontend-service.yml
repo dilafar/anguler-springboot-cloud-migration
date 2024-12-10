@@ -6,7 +6,7 @@ metadata:
     app: employee-frontend
     tier: frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: employee-frontend
   ports:

@@ -6,12 +6,11 @@ metadata:
     app: employee-backend
     tier: backend
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: employee-backend
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
       protocol: TCP
-      nodePort: 32245
       name: http
