@@ -38,12 +38,7 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          $(tag)
-  - job: BuildFrontend
-    displayName: Build frontend image
-    pool:
-      vmImage: $(vmImageName)
-    steps:        
+          $(tag)      
     - task: Docker@2
       displayName: Build and push an image to frontend container registry
       inputs:
