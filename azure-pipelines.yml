@@ -7,7 +7,7 @@ resources:
 - repo: self
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '6c243601-847b-4942-95f7-e31ec44b7de3'
+  dockerRegistryServiceConnection: '27148f27-b589-47f2-a7ac-c01051bc09a8'
   imageRepository: 'appbackend'
   imageRepositoryFrontEnd: 'appfrontend'
   containerRegistry: 'devopsacrnew.azurecr.io'
