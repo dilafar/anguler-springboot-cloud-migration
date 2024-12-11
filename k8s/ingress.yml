@@ -29,8 +29,8 @@ spec:
               number: 80
   tls:
   - hosts:
-      - azure.employee-mgmt.com
-    secretName: azure-employee-mgmt-secret
+      - azuredev.employee-mgmt.com
+    secretName: azuredevops-employee-mgmt-secret
   - hosts:
       - azuredns.employee-mgmt.com
-    secretName: azuredns-employee-mgmt-secret
+    secretName: azuredevops-backend-employee-mgmt-secret
