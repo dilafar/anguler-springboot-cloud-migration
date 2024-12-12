@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiServerUrl: "https://azuredns.employee-mgmt.com/api"
+  apiServerUrl: "https://aws.cloud-net-mgmt.com/api"
 };
 

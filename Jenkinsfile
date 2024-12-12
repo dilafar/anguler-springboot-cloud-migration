@@ -8,21 +8,13 @@ pipeline{
         maven 'maven3'
     }
 
-    environment {
-        AWS_S3_BUCKET = 'cicdbeans3'
-        AWS_EB_APP_NAME = 'employee-test'
-        AWS_EB_ENVIRONMENT = 'Employee-test-env'
-        AWS_EB_APP_VERSION = "${BUILD_ID}"
+    environment {     
         ARTIFACT_NAME = "employeemanager-v${BUILD_ID}.jar"
         COSIGN_PASSWORD = credentials('cosign-password') 
         COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
-        SEMGREP_PR_ID = "${env.CHANGE_ID}"
-        AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
-        AZURE_CLIENT_ID = credentials('azure-client-id')
-        AZURE_CLIENT_SECRET = credentials('azure-client-secret')
-        AZURE_TENANT_ID = credentials('azure-tenant-id')
+        SEMGREP_PR_ID = "${env.CHANGE_ID}"     
     }
 
     stages{
@@ -442,35 +434,31 @@ pipeline{
         }
 
         stage("Kubernetes Apply") {
-            steps {
-                script {
-                            sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                            sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo --overwrite-existing"
-                            sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
-                                            echo "kubernetes-script.sh file is missing!" >&2
-                                            exit 1
-                                        fi
-                                        chmod +x kubernetes-script.sh
-                                
-                            '''
-                         //   sh "./kubernetes-script.sh"
-                            sh "kubectl config use-context aks-demo"
-                            sh "kubectl config current-context"
-                            sh "kubectl apply -k kustomization/"
-                            sh "kubectl get all"
-
-                        }
+                environment {
+                    AWS_ACCESS_KEY_ID = credentials('awsbeancreds')
+                    AWS_SECRET_ACCESS_KEY = credentials('awsbeancreds')
                 }
-            
-        }
+                steps {
+                    script {
+                        def clusterExists = sh(
+                            script: "kubectl config get-contexts | grep -q 'eksdemo'",
+                            returnStatus: true
+                        ) == 0
+                        if (!clusterExists) {
+                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                        }
+                        sh "kubectl get nodes"
+                    }
+                }
+}
+
 
         stage ("kubernetes cluster check") {
             steps {
                 script {
-                        sh '''
-                            kubectl config use-context aks-demo
-                        '''
+                      //  sh '''
+                       //     kubectl config use-context aks-demo
+                        //'''
                     parallel (
                         "kubernetes CIS benchmark": {
                             sh '''
@@ -482,12 +470,12 @@ pipeline{
                                 kubescape scan
                             '''
                         },
-                        "kubenetes resource scan": {
-                             sh '''
-                                kubescape scan workload Deployment/employee-backend 
-                                kubescape scan workload service/employee-backend-service 
-                            '''
-                        }
+                     //   "kubenetes resource scan": {
+                       //      sh '''
+                         //       kubescape scan workload Deployment/employee-backend 
+                           //     kubescape scan workload service/employee-backend-service 
+                            //'''
+                       // }
                     )
                             
 

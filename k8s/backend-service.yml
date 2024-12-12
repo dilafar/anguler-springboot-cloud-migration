@@ -5,6 +5,8 @@ metadata:
   labels:
     app: employee-backend
     tier: backend
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
 spec:
   type: ClusterIP
   selector:

@@ -6,7 +6,7 @@
       --policy-document file://iam_policy_latest.json
 
 ### Policy ARN
-    Policy ARN:  arn:aws:iam::130488647343:policy/AWSLoadBalancerControllerIAMPolicy
+    Policy ARN:  arn:aws:iam::503561445256:policy/AWSLoadBalancerControllerIAMPolicy
 
 ### Verify if any existing service account
     kubectl get sa -n kube-system
@@ -14,10 +14,10 @@
 
 ### create iamserviceaccount
     eksctl create iamserviceaccount \
-        --cluster=eksdemonew \
+        --cluster=eksdemo \
         --namespace=kube-system \
         --name=aws-load-balancer-controller \
-        --attach-policy-arn=arn:aws:iam::130488647343:policy/AWSLoadBalancerControllerIAMPolicy \
+        --attach-policy-arn=arn:aws:iam::503561445256:policy/AWSLoadBalancerControllerIAMPolicy \
         --override-existing-serviceaccounts \
         --approve
 
@@ -31,16 +31,16 @@
 
 ### region code and account number
     https://docs.aws.amazon.com/eks/latest/userguide/add-ons-images.html
-    us-east-1=602401143452.dkr.ecr.us-east-1.amazonaws.com
+    us-east-1=602401143452.dkr.ecr.us-east-1.amazonaws.com 
     
 ## install aws loadbalancer controller
     helm repo add eks https://aws.github.io/eks-charts
     helm repo update
     helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
         -n kube-system \
-        --set clusterName=eksdemonew \
+        --set clusterName=eksdemo \
         --set serviceAccount.create=false \
         --set serviceAccount.name=aws-load-balancer-controller \
         --set region=us-east-1 \
-        --set vpcId=vpc-0363f386a43e395g7 \
+        --set vpcId=vpc-0feb46acd23bafb33 \
         --set image.repository=602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller
