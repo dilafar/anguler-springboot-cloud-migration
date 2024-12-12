@@ -447,6 +447,7 @@ pipeline{
                         if (!clusterExists) {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                         }
+                        sh "kubectl config view"
                         sh "kubectl get nodes"
                     }
                 }
