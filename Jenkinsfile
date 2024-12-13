@@ -439,6 +439,7 @@ pipeline{
                         withAWS(credentials: 'awsbeancreds', region: 'us-east-1') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             sh "kubectl config view"
+                            sh "aws s3 ls"
                             sh "kubectl get nodes"
                         }
                 }
