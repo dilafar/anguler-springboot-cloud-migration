@@ -434,24 +434,16 @@ pipeline{
         }
 
         stage("Kubernetes Apply") {
-                environment {
-                    AWS_ACCESS_KEY_ID = credentials('awsbeancreds')
-                    AWS_SECRET_ACCESS_KEY = credentials('awsbeancreds')
-                }
                 steps {
                     script {
-                        def clusterExists = sh(
-                            script: "kubectl config get-contexts | grep -q 'eksdemo'",
-                            returnStatus: true
-                        ) == 0
-                        if (!clusterExists) {
+                        withAWS(credentials: 'awsbeancreds') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            sh "kubectl config view"
+                            sh "kubectl get nodes"
                         }
-                        sh "kubectl config view"
-                        sh "kubectl get nodes"
-                    }
                 }
-}
+        }
+    }
 
 
         stage ("kubernetes cluster check") {
