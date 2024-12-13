@@ -436,7 +436,7 @@ pipeline{
         stage("Kubernetes Apply") {
                 steps {
                     script {
-                        withAWS(credentials: 'awsbeancreds') {
+                        withAWS(credentials: 'awsbeancreds', region: 'us-east-1') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             sh "kubectl config view"
                             sh "kubectl get nodes"
