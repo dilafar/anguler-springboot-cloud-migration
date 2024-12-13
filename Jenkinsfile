@@ -440,6 +440,8 @@ pipeline{
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             sh "kubectl config view"
                             sh "kubectl get nodes"
+                            sh "kubectl apply -f kustomization/externalDNS.yml"
+                            sh "kubectl apply -k kustomization/"
                         }
                 }
         }

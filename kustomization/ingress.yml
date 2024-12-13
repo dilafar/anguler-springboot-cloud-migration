@@ -3,11 +3,23 @@ kind: Ingress
 metadata:
   name: employee-mgmt-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    alb.ingress.kubernetes.io/load-balancer-name: employeemgmtingress
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+   #alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/success-codes: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:503561445256:certificate/48078190-563c-4ea2-b9f6-2db954427e21
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
-  - host: azure.employee-mgmt.com
+  - host: awsdev.cloud-net-mgmt.com
     http:
       paths:
       - pathType: Prefix
@@ -17,7 +29,7 @@ spec:
             name: employee-frontend-service
             port: 
               number: 80
-  - host: azuredns.employee-mgmt.com
+  - host: aws.cloud-net-mgmt.com
     http:
       paths:
       - pathType: Prefix
@@ -27,10 +39,4 @@ spec:
             name: employee-backend-service
             port: 
               number: 80
-  tls:
-  - hosts:
-      - azure.employee-mgmt.com
-    secretName: azure-employee-mgmt-secret
-  - hosts:
-      - azuredns.employee-mgmt.com
-    secretName: azuredns-employee-mgmt-secret
+
