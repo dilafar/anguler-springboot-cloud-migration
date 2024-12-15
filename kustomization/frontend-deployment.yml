@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: employee-frontend
-          image: devopsacrnew.azurecr.io/appfrontend
+          image: fadhiljr/nginxapp:employee-frontend-v0.0.18-199
           ports:
             - containerPort: 80
           resources:
