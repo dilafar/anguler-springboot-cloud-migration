@@ -48,4 +48,4 @@ aws eks --region us-east-1 update-kubeconfig --name eksdemo
 
 # Verify EKS Nodes in EKS Cluster using kubectl
 kubectl get nodes
-## end
+
