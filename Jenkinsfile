@@ -149,24 +149,24 @@ pipeline{
                                                 }         
                                     }
                                 },
-                                "Semgrep": {
-                                    dir('employeemanagerfrontend') {
-                                           sh '''
-                                                    python3 -m pip install semgrep==1.86.0
-                                                    export PATH=$PATH:$HOME/.local/bin
-                                                    semgrep ci --json --output semgrep.json
-                                              '''
-                                    }
-                                }
+                             //   "Semgrep": {
+                             //       dir('employeemanagerfrontend') {
+                              //             sh '''
+                             //                       python3 -m pip install semgrep==1.86.0
+                              //                      export PATH=$PATH:$HOME/.local/bin
+                               //                     semgrep ci --json --output semgrep.json
+                               //               '''
+                                //    }
+                               // }
 
                     )
                 }
             }
-            post {
-                    always {
-                        archiveArtifacts artifacts: '**/employeemanagerfrontend/semgrep.json', allowEmptyArchive: true
-                    }
-                }   
+          //  post {
+          //          always {
+           //             archiveArtifacts artifacts: '**/employeemanagerfrontend/semgrep.json', allowEmptyArchive: true
+           //         }
+            //    }   
 
         }
 
