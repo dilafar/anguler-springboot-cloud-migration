@@ -18,7 +18,7 @@
 ### verify Service Account
     kubectl get sa external-dns
     kubectl describe sa external-dns
-    eksctl get iamserviceaccount --cluster eksdemonew
+    eksctl get iamserviceaccount --cluster eksdemo
 
 arn:aws:iam::503561445256:role/eksctl-eksdemo-addon-iamserviceaccount-defaul-Role1-27DkWPj0rk67
 

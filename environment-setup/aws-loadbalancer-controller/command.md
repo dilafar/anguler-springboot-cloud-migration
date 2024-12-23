@@ -22,7 +22,7 @@
         --approve
 
 ### Verify if any IAM Service Accounts present in EKS Cluster
-    eksctl get iamserviceaccount --cluster=eksdemonew
+    eksctl get iamserviceaccount --cluster=eksdemo
 
 ### Verify if any existing service account
     kubectl get sa -n kube-system

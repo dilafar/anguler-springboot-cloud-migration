@@ -133,7 +133,7 @@ pipeline{
                                                                 -Dsonar.projectName=employee \
                                                                 -Dsonar.projectVersion=1.0 \
                                                                 -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.144/ \
+                                                                -Dsonar.host.url=http://172.48.16.220/ \
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
@@ -179,7 +179,7 @@ pipeline{
                                 nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
                                             protocol: 'http',
-                                            nexusUrl: '172.48.16.120:8081',
+                                            nexusUrl: '172.48.16.19:8081',
                                             groupId: 'QA',
                                             version: "${BUILD_ID}",
                                             repository: 'employee-repo',
@@ -440,8 +440,8 @@ pipeline{
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             sh "kubectl config view"
                             sh "kubectl get nodes"
-                            sh "kubectl apply -f kustomization/externalDNS.yml"
-                            sh "kubectl apply -k kustomization/"
+                          //  sh "kubectl apply -f kustomization/externalDNS.yml"
+                           // sh "kubectl apply -k kustomization/"
                         }
                 }
         }
@@ -486,10 +486,10 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin master || true
+                                git pull origin aws || true
                                 git add .
-                                git commit -m "change added"
-                                git push origin HEAD:master
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:aws
                             '''
                     }
                 }

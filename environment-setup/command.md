@@ -1,5 +1,5 @@
 # Create Cluster
-eksctl create cluster --name=eksdemo1 \
+eksctl create cluster --name=eksdemo \
                       --region=us-east-1 \
                       --zones=us-east-1a,us-east-1b \
                       --without-nodegroup 
@@ -10,18 +10,18 @@ eksctl get cluster
 # Replace with region & cluster name
 eksctl utils associate-iam-oidc-provider \
     --region us-east-1 \
-    --cluster eksdemo1 \
+    --cluster eksdemo \
     --approve
 
-eksctl create nodegroup --cluster=eksdemo1 \
+eksctl create nodegroup --cluster=eksdemo \
                         --region=us-east-1 \
-                        --name=eksdemo1-ng-private1 \
+                        --name=eksdemo-ng-private \
                         --node-type=t3.medium \
                         --nodes-min=2 \
                         --nodes-max=4 \
                         --node-volume-size=20 \
                         --ssh-access \
-                        --ssh-public-key=kube-demo \
+                        --ssh-public-key=server-key \
                         --managed \
                         --asg-access \
                         --external-dns-access \

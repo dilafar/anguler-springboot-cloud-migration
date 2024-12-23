@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: external-dns
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::503561445256:role/eksctl-eksdemo-addon-iamserviceaccount-defaul-Role1-27DkWPj0rk67
+    eks.amazonaws.com/role-arn: arn:aws:iam::911167901499:role/eksctl-eksdemo-addon-iamserviceaccount-defaul-Role1-9R1QUVaJgMwB
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
