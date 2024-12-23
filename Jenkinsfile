@@ -375,8 +375,8 @@ pipeline{
                                 "Frontend Reports Upload": {
                                     dir('employeemanagerfrontend') {
                                         script {
-                                            sh '''
-                                                python3 upload-reports.py semgrep.json 
+                                            // python3 upload-reports.py semgrep.json 
+                                            sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
                                             '''
