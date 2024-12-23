@@ -419,15 +419,15 @@ pipeline{
                                             wait
                                        '''                           
                             },
-                          //  "kubescape": {
-                               // dir('kustomization') {
-                                  //      script {
-                                    //        sh '''
-                                             ///   kubescape scan framework nsa .
-                                         //   '''
-                                     //   }
-                                //}
-                            //}
+                           "kubescape": {
+                                dir('kustomization') {
+                                        script {
+                                            sh '''
+                                                kubescape scan framework nsa .
+                                            '''
+                                        }
+                                }
+                            }
                         )
                     }
             }
@@ -438,44 +438,49 @@ pipeline{
                     script {
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
-                            sh "kubectl config view"
-                            sh "kubectl get nodes"
-                          //  sh "kubectl apply -f kustomization/externalDNS.yml"
-                           // sh "kubectl apply -k kustomization/"
+                            sh '''
+                                        if [ ! -f kubernetes-script.sh ]; then
+                                            echo "kubernetes-script.sh file is missing!" >&2
+                                            exit 1
+                                        fi
+                                        chmod +x kubernetes-script.sh
+                                        chmod +x kubernetes-apply.sh
+                            '''
+                              sh "kubectl apply -f kustomization/secret.yml"
+                              sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
+                              sh "kubectl apply -f kustomization/backend-deployment.yml"
+                           // sh "kubectl apply -f kustomization/externalDNS.yml"
+                           // sh "./kubernetes-script.sh"
+                           // sh "./kubernetes-apply.sh"
+
                         }
                 }
+            }
         }
-    }
-
 
         stage ("kubernetes cluster check") {
-            steps {
-                script {
-                      //  sh '''
-                       //     kubectl config use-context aks-demo
-                        //'''
-                    parallel (
-                        "kubernetes CIS benchmark": {
-                            sh '''
-                                kubescape scan framework all
-                            '''
-                        },
-                        "kubernetes cluster scan": {
-                             sh '''
-                                kubescape scan
-                            '''
-                        },
-                     //   "kubenetes resource scan": {
-                       //      sh '''
-                         //       kubescape scan workload Deployment/employee-backend 
-                           //     kubescape scan workload service/employee-backend-service 
-                            //'''
-                       // }
-                    )
-                            
-
+                steps {
+                    script {
+                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
+                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            parallel (
+                                "kubernetes CIS benchmark": {
+                                    echo "Starting Kubernetes CIS Benchmark scan"
+                                    sh '''
+                                        kubescape scan framework all
+                                    '''
+                                    echo "Kubernetes CIS Benchmark scan completed"
+                                },
+                                "kubernetes cluster scan": {
+                                    sh '''
+                                        kubescape scan
+                                    '''
+                                }
+                            )
+                        }
+                    }
                 }
-            }
+
         }
 
         stage("commit change") {
