@@ -152,7 +152,7 @@ pipeline{
                                 "Semgrep": {
                                     dir('employeemanagerfrontend') {
                                            sh '''
-                                                    pip3 install --user --upgrade semgrep
+                                                    python3 -m pip install semgrep==1.86.0
                                                     export PATH=$PATH:$HOME/.local/bin
                                                     semgrep ci --json --output semgrep.json
                                               '''
