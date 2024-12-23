@@ -6,8 +6,8 @@ scan_type = ''
 
 if file_name == 'njsscan.sarif':
     scan_type = 'SARIF'
-elif file_name == 'semgrep.json':
-    scan_type = 'Semgrep JSON Report'
+#elif file_name == 'semgrep.json':
+#    scan_type = 'Semgrep JSON Report'
 elif file_name == 'retire.json':
     scan_type = 'Retire.js Scan'
 elif file_name == 'dependency-check-report.json':
