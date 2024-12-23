@@ -419,15 +419,15 @@ pipeline{
                                             wait
                                        '''                           
                             },
-                            "kubescape": {
-                                dir('kustomization') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
-                                }
-                            }
+                          //  "kubescape": {
+                               // dir('kustomization') {
+                                  //      script {
+                                    //        sh '''
+                                             ///   kubescape scan framework nsa .
+                                         //   '''
+                                     //   }
+                                //}
+                            //}
                         )
                     }
             }
