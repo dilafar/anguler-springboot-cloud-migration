@@ -483,6 +483,22 @@ pipeline{
 
         }
 
+      //  stage("DAST-ZAP") {
+       //     agent {
+      //          docker 'owasp/zap2docker-stable:latest'  
+      //      }
+       //     steps {
+        //        script {
+        //            // zap-full-scan.py
+            //       sh '''
+                 //       mkdir -p /zap/wrk
+               //         zap-baseline.py -t awsdev.cloud-net-mgmt.com -g gen.conf -I -x baseline.xml
+               //         cp /zap/wrk/baseline.xml baseline.xml
+               //     '''
+              //  }
+         //   }
+      //  }
+
         stage("commit change") {
             steps {
                 script {
