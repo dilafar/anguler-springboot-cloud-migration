@@ -1,14 +1,14 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2024-12-27T14:24:19.286175986Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-frontend-v0.0.26-36",
+  "CreatedAt": "2024-12-27T14:34:40.911764969Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-frontend-v0.0.27-37",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.3"
     },
-    "ImageID": "sha256:9b80658a28846889250d8fa937fe81fc10c2467d95ccd416b67ebba8cbecc4c4",
+    "ImageID": "sha256:a177dafe650514f7c631f953d43f1815473519e28caa2cf64a41b1dabddfc6c7",
     "DiffIDs": [
       "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
       "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
@@ -17,18 +17,18 @@
       "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
       "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
       "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
-      "sha256:d731297f01dfeb4de297d449f45f3a77ae2084d2a53705038b904f9aa90b76ec",
-      "sha256:c24a52cfbe17b13980679d17549266321a278de6a6bda8a65285b05ffea1ba6f"
+      "sha256:b0cf91fa171b073e9122f6e0a760fb8da285c4d8e7e9e70c05088fa4bbe22a82",
+      "sha256:2a8242e5aa2fefc75964f1ad82c73208e1d955eead6f5dd87a60fae60352f46a"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-frontend-v0.0.26-36"
+      "fadhiljr/nginxapp:employee-frontend-v0.0.27-37"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:0a8638b252ce96647035243e3d9c5d125c3cfc14d7db36341a8280879caeac73"
+      "fadhiljr/nginxapp@sha256:bb6501b257947538ad020e2a9937ac3065c448ee72ea82e2bbf63108de97c5ab"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2024-12-27T14:24:00.458399655Z",
+      "created": "2024-12-27T14:34:25.331970229Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -121,11 +121,11 @@
           "empty_layer": true
         },
         {
-          "created": "2024-12-27T14:24:00Z",
+          "created": "2024-12-27T14:34:25Z",
           "created_by": "/bin/sh -c #(nop) COPY dir:061bd4db0a6a2a343887f8900b95bd59bc0e5042548dcb5b05bca019b94d7844 in /usr/share/nginx/html "
         },
         {
-          "created": "2024-12-27T14:24:00Z",
+          "created": "2024-12-27T14:34:25Z",
           "created_by": "/bin/sh -c #(nop) COPY file:876430474185dcd89cf28caaaaac4af3a0eafa56f1708c840dcd5493818b3ad1 in /etc/nginx/conf.d/default.conf "
         }
       ],
@@ -140,8 +140,8 @@
           "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
           "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
           "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
-          "sha256:d731297f01dfeb4de297d449f45f3a77ae2084d2a53705038b904f9aa90b76ec",
-          "sha256:c24a52cfbe17b13980679d17549266321a278de6a6bda8a65285b05ffea1ba6f"
+          "sha256:b0cf91fa171b073e9122f6e0a760fb8da285c4d8e7e9e70c05088fa4bbe22a82",
+          "sha256:2a8242e5aa2fefc75964f1ad82c73208e1d955eead6f5dd87a60fae60352f46a"
         ]
       },
       "config": {
@@ -159,7 +159,7 @@
           "PKG_RELEASE=1",
           "DYNPKG_RELEASE=2"
         ],
-        "Image": "sha256:b5fda072b76c24ab573ee77e1aa95b750a0e103d1e8267f228caee8b0ae4978d",
+        "Image": "sha256:d5dd859cb823e17868a03fd10200324a28f4f1a67226b13ce425ac59bd99d4c6",
         "Labels": {
           "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
         },
@@ -171,7 +171,7 @@
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-frontend-v0.0.26-36 (alpine 3.20.3)",
+      "Target": "fadhiljr/nginxapp:employee-frontend-v0.0.27-37 (alpine 3.20.3)",
       "Class": "os-pkgs",
       "Type": "alpine"
     }
