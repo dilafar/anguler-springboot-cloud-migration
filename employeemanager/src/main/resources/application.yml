@@ -14,3 +14,10 @@ spring:
       mode: always
   application:
     name: "employee"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
