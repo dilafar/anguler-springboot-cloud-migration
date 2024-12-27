@@ -1,94 +1,132 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2024-12-27T02:28:26.477574143Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.19-24",
+  "CreatedAt": "2024-12-27T04:37:07.813112421Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-frontend-v0.0.20-26",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.3"
     },
-    "ImageID": "sha256:2434455575f0f551a65a109ed36555ba36f7516947b1f84f748fd9d4e3d016ce",
+    "ImageID": "sha256:84d67736a0b09e5735293561d17b3ac10d265f6addb88e778c3cabc69093ab07",
     "DiffIDs": [
       "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-      "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-      "sha256:7232135de6812b57f1e7683d697977d567bdeda92f8a5ceb0975e2c84f452f26",
-      "sha256:f7a0c5dbb59c66b0d3f9a3ab6ab2df25fb7c93b151b1258b52d2af421f128c96"
+      "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
+      "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
+      "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
+      "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
+      "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
+      "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
+      "sha256:4f6057292821976cd09854af9149a9f42785469a0eca33b1327c8852e2183e9d",
+      "sha256:6007db75acc4846cc5b3c9d119e827a6c2cfb392da68a15f64bbed5eca79de61"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-backend-v0.0.19-24"
+      "fadhiljr/nginxapp:employee-frontend-v0.0.20-26"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:2d24c6cc4ea811e1db61a82daa3e33ea78a6d4385b88792cacba4e84a8829166"
+      "fadhiljr/nginxapp@sha256:9749e3d1435f0d7a1227cf7555048a87e9f03a297d5a2fdd39ce5d76ea81d496"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "827ac23452ecc75482feb01f00e3c43d8cc001c82f1acdadd009108f8a3e453f",
-      "created": "2024-12-27T02:25:47.972597364Z",
+      "created": "2024-12-27T04:36:49.613381168Z",
       "docker_version": "24.0.7",
       "history": [
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-08-15T00:20:26Z",
           "created_by": "ADD alpine-minirootfs-3.20.3-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-08-15T00:20:26Z",
           "created_by": "CMD [\"/bin/sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ARG version=17.0.13.11.1",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "LABEL maintainer=NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "RUN |1 version=17.0.13.11.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV NGINX_VERSION=1.26.2",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV PKG_RELEASE=1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV DYNPKG_RELEASE=2",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "RUN /bin/sh -c set -x     \u0026\u0026 addgroup -g 101 -S nginx     \u0026\u0026 adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx     \u0026\u0026 apkArch=\"$(cat /etc/apk/arch)\"     \u0026\u0026 nginxPackages=\"         nginx=${NGINX_VERSION}-r${PKG_RELEASE}     \"     \u0026\u0026 apk add --no-cache --virtual .checksum-deps         openssl     \u0026\u0026 case \"$apkArch\" in         x86_64|aarch64)             set -x             \u0026\u0026 KEY_SHA512=\"e09fa32f0a0eab2b879ccbbc4d0e4fb9751486eedda75e35fac65802cc9faa266425edf83e261137a2f4d16281ce2c1a5f4502930fe75154723da014214f0655\"             \u0026\u0026 wget -O /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub             \u0026\u0026 if echo \"$KEY_SHA512 */tmp/nginx_signing.rsa.pub\" | sha512sum -c -; then                 echo \"key verification succeeded!\";                 mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/;             else                 echo \"key verification failed!\";                 exit 1;             fi             \u0026\u0026 apk add -X \"https://nginx.org/packages/alpine/v$(egrep -o '^[0-9]+\\.[0-9]+' /etc/alpine-release)/main\" --no-cache $nginxPackages             ;;         *)             set -x             \u0026\u0026 tempDir=\"$(mktemp -d)\"             \u0026\u0026 chown nobody:nobody $tempDir             \u0026\u0026 apk add --no-cache --virtual .build-deps                 gcc                 libc-dev                 make                 openssl-dev                 pcre2-dev                 zlib-dev                 linux-headers                 bash                 alpine-sdk                 findutils                 curl             \u0026\u0026 su nobody -s /bin/sh -c \"                 export HOME=${tempDir}                 \u0026\u0026 cd ${tempDir}                 \u0026\u0026 curl -f -O https://hg.nginx.org/pkg-oss/archive/${NGINX_VERSION}-${PKG_RELEASE}.tar.gz                 \u0026\u0026 PKGOSSCHECKSUM=\\\"825f610c44dfb97166112e6d060c0ba209a74f50e42c7c23a5b8742f468596f110bb1b4ca9299547a8a3d41f3a7caa864622f40f6c7bb4d8bab3d24880bdfb6a *${NGINX_VERSION}-${PKG_RELEASE}.tar.gz\\\"                 \u0026\u0026 if [ \\\"\\$(openssl sha512 -r ${NGINX_VERSION}-${PKG_RELEASE}.tar.gz)\\\" = \\\"\\$PKGOSSCHECKSUM\\\" ]; then                     echo \\\"pkg-oss tarball checksum verification succeeded!\\\";                 else                     echo \\\"pkg-oss tarball checksum verification failed!\\\";                     exit 1;                 fi                 \u0026\u0026 tar xzvf ${NGINX_VERSION}-${PKG_RELEASE}.tar.gz                 \u0026\u0026 cd pkg-oss-${NGINX_VERSION}-${PKG_RELEASE}                 \u0026\u0026 cd alpine                 \u0026\u0026 make base                 \u0026\u0026 apk index --allow-untrusted -o ${tempDir}/packages/alpine/${apkArch}/APKINDEX.tar.gz ${tempDir}/packages/alpine/${apkArch}/*.apk                 \u0026\u0026 abuild-sign -k ${tempDir}/.abuild/abuild-key.rsa ${tempDir}/packages/alpine/${apkArch}/APKINDEX.tar.gz                 \"             \u0026\u0026 cp ${tempDir}/.abuild/abuild-key.rsa.pub /etc/apk/keys/             \u0026\u0026 apk del --no-network .build-deps             \u0026\u0026 apk add -X ${tempDir}/packages/alpine/ --no-cache $nginxPackages             ;;     esac     \u0026\u0026 apk del --no-network .checksum-deps     \u0026\u0026 if [ -n \"$tempDir\" ]; then rm -rf \"$tempDir\"; fi     \u0026\u0026 if [ -f \"/etc/apk/keys/abuild-key.rsa.pub\" ]; then rm -f /etc/apk/keys/abuild-key.rsa.pub; fi     \u0026\u0026 apk add --no-cache --virtual .gettext gettext     \u0026\u0026 mv /usr/bin/envsubst /tmp/         \u0026\u0026 runDeps=\"$(         scanelf --needed --nobanner /tmp/envsubst             | awk '{ gsub(/,/, \"\\nso:\", $2); print \"so:\" $2 }'             | sort -u             | xargs -r apk info --installed             | sort -u     )\"     \u0026\u0026 apk add --no-cache $runDeps     \u0026\u0026 apk del --no-network .gettext     \u0026\u0026 mv /tmp/envsubst /usr/local/bin/     \u0026\u0026 apk add --no-cache tzdata     \u0026\u0026 ln -sf /dev/stdout /var/log/nginx/access.log     \u0026\u0026 ln -sf /dev/stderr /var/log/nginx/error.log     \u0026\u0026 mkdir /docker-entrypoint.d # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV LANG=C.UTF-8",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY docker-entrypoint.sh / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 10-listen-on-ipv6-by-default.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 15-local-resolvers.envsh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 20-envsubst-on-templates.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 30-tune-worker-processes.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENTRYPOINT [\"/docker-entrypoint.sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV JAVA_HOME=/usr/lib/jvm/default-jvm",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "EXPOSE map[80/tcp:{}]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "STOPSIGNAL SIGQUIT",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-12-27T02:25:44Z",
-          "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
-        },
-        {
-          "created": "2024-12-27T02:25:45Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:032ace91cee82aef86710c500ea4eb732e31320e533c855b2b053e0cb8f1fe65 in /home/k8-user/app.jar "
-        },
-        {
-          "created": "2024-12-27T02:25:46Z",
-          "created_by": "/bin/sh -c #(nop)  USER k8-user",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "CMD [\"nginx\" \"-g\" \"daemon off;\"]",
+          "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-12-27T02:25:47Z",
-          "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
-          "empty_layer": true
+          "created": "2024-12-27T04:36:49Z",
+          "created_by": "/bin/sh -c #(nop) COPY dir:061bd4db0a6a2a343887f8900b95bd59bc0e5042548dcb5b05bca019b94d7844 in /usr/share/nginx/html "
         },
         {
-          "created": "2024-12-27T02:25:47Z",
-          "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
-          "empty_layer": true
+          "created": "2024-12-27T04:36:49Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:876430474185dcd89cf28caaaaac4af3a0eafa56f1708c840dcd5493818b3ad1 in /etc/nginx/conf.d/default.conf "
         }
       ],
       "os": "linux",
@@ -96,38 +134,46 @@
         "type": "layers",
         "diff_ids": [
           "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-          "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-          "sha256:7232135de6812b57f1e7683d697977d567bdeda92f8a5ceb0975e2c84f452f26",
-          "sha256:f7a0c5dbb59c66b0d3f9a3ab6ab2df25fb7c93b151b1258b52d2af421f128c96"
+          "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
+          "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
+          "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
+          "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
+          "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
+          "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
+          "sha256:4f6057292821976cd09854af9149a9f42785469a0eca33b1327c8852e2183e9d",
+          "sha256:6007db75acc4846cc5b3c9d119e827a6c2cfb392da68a15f64bbed5eca79de61"
         ]
       },
       "config": {
+        "Cmd": [
+          "nginx",
+          "-g",
+          "daemon off;"
+        ],
         "Entrypoint": [
-          "java",
-          "-jar",
-          "/home/k8-user/app.jar"
+          "/docker-entrypoint.sh"
         ],
         "Env": [
-          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
-          "LANG=C.UTF-8",
-          "JAVA_HOME=/usr/lib/jvm/default-jvm"
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NGINX_VERSION=1.26.2",
+          "PKG_RELEASE=1",
+          "DYNPKG_RELEASE=2"
         ],
-        "Image": "sha256:97f49890dc9da702e242c7d59334ab4ea8be808073949e2f09bc7a1b6229ce56",
-        "User": "k8-user",
-        "WorkingDir": "/"
+        "Image": "sha256:dd68089b94a5dd3eb0a12c5067be8df7e20cc30ef56734aadb75dffe2d24a91e",
+        "Labels": {
+          "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
+        },
+        "WorkingDir": "/",
+        "ArgsEscaped": true,
+        "StopSignal": "SIGQUIT"
       }
     }
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.19-24 (alpine 3.20.3)",
+      "Target": "fadhiljr/nginxapp:employee-frontend-v0.0.20-26 (alpine 3.20.3)",
       "Class": "os-pkgs",
       "Type": "alpine"
-    },
-    {
-      "Target": "Java",
-      "Class": "lang-pkgs",
-      "Type": "jar"
     }
   ]
 }
