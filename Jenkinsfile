@@ -451,6 +451,7 @@ pipeline{
                             sh "kubectl apply -f kustomization/externalDNS.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
+                            sh 'sleep 90'
                         }
                 }
             }
