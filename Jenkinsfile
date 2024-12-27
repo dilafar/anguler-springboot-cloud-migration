@@ -461,9 +461,7 @@ pipeline{
                 steps {
                     script {
                         sh '''
-                            docker system prune -a --volumes --force || true
-                            rm -rf /var/lib/jenkins/.cache/trivy
-                            rm -rf /var/lib/jenkins/workspace/*
+                            docker system prune -a --volumes --force || true                           
                         '''
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
