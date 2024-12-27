@@ -446,12 +446,10 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                             // sh "kubectl apply -f kustomization/secret.yml"
-                             // sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
-                             // sh "kubectl apply -f kustomization/backend-deployment.yml"
                             sh "kubectl apply -f kustomization/externalDNS.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
+                            sh "kubectl apply -f kustomization/ingress.yml"
 
                         }
                 }
@@ -483,21 +481,23 @@ pipeline{
 
         }
 
-      //  stage("DAST-ZAP") {
-       //     agent {
-      //          docker 'owasp/zap2docker-stable:latest'  
-      //      }
-       //     steps {
-        //        script {
-        //            // zap-full-scan.py
-            //       sh '''
-                 //       mkdir -p /zap/wrk
-               //         zap-baseline.py -t awsdev.cloud-net-mgmt.com -g gen.conf -I -x baseline.xml
-               //         cp /zap/wrk/baseline.xml baseline.xml
-               //     '''
-              //  }
-         //   }
-      //  }
+        stage("DAST-ZAP") {
+            agent {
+                docker 'owasp/zap2docker-stable:latest'  
+            }
+            steps {
+                script {
+                    // zap-full-scan.py
+                    sh 'mkdir -p /zap/wrk'
+
+                    // Run the ZAP baseline scan
+                    sh '''
+                        zap-baseline.py -t awsdev.cloud-net-mgmt.com -g gen.conf -x /zap/wrk/baseline.xml
+                        cp /zap/wrk/baseline.xml baseline.xml
+                    '''
+                }
+            }
+        }
 
         stage("commit change") {
             steps {
