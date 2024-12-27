@@ -450,6 +450,7 @@ pipeline{
                                             echo "kubernetes-script.sh file is missing!" >&2
                                             exit 1
                                         fi
+
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
