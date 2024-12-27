@@ -486,18 +486,22 @@ pipeline{
         }
 
         stage("DAST-ZAP") {
-            agent {
-                docker 'ghcr.io/zaproxy/zaproxy:stable'
-            }
-            steps {
-                script {
-                    sh '''
-                        zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -p progress.conf -x /zap/wrk/baseline.xml
-                        cp /zap/wrk/baseline.xml baseline.xml
-                    '''
-                }
-            }
-        }
+                    agent {
+                        docker {
+                            image 'ghcr.io/zaproxy/zaproxy:stable'
+                            args "-v ${env.WORKSPACE}:/zap/wrk"
+                        }
+                    }
+                    steps {
+                        script {
+                            sh '''
+                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -p progress.conf -x /zap/wrk/baseline.xml
+                                cp /zap/wrk/baseline.xml baseline.xml
+                            '''
+                        }
+                    }
+             }
+
 
         stage("commit change") {
             steps {
