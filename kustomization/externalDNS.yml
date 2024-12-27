@@ -55,4 +55,4 @@ spec:
             - --provider=google
             - --google-zone-visibility=public
             - --registry=txt
-            - --txt-owner-id=my-identifier
+            - --txt-owner-id=my-hostedzone-identifier
