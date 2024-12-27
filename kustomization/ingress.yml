@@ -3,23 +3,13 @@ kind: Ingress
 metadata:
   name: employee-mgmt-ingress
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: employeemgmtingress
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
-   #alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
-    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
-    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
-    alb.ingress.kubernetes.io/success-codes: '200'
-    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:911167901499:certificate/c8570f67-513e-43bc-aad7-1ac5f3a38f37
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    kubernetes.io/ingress.global-static-ip-name: "gke-ingress-external"   
+    networking.gke.io/managed-certificates: managed-cert-ingress
+    networking.gke.io/v1beta1.FrontendConfig: "frontend-config"
 spec:
-  ingressClassName: alb
+  ingressClassName: gce
   rules:
-  - host: awsdev.cloud-net-mgmt.com
+  - host: gcpdev.cloud-emgmt.com
     http:
       paths:
       - pathType: Prefix
@@ -29,7 +19,7 @@ spec:
             name: employee-frontend-service
             port: 
               number: 80
-  - host: aws.cloud-net-mgmt.com
+  - host: gcp.cloud-emgmt.com
     http:
       paths:
       - pathType: Prefix

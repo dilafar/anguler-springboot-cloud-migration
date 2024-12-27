@@ -31,7 +31,7 @@ spec:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://mysql:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
-              value: "admin"
+              value: "root"
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -47,3 +47,11 @@ spec:
             limits:
               cpu: "250m"
               memory: "250Mi"
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5       

@@ -14,7 +14,10 @@ pipeline{
         COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
-        SEMGREP_PR_ID = "${env.CHANGE_ID}"     
+        SEMGREP_PR_ID = "${env.CHANGE_ID}"   
+        CLOUDSDK_CORE_PROJECT = 'warm-axle-445714-v1'
+        CLIENT_EMAIL = 'jenkins-gcloud@warm-axle-445714-v1.iam.gserviceaccount.com'
+        GCLOUD_CRDS = credentials('gcloud-crds')
     }
 
     stages{
@@ -436,52 +439,47 @@ pipeline{
         stage("Kubernetes Apply") {
                 steps {
                     script {
-                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
-                                            echo "kubernetes-script.sh file is missing!" >&2
-                                            exit 1
-                                        fi
-                                        chmod +x kubernetes-script.sh
-                                        chmod +x kubernetes-apply.sh
+                                        gcloud version
+                                        gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
+                                        gcloud compute zones list
+                                        gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1
+
                             '''
-                              sh "kubectl apply -f kustomization/secret.yml"
-                              sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
-                              sh "kubectl apply -f kustomization/backend-deployment.yml"
+                            sh "kubectl get nodes"
+                             // sh "kubectl apply -f kustomization/secret.yml"
+                            //  sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
+                             // sh "kubectl apply -f kustomization/backend-deployment.yml"
                            // sh "kubectl apply -f kustomization/externalDNS.yml"
                            // sh "./kubernetes-script.sh"
                            // sh "./kubernetes-apply.sh"
 
                         }
                 }
-            }
         }
 
-        stage ("kubernetes cluster check") {
-                steps {
-                    script {
-                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
-                            parallel (
-                                "kubernetes CIS benchmark": {
-                                    echo "Starting Kubernetes CIS Benchmark scan"
-                                    sh '''
-                                        kubescape scan framework all
-                                    '''
-                                    echo "Kubernetes CIS Benchmark scan completed"
-                                },
-                                "kubernetes cluster scan": {
-                                    sh '''
-                                        kubescape scan
-                                    '''
-                                }
-                            )
-                        }
-                    }
-                }
+      //  stage ("kubernetes cluster check") {
+          //      steps {
+            //        script {
+            //                sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+               //             parallel (
+               //                 "kubernetes CIS benchmark": {
+                //                    echo "Starting Kubernetes CIS Benchmark scan"
+                 //                   sh '''
+                //                        kubescape scan framework all
+                 //                   '''
+                  //                  echo "Kubernetes CIS Benchmark scan completed"
+                  //              },
+                   //             "kubernetes cluster scan": {
+                   //                 sh '''
+                     //                   kubescape scan
+                    //                '''
+                    //            }
+                   //        )     
+                //    }
+             //   }
 
-        }
+      //  }
 
       //  stage("DAST-ZAP") {
        //     agent {
@@ -507,10 +505,10 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin aws || true
+                                git pull origin gcp || true
                                 git add .
                                 git commit -m "change added from jenkins"
-                                git push origin HEAD:aws
+                                git push origin HEAD:gcp
                             '''
                     }
                 }
@@ -524,6 +522,7 @@ pipeline{
     post {
         always {
             dependencyCheckPublisher pattern: '**/employeemanager/target/dependency-check-report/dependency-check-report.json'
+            sh "gcloud auth revoke $CLIENT_EMAIL"
         }
     }
 }

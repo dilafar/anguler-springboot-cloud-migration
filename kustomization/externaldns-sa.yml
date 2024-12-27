@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: external-dns-gsa@warm-axle-445714-v1.iam.gserviceaccount.com
+  creationTimestamp: "2024-12-27T00:33:50Z"
+  name: external-dns-ksa
+  namespace: external-dns-ns
+  resourceVersion: "1595437"
+  uid: b28cd3d0-9c22-4da4-917a-27fbb0654a76
