@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2024-12-27T09:12:38.156837642Z",
+  "CreatedAt": "2024-12-27T10:19:58.920410386Z",
   "ArtifactName": "node:23.4.0-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
