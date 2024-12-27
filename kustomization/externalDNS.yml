@@ -3,13 +3,11 @@ kind: ServiceAccount
 metadata:
   annotations:
     iam.gke.io/gcp-service-account: external-dns-gsa@warm-axle-445714-v1.iam.gserviceaccount.com
-  creationTimestamp: "2024-12-27T00:33:50Z"
+  creationTimestamp: "2024-12-27T14:50:49Z"
   name: external-dns-ksa
-  labels:
-    app.kubernetes.io/name: external-dns
   namespace: external-dns-ns
-  resourceVersion: "1595437"
-  uid: b28cd3d0-9c22-4da4-917a-27fbb0654a76
+  resourceVersion: "505941"
+  uid: a8c42c78-b07c-438d-b9c9-156ab9e3c6a2
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
