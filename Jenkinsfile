@@ -446,11 +446,11 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
+                            sh "kubectl apply -f kustomization/ingress.yml -n employee"
+                            sh "kubectl config current-context"
                             sh "kubectl apply -f kustomization/externalDNS.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
-                            sh "kubectl apply -f kustomization/ingress.yml -n employee"
-
                         }
                 }
             }
