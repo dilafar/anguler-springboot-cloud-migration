@@ -47,7 +47,7 @@ rules:
       - configmaps
       - events
       - endpoints
-      - ingress
+      - ingresses
       - namespaces
       - clusterrolebindings
       - clusterroles
