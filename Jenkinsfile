@@ -442,11 +442,17 @@ pipeline{
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud compute zones list
                                         gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1
 
                             '''
-                            sh "kubectl get nodes"
+                            sh '''
+                                        if [ ! -f kubernetes-script.sh ]; then
+                                            echo "kubernetes-script.sh file is missing!" >&2
+                                            exit 1
+                                        fi
+                                        chmod +x kubernetes-script.sh
+                                        chmod +x kubernetes-apply.sh
+                            '''
                              // sh "kubectl apply -f kustomization/secret.yml"
                             //  sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
                              // sh "kubectl apply -f kustomization/backend-deployment.yml"
@@ -463,14 +469,19 @@ pipeline{
         stage ("kubernetes cluster check") {
                 steps {
                     script {
-                            sh "gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1"
+                            sh '''
+                                        gcloud version
+                                        gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
+                                        gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1
+
+                            '''
                             parallel (
                                 "kubernetes CIS benchmark": {
                                     echo "Starting Kubernetes CIS Benchmark scan"
                                     sh '''
                                         kubescape scan framework all
-                                   '''
-                                   echo "Kubernetes CIS Benchmark scan completed"
+                                    '''
+                                    echo "Kubernetes CIS Benchmark scan completed"
                                 },
                                 "kubernetes cluster scan": {
                                     sh '''
