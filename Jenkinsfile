@@ -460,6 +460,7 @@ pipeline{
         stage ("kubernetes cluster check") {
                 steps {
                     script {
+                        sh 'docker system prune -a --volumes --force || true'
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
                             sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
                             parallel (
