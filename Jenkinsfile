@@ -442,7 +442,7 @@ pipeline{
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1
+                                        gcloud container clusters get-credentials autopilot-cluster-kube --region us-central1 --project warm-axle-445714-v1
 
                             '''
                             sh '''
