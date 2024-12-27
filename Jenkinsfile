@@ -483,7 +483,7 @@ pipeline{
 
         stage("DAST-ZAP") {
             agent {
-                docker 'ghcr.io/zaproxy/zaproxy:stable'  zaproxy/zap-stable
+                docker 'ghcr.io/zaproxy/zaproxy:stable'
             }
             steps {
                 script {
