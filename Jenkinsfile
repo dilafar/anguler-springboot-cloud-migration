@@ -450,36 +450,38 @@ pipeline{
                              // sh "kubectl apply -f kustomization/secret.yml"
                             //  sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
                              // sh "kubectl apply -f kustomization/backend-deployment.yml"
-                           // sh "kubectl apply -f kustomization/externalDNS.yml"
-                           // sh "./kubernetes-script.sh"
-                           // sh "./kubernetes-apply.sh"
+                            sh "kubectl apply -f kustomization/frontendconfig.yml"
+                            sh "kubectl apply -f kustomization/managed-certificate.yml"
+                            sh "kubectl apply -f kustomization/externalDNS.yml"
+                            sh "./kubernetes-script.sh"
+                            sh "./kubernetes-apply.sh"
 
                         }
                 }
         }
 
-      //  stage ("kubernetes cluster check") {
-          //      steps {
-            //        script {
-            //                sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
-               //             parallel (
-               //                 "kubernetes CIS benchmark": {
-                //                    echo "Starting Kubernetes CIS Benchmark scan"
-                 //                   sh '''
-                //                        kubescape scan framework all
-                 //                   '''
-                  //                  echo "Kubernetes CIS Benchmark scan completed"
-                  //              },
-                   //             "kubernetes cluster scan": {
-                   //                 sh '''
-                     //                   kubescape scan
-                    //                '''
-                    //            }
-                   //        )     
-                //    }
-             //   }
+        stage ("kubernetes cluster check") {
+                steps {
+                    script {
+                            sh "gcloud container clusters get-credentials standard-cluster-1 --region us-central1 --project warm-axle-445714-v1"
+                            parallel (
+                                "kubernetes CIS benchmark": {
+                                    echo "Starting Kubernetes CIS Benchmark scan"
+                                    sh '''
+                                        kubescape scan framework all
+                                   '''
+                                   echo "Kubernetes CIS Benchmark scan completed"
+                                },
+                                "kubernetes cluster scan": {
+                                    sh '''
+                                        kubescape scan
+                                     '''
+                                }
+                           )     
+                    }
+                }
 
-      //  }
+        }
 
       //  stage("DAST-ZAP") {
        //     agent {
