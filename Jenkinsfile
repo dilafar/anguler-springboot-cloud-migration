@@ -491,10 +491,6 @@ pipeline{
             }
             steps {
                 script {
-                    // zap-full-scan.py
-                    sh 'mkdir -p /zap/wrk'
-
-                    // Run the ZAP baseline scan
                     sh '''
                         zap-baseline.py -t awsdev.cloud-net-mgmt.com -g gen.conf -x /zap/wrk/baseline.xml
                         cp /zap/wrk/baseline.xml baseline.xml
