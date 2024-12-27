@@ -454,17 +454,17 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                              sh "kubectl apply -f kustomization/secret.yml"
+                             // sh "kubectl apply -f kustomization/secret.yml"
                             //  sh "kubectl apply -f kustomization/mysql-externalName-service.yml"
-                              sh "kubectl apply -f kustomization/backend-deployment.yml"
-                              sh "kubectl apply -f kustomization/backend-service.yml"
-                              sh "kubectl apply -f kustomization/frontend-deployment.yml"
-                              sh "kubectl apply -f kustomization/frontend-service.yml"
-                        //    sh "kubectl apply -f kustomization/frontendconfig.yml"
-                          //  sh "kubectl apply -f kustomization/managed-certificate.yml"
-                           // sh "kubectl apply -f kustomization/externalDNS.yml"
-                         //   sh "./kubernetes-script.sh"
-                           // sh "./kubernetes-apply.sh"
+                            //  sh "kubectl apply -f kustomization/backend-deployment.yml"
+                            //  sh "kubectl apply -f kustomization/backend-service.yml"
+                            //  sh "kubectl apply -f kustomization/frontend-deployment.yml"
+                           //   sh "kubectl apply -f kustomization/frontend-service.yml"
+                            sh "kubectl apply -f kustomization/frontendconfig.yml"
+                            sh "kubectl apply -f kustomization/managed-certificate.yml"
+                            sh "kubectl apply -f kustomization/externalDNS.yml"
+                            sh "./kubernetes-script.sh"
+                            sh "./kubernetes-apply.sh"
 
                         }
                 }
