@@ -489,7 +489,7 @@ pipeline{
                     agent {
                         docker {
                             image 'ghcr.io/zaproxy/zaproxy:stable'
-                           
+                            args "-v ${env.WORKSPACE}:/zap/wrk"
                         }
                     }
                     steps {
