@@ -485,16 +485,22 @@ pipeline{
 
         }
 
-        stage("DAST-ZAP") {
-                    steps {
-                                    // zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf  -x /zap/wrk/baseline.xml
-                               // cp /zap/wrk/baseline.xml baseline.xml
-                        script {
-                            sh "pwd"
+        stage("DAST-ZAP") {// args "-v ${env.WORKSPACE}:/zap/wrk"
+                    agent {
+                        docker {
+                            image 'ghcr.io/zaproxy/zaproxy:stable'
+                           
                         }
                     }
-             }
-
+                    steps {
+                        script {
+                            sh '''
+                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -x /zap/wrk/baseline.xml
+                                cp /zap/wrk/baseline.xml baseline.xml
+                            '''
+                        }
+                    }
+        }
 
         stage("commit change") {
             steps {
