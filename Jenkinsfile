@@ -495,7 +495,7 @@ pipeline{
                     steps {
                         script {
                             sh '''
-                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -p progress.conf -x /zap/wrk/baseline.xml
+                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf  -x /zap/wrk/baseline.xml
                                 cp /zap/wrk/baseline.xml baseline.xml
                             '''
                         }
