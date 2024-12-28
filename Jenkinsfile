@@ -489,11 +489,12 @@ pipeline{
                     agent {
                         docker {
                             image 'ghcr.io/zaproxy/zaproxy:stable'
-                            args "-v ${env.WORKSPACE}:/zap/wrk"
+                            args "-v ${env.WORKSPACE}/zap/wrk:/zap/wrk"
                         }
                     }
                     steps {
                         script {
+                            sh "${env.WORKSPACE}"
                             sh '''
                                 zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -x /zap/wrk/baseline.xml
                                 cp /zap/wrk/baseline.xml baseline.xml
