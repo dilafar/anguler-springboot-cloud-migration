@@ -490,10 +490,7 @@ pipeline{
                                     // zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf  -x /zap/wrk/baseline.xml
                                // cp /zap/wrk/baseline.xml baseline.xml
                         script {
-                            sh '''
-                                docker run -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-                                    -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html
-                            '''
+                            sh "pwd"
                         }
                     }
              }
