@@ -459,8 +459,8 @@ pipeline{
                             sh "kubectl apply -f kustomization/externalDNS.yml"
                           //  sh "./kubernetes-script.sh"
                            // sh "./kubernetes-apply.sh"
-                            sh "kubectl apply -k kustomization/"
-                            sh "kubectl apply -f kustomization/ingress.yml"
+                          //  sh "kubectl apply -k kustomization/"
+                          //  sh "kubectl apply -f kustomization/ingress.yml"
 
                         }
                 }
