@@ -492,6 +492,7 @@ pipeline{
                             parallel (
                                 "DAST": {
                                     sh '''
+                                        mkdir -p /zap/wrk
                                         docker run  -v ${WORKSPACE}:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable \
                                                 zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html
                                     '''
