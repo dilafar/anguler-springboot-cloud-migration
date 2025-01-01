@@ -10,11 +10,11 @@ if file_name == 'njsscan.sarif':
  #   scan_type = 'Semgrep JSON Report'
 elif file_name == 'retire.json':
     scan_type = 'Retire.js Scan'
-elif file_name == 'dependency-check-report.json':
-    scan_type = 'Dependency Check Scan'
+#elif file_name == 'dependency-check-report.json':
+#   scan_type = 'Dependency Check Scan'
 
 headers = {
-            'Authorization': 'Token da363aab2879c74a3170f87eb88565ba2c610029'
+            'Authorization': 'Token 548afd6fab3bea9794a41b31da0e9404f733e222'
           }
 
 url = 'https://demo.defectdojo.org/api/v2/import-scan/'
@@ -24,7 +24,7 @@ data = {
     'verified': True,
     'scan_type': scan_type,
     'minimum_severity': 'Low',
-    'engagement': 17
+    'engagement': 14
 }
 
 files = {

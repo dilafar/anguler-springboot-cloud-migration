@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata: 
+  name: main-rules-alert-config
+  namespace: monitoring   
+spec:
+  route:
+    receiver: 'email'
+    repeatInterval: 30m
+    routes:
+      - matchers:
+          - name: alertname
+            value: HostHighCPULoad
+      - matchers:
+          - name: alertname
+            value: KubernetesPodCrashLooping
+  receivers:
+    - name: 'email'
+      emailConfigs:
+        - to: 'fadhilahamed98@gmail.com'
+          from: 'fadhilahamed98@gmail.com'
+          smarthost: 'smtp.gmail.com:587'
+          authUsername: 'fadhilahamed98@gmail.com'
+          authIdentity: 'fadhilahamed98@gmail.com'
+          authPassword:
+            name: gmail-auth
+            key: password

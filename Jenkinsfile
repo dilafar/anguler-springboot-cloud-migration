@@ -149,15 +149,18 @@ pipeline{
                                                 }         
                                     }
                                 },
-                             //   "Semgrep": {
-                             //       dir('employeemanagerfrontend') {
-                              //             sh '''
-                             //                       python3 -m pip install semgrep==1.86.0
-                              //                      export PATH=$PATH:$HOME/.local/bin
-                               //                     semgrep ci --json --output semgrep.json
-                               //               '''
-                                //    }
-                               // }
+                                "Semgrep": {
+                                    dir('employeemanagerfrontend') {
+                                           sh '''
+                                                    docker pull semgrep/semgrep && \
+                                                    docker run \
+                                                        -e SEMGREP_APP_TOKEN=$SEMGREP_APP_TOKEN \
+                                                        -e SEMGREP_PR_ID=$SEMGREP_PR_ID \
+                                                        -v "$(pwd):$(pwd)" --workdir $(pwd) \
+                                                    semgrep/semgrep semgrep ci
+                                              '''
+                                    }
+                                }
 
                     )
                 }
@@ -488,9 +491,17 @@ pipeline{
         stage("DAST-ZAP") {
                     steps {
                         script {
-                            sh '''
-                                docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-net-mgmt.com
-                            '''
+                            parallel (
+                                "DAST": {
+                                    sh '''
+                                        docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-net-mgmt.com
+                                    '''
+                                },
+                                "website-monitor":{
+                                    sh 'python3 eks/monitor-website.py'
+                                }
+                            )
+                            
                         }
                     }
         }
@@ -519,7 +530,37 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: '**/employeemanager/target/dependency-check-report/dependency-check-report.json'
-        }
+           script {
+                    def jobName = env.JOB_NAME
+                    def buildNumber = env.BUILD_NUMBER
+                    def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+                    def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
+                    def buildUrl = env.BUILD_URL
+
+                    def body = """
+                        <html>
+                        <body>
+                        <div style="border: 4px solid ${bannerColor}; padding: 10px;">
+                            <h2>${jobName} - Build ${buildNumber}</h2>
+                            <div style="background-color: ${bannerColor}; padding: 10px;">
+                                <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
+                            </div>
+                            <p>Check the <a href="${buildUrl}">console output</a>.</p>
+                        </div>
+                        </body>
+                        </html>
+                    """
+
+                    emailext(
+                        subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+                        body: body,
+                        to: 'fadhilahamed98@gmail.com',
+                        from: 'jenkins@example.com',
+                        replyTo: 'jenkins@example.com',
+                        mimeType: 'text/html',
+                    )
+                 }
+            }
+        
+         }
     }
-}

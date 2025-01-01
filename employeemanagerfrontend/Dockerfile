@@ -9,7 +9,6 @@ COPY . .
 RUN ng build --configuration production
 
 RUN chown -R node:node /app
-USER node
 
 FROM nginx:stable-alpine-slim
 
