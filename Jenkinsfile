@@ -149,8 +149,7 @@ pipeline{
                                                 }         
                                     }
                                 },
-                                "Semgrep": {
-                                    dir('employeemanagerfrontend') {
+                                "Semgrep": {                     
                                            sh '''
                                                     docker pull semgrep/semgrep && \
                                                     docker run \
@@ -158,8 +157,7 @@ pipeline{
                                                         -e SEMGREP_PR_ID=$SEMGREP_PR_ID \
                                                         -v "$(pwd):$(pwd)" --workdir $(pwd) \
                                                     semgrep/semgrep semgrep ci
-                                              '''
-                                    }
+                                              '''   
                                 }
 
                     )
@@ -494,7 +492,8 @@ pipeline{
                             parallel (
                                 "DAST": {
                                     sh '''
-                                        docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-net-mgmt.com
+                                        docker run -v ${WORKSPACE}:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable \
+                                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html
                                     '''
                                 },
                                 "website-monitor":{

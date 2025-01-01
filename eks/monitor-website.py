@@ -15,6 +15,8 @@ try:
     #response.status_code == 200
     if response.status_code == 200:
         print('Application is running successfully')
+        msg = f"Subject: SITE UP\nApplication Returened {response.status_code} \nFix the issue! Restart the application..."
+        send_notification(msg)
     else:
         print('Application is Down. fix it...')
         msg = f"Subject: SITE DOWN\nApplication Returened {response.status_code} \nFix the issue! Restart the application..."
