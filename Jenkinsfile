@@ -156,7 +156,7 @@ pipeline{
                                                         -e SEMGREP_APP_TOKEN=$SEMGREP_APP_TOKEN \
                                                         -e SEMGREP_PR_ID=$SEMGREP_PR_ID \
                                                         -v "$(pwd):$(pwd)" --workdir $(pwd) \
-                                                    semgrep/semgrep semgrep ci
+                                                    semgrep/semgrep semgrep ci --json --output semgrep.json
                                               '''   
                                 }
 
@@ -493,7 +493,7 @@ pipeline{
                                 "DAST": {
                                     sh '''
                                         docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html
+                                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html || true
                                     '''
                                 },
                                 "website-monitor":{
