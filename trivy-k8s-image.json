@@ -1,94 +1,132 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-02T16:20:39.848707146Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.30-84",
+  "CreatedAt": "2025-01-02T16:44:40.659133341Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-frontend-v0.0.31-85",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.3"
     },
-    "ImageID": "sha256:05683abe0c5e0a6e93ea19f78e42a696922a5cf6c84cd71efec033102cbf0914",
+    "ImageID": "sha256:9914fd3201f3a8d37d5e920ac99765f246b683fe2ce93a2c84974ce2cfe38699",
     "DiffIDs": [
       "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-      "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-      "sha256:58638d18ca205899c9d4e2c090e4eb78ffefc294c8a01597f794719bb112e29f",
-      "sha256:22c37963b21934d44c7f06deb148cb3da3e9c7867255407a189f399273be255a"
+      "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
+      "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
+      "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
+      "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
+      "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
+      "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
+      "sha256:88a7a03e7bd7669248f01f93e6f0fef26c24a401591c9058189b16b75971c9ce",
+      "sha256:0aa32e3189bba392b67c3382ad40f658fcf1f901a81282c98dc1aa82584b74a0"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-backend-v0.0.30-84"
+      "fadhiljr/nginxapp:employee-frontend-v0.0.31-85"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:1aa74b27b3ba0a2a70aa42502191ca4a06ef8cb2ef0c3d7c033dfd53301bc1f4"
+      "fadhiljr/nginxapp@sha256:522c91f652012a091f4c78289d8325872f51fa38f18abddcda1d7a38b77ec9fb"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "f7a79fa998765c09e441855d8980853a22a67ea013805c4e5b571a60b2ab6290",
-      "created": "2025-01-02T16:17:50.952054774Z",
+      "created": "2025-01-02T16:44:20.92107642Z",
       "docker_version": "24.0.7",
       "history": [
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-08-15T00:20:26Z",
           "created_by": "ADD alpine-minirootfs-3.20.3-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-08-15T00:20:26Z",
           "created_by": "CMD [\"/bin/sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ARG version=17.0.13.11.1",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "LABEL maintainer=NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "RUN |1 version=17.0.13.11.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV NGINX_VERSION=1.26.2",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV PKG_RELEASE=1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENV DYNPKG_RELEASE=2",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "RUN /bin/sh -c set -x     \u0026\u0026 addgroup -g 101 -S nginx     \u0026\u0026 adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx     \u0026\u0026 apkArch=\"$(cat /etc/apk/arch)\"     \u0026\u0026 nginxPackages=\"         nginx=${NGINX_VERSION}-r${PKG_RELEASE}     \"     \u0026\u0026 apk add --no-cache --virtual .checksum-deps         openssl     \u0026\u0026 case \"$apkArch\" in         x86_64|aarch64)             set -x             \u0026\u0026 KEY_SHA512=\"e09fa32f0a0eab2b879ccbbc4d0e4fb9751486eedda75e35fac65802cc9faa266425edf83e261137a2f4d16281ce2c1a5f4502930fe75154723da014214f0655\"             \u0026\u0026 wget -O /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub             \u0026\u0026 if echo \"$KEY_SHA512 */tmp/nginx_signing.rsa.pub\" | sha512sum -c -; then                 echo \"key verification succeeded!\";                 mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/;             else                 echo \"key verification failed!\";                 exit 1;             fi             \u0026\u0026 apk add -X \"https://nginx.org/packages/alpine/v$(egrep -o '^[0-9]+\\.[0-9]+' /etc/alpine-release)/main\" --no-cache $nginxPackages             ;;         *)             set -x             \u0026\u0026 tempDir=\"$(mktemp -d)\"             \u0026\u0026 chown nobody:nobody $tempDir             \u0026\u0026 apk add --no-cache --virtual .build-deps                 gcc                 libc-dev                 make                 openssl-dev                 pcre2-dev                 zlib-dev                 linux-headers                 bash                 alpine-sdk                 findutils                 curl             \u0026\u0026 su nobody -s /bin/sh -c \"                 export HOME=${tempDir}                 \u0026\u0026 cd ${tempDir}                 \u0026\u0026 curl -f -O https://hg.nginx.org/pkg-oss/archive/${NGINX_VERSION}-${PKG_RELEASE}.tar.gz                 \u0026\u0026 PKGOSSCHECKSUM=\\\"825f610c44dfb97166112e6d060c0ba209a74f50e42c7c23a5b8742f468596f110bb1b4ca9299547a8a3d41f3a7caa864622f40f6c7bb4d8bab3d24880bdfb6a *${NGINX_VERSION}-${PKG_RELEASE}.tar.gz\\\"                 \u0026\u0026 if [ \\\"\\$(openssl sha512 -r ${NGINX_VERSION}-${PKG_RELEASE}.tar.gz)\\\" = \\\"\\$PKGOSSCHECKSUM\\\" ]; then                     echo \\\"pkg-oss tarball checksum verification succeeded!\\\";                 else                     echo \\\"pkg-oss tarball checksum verification failed!\\\";                     exit 1;                 fi                 \u0026\u0026 tar xzvf ${NGINX_VERSION}-${PKG_RELEASE}.tar.gz                 \u0026\u0026 cd pkg-oss-${NGINX_VERSION}-${PKG_RELEASE}                 \u0026\u0026 cd alpine                 \u0026\u0026 make base                 \u0026\u0026 apk index --allow-untrusted -o ${tempDir}/packages/alpine/${apkArch}/APKINDEX.tar.gz ${tempDir}/packages/alpine/${apkArch}/*.apk                 \u0026\u0026 abuild-sign -k ${tempDir}/.abuild/abuild-key.rsa ${tempDir}/packages/alpine/${apkArch}/APKINDEX.tar.gz                 \"             \u0026\u0026 cp ${tempDir}/.abuild/abuild-key.rsa.pub /etc/apk/keys/             \u0026\u0026 apk del --no-network .build-deps             \u0026\u0026 apk add -X ${tempDir}/packages/alpine/ --no-cache $nginxPackages             ;;     esac     \u0026\u0026 apk del --no-network .checksum-deps     \u0026\u0026 if [ -n \"$tempDir\" ]; then rm -rf \"$tempDir\"; fi     \u0026\u0026 if [ -f \"/etc/apk/keys/abuild-key.rsa.pub\" ]; then rm -f /etc/apk/keys/abuild-key.rsa.pub; fi     \u0026\u0026 apk add --no-cache --virtual .gettext gettext     \u0026\u0026 mv /usr/bin/envsubst /tmp/         \u0026\u0026 runDeps=\"$(         scanelf --needed --nobanner /tmp/envsubst             | awk '{ gsub(/,/, \"\\nso:\", $2); print \"so:\" $2 }'             | sort -u             | xargs -r apk info --installed             | sort -u     )\"     \u0026\u0026 apk add --no-cache $runDeps     \u0026\u0026 apk del --no-network .gettext     \u0026\u0026 mv /tmp/envsubst /usr/local/bin/     \u0026\u0026 apk add --no-cache tzdata     \u0026\u0026 ln -sf /dev/stdout /var/log/nginx/access.log     \u0026\u0026 ln -sf /dev/stderr /var/log/nginx/error.log     \u0026\u0026 mkdir /docker-entrypoint.d # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV LANG=C.UTF-8",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY docker-entrypoint.sh / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 10-listen-on-ipv6-by-default.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 15-local-resolvers.envsh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 20-envsubst-on-templates.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "COPY 30-tune-worker-processes.sh /docker-entrypoint.d # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "ENTRYPOINT [\"/docker-entrypoint.sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV JAVA_HOME=/usr/lib/jvm/default-jvm",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "EXPOSE map[80/tcp:{}]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2024-10-16T02:18:03Z",
-          "created_by": "ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "STOPSIGNAL SIGQUIT",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-01-02T16:17:49Z",
-          "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
-        },
-        {
-          "created": "2025-01-02T16:17:50Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:eb256e24b5dcdf8ece5c32acb7d5f2dfb239b6475548e752d01408ccebe22d7b in /home/k8-user/app.jar "
-        },
-        {
-          "created": "2025-01-02T16:17:50Z",
-          "created_by": "/bin/sh -c #(nop)  USER k8-user",
+          "created": "2024-08-15T00:20:26Z",
+          "created_by": "CMD [\"nginx\" \"-g\" \"daemon off;\"]",
+          "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
-          "created": "2025-01-02T16:17:50Z",
-          "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
-          "empty_layer": true
+          "created": "2025-01-02T16:44:20Z",
+          "created_by": "/bin/sh -c #(nop) COPY dir:d60aac3af8c329f76d9de021bcac67293c1bedc381b53bc20ea688dc51ca3783 in /usr/share/nginx/html "
         },
         {
-          "created": "2025-01-02T16:17:50Z",
-          "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
-          "empty_layer": true
+          "created": "2025-01-02T16:44:20Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:876430474185dcd89cf28caaaaac4af3a0eafa56f1708c840dcd5493818b3ad1 in /etc/nginx/conf.d/default.conf "
         }
       ],
       "os": "linux",
@@ -96,107 +134,46 @@
         "type": "layers",
         "diff_ids": [
           "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-          "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-          "sha256:58638d18ca205899c9d4e2c090e4eb78ffefc294c8a01597f794719bb112e29f",
-          "sha256:22c37963b21934d44c7f06deb148cb3da3e9c7867255407a189f399273be255a"
+          "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
+          "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
+          "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
+          "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
+          "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
+          "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
+          "sha256:88a7a03e7bd7669248f01f93e6f0fef26c24a401591c9058189b16b75971c9ce",
+          "sha256:0aa32e3189bba392b67c3382ad40f658fcf1f901a81282c98dc1aa82584b74a0"
         ]
       },
       "config": {
+        "Cmd": [
+          "nginx",
+          "-g",
+          "daemon off;"
+        ],
         "Entrypoint": [
-          "java",
-          "-jar",
-          "/home/k8-user/app.jar"
+          "/docker-entrypoint.sh"
         ],
         "Env": [
-          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
-          "LANG=C.UTF-8",
-          "JAVA_HOME=/usr/lib/jvm/default-jvm"
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NGINX_VERSION=1.26.2",
+          "PKG_RELEASE=1",
+          "DYNPKG_RELEASE=2"
         ],
-        "Image": "sha256:751f191cc677e381924fe8f4e2939485f48260e048bef0b19a3e982f964b94da",
-        "User": "k8-user",
-        "WorkingDir": "/"
+        "Image": "sha256:52c5cc9db8200cfbfeca138837954ab8c69eb52260f00c6ca8a6892c117e6717",
+        "Labels": {
+          "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
+        },
+        "WorkingDir": "/",
+        "ArgsEscaped": true,
+        "StopSignal": "SIGQUIT"
       }
     }
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.30-84 (alpine 3.20.3)",
+      "Target": "fadhiljr/nginxapp:employee-frontend-v0.0.31-85 (alpine 3.20.3)",
       "Class": "os-pkgs",
       "Type": "alpine"
-    },
-    {
-      "Target": "Java",
-      "Class": "lang-pkgs",
-      "Type": "jar",
-      "Vulnerabilities": [
-        {
-          "VulnerabilityID": "CVE-2024-50379",
-          "PkgName": "org.apache.tomcat.embed:tomcat-embed-core",
-          "PkgPath": "home/k8-user/app.jar/BOOT-INF/lib/tomcat-embed-core-10.1.31.jar",
-          "PkgIdentifier": {
-            "PURL": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@10.1.31",
-            "UID": "7750282317461138"
-          },
-          "InstalledVersion": "10.1.31",
-          "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
-          "Status": "fixed",
-          "Layer": {
-            "DiffID": "sha256:22c37963b21934d44c7f06deb148cb3da3e9c7867255407a189f399273be255a"
-          },
-          "SeveritySource": "ghsa",
-          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-50379",
-          "DataSource": {
-            "ID": "ghsa",
-            "Name": "GitHub Security Advisory Maven",
-            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
-          },
-          "Title": "tomcat: RCE due to TOCTOU issue in JSP compilation",
-          "Description": "Time-of-check Time-of-use (TOCTOU) Race Condition vulnerability during JSP compilation in Apache Tomcat permits an RCE on case insensitive file systems when the default servlet is enabled for write (non-default configuration).\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.1, from 10.1.0-M1 through 10.1.33, from 9.0.0.M1 through 9.0.97.\n\nUsers are recommended to upgrade to version 11.0.2, 10.1.34 or 9.0.98, which fixes the issue.",
-          "Severity": "HIGH",
-          "CweIDs": [
-            "CWE-367"
-          ],
-          "VendorSeverity": {
-            "bitnami": 4,
-            "ghsa": 3,
-            "redhat": 3
-          },
-          "CVSS": {
-            "bitnami": {
-              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-              "V3Score": 9.8
-            },
-            "ghsa": {
-              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-              "V3Score": 9.8
-            },
-            "redhat": {
-              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
-              "V3Score": 8.1
-            }
-          },
-          "References": [
-            "http://www.openwall.com/lists/oss-security/2024/12/17/4",
-            "http://www.openwall.com/lists/oss-security/2024/12/18/2",
-            "https://access.redhat.com/security/cve/CVE-2024-50379",
-            "https://github.com/apache/tomcat",
-            "https://github.com/apache/tomcat/commit/05ddeeaa54df1e2dc427d0164bedd6b79f78d81f",
-            "https://github.com/apache/tomcat/commit/43b507ebac9d268b1ea3d908e296cc6e46795c00",
-            "https://github.com/apache/tomcat/commit/631500b0c9b2a2a2abb707e3de2e10a5936e5d41",
-            "https://github.com/apache/tomcat/commit/684247ae85fa633b9197b32391de59fc54703842",
-            "https://github.com/apache/tomcat/commit/8554f6b1722b33a2ce8b0a3fad37825f3a75f2d2",
-            "https://github.com/apache/tomcat/commit/cc7a98b57c6dc1df21979fcff94a36e068f4456c",
-            "https://lists.apache.org/thread/y6lj6q1xnp822g6ro70tn19sgtjmr80r",
-            "https://nvd.nist.gov/vuln/detail/CVE-2024-50379",
-            "https://tomcat.apache.org/security-10.html#Fixed_in_Apache_Tomcat_10.1.34",
-            "https://tomcat.apache.org/security-11.html#Fixed_in_Apache_Tomcat_11.0.2",
-            "https://tomcat.apache.org/security-9.html#Fixed_in_Apache_Tomcat_9.0.98",
-            "https://www.cve.org/CVERecord?id=CVE-2024-50379"
-          ],
-          "PublishedDate": "2024-12-17T13:15:18.81Z",
-          "LastModifiedDate": "2024-12-19T18:15:23Z"
-        }
-      ]
     }
   ]
 }
