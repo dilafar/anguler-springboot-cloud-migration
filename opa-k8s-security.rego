@@ -6,7 +6,8 @@ deny contains msg if {
 
 	not input.spec.type == "LoadBalancer"
 	not input.spec.type == "ClusterIP"
-  not input.spec.type == "ExternalName"
+    not input.spec.type == "ExternalName"
+	not input.spec.type == "NodePort"
 
 	msg := "Service type must be LoadBalancer or ClusterIP"
 
