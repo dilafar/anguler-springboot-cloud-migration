@@ -16,9 +16,12 @@ spec:
         app: employee-frontend
         tier: frontend
     spec:
+      imagePullSecrets:
+        - name: aws-registry-key
       containers:
         - name: employee-frontend
           image: fadhiljr/nginxapp:employee-frontend-v0.0.21-70
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:
