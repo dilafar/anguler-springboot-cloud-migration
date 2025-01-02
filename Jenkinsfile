@@ -15,8 +15,8 @@ pipeline{
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
         SEMGREP_PR_ID = "${env.CHANGE_ID}"   
-        CLOUDSDK_CORE_PROJECT = 'warm-axle-445714-v1'
-        CLIENT_EMAIL = 'jenkins-gcloud@warm-axle-445714-v1.iam.gserviceaccount.com'
+        CLOUDSDK_CORE_PROJECT = 'single-portal-443110-r7'
+        CLIENT_EMAIL = 'jenkins-gcloud@single-portal-443110-r7.iam.gserviceaccount.com'
         GCLOUD_CRDS = credentials('gcloud-crds')
     }
 
@@ -152,24 +152,25 @@ pipeline{
                                                 }         
                                     }
                                 },
-                             //   "Semgrep": {
-                             //       dir('employeemanagerfrontend') {
-                              //             sh '''
-                             //                       python3 -m pip install semgrep==1.86.0
-                              //                      export PATH=$PATH:$HOME/.local/bin
-                               //                     semgrep ci --json --output semgrep.json
-                               //               '''
-                                //    }
-                               // }
+                                "Semgrep": {                     
+                                           sh '''
+                                                    docker pull semgrep/semgrep && \
+                                                    docker run \
+                                                        -e SEMGREP_APP_TOKEN=$SEMGREP_APP_TOKEN \
+                                                        -e SEMGREP_PR_ID=$SEMGREP_PR_ID \
+                                                        -v "$(pwd):$(pwd)" --workdir $(pwd) \
+                                                    semgrep/semgrep semgrep ci --json --output semgrep.json
+                                              '''   
+                                }
 
                     )
                 }
             }
-          //  post {
-          //          always {
-           //             archiveArtifacts artifacts: '**/employeemanagerfrontend/semgrep.json', allowEmptyArchive: true
-           //         }
-            //    }   
+            post {
+                    always {
+                        archiveArtifacts artifacts: '**/semgrep.json', allowEmptyArchive: true
+                    }
+                }   
 
         }
 
@@ -436,13 +437,14 @@ pipeline{
             }
         }
 
+
         stage("Kubernetes Apply") {
                 steps {
                     script {
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud container clusters get-credentials autopilot-cluster-kube --region us-central1 --project warm-axle-445714-v1
+                                        gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project single-portal-443110-r7
 
                             '''
                             sh '''
@@ -454,13 +456,13 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
+                            sh "kubectl apply -f kustomization/backend.yml"
                             sh "kubectl apply -f kustomization/frontendconfig.yml"
                             sh "kubectl apply -f kustomization/managed-certificate.yml"
                             sh "kubectl apply -f kustomization/externalDNS.yml"
-                          //  sh "./kubernetes-script.sh"
-                           // sh "./kubernetes-apply.sh"
-                          //  sh "kubectl apply -k kustomization/"
-                          //  sh "kubectl apply -f kustomization/ingress.yml"
+                            sh "./kubernetes-script.sh"
+                            sh "./kubernetes-apply.sh"
+                            sh 'sleep 90'
 
                         }
                 }
@@ -472,7 +474,7 @@ pipeline{
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud container clusters get-credentials autopilot-cluster-kube --region us-central1 --project warm-axle-445714-v1
+                                        gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project single-portal-443110-r7
                             '''
                             parallel (
                                 "kubernetes CIS benchmark": {
@@ -493,21 +495,24 @@ pipeline{
 
         }
 
-      //  stage("DAST-ZAP") {
-       //     agent {
-      //          docker 'owasp/zap2docker-stable:latest'  
-      //      }
-       //     steps {
-        //        script {
-        //            // zap-full-scan.py
-            //       sh '''
-                 //       mkdir -p /zap/wrk
-               //         zap-baseline.py -t awsdev.cloud-net-mgmt.com -g gen.conf -I -x baseline.xml
-               //         cp /zap/wrk/baseline.xml baseline.xml
-               //     '''
-              //  }
-         //   }
-      //  }
+        stage("DAST-ZAP") {
+                    steps {
+                        script {
+                            parallel (
+                                "DAST": {
+                                    sh '''
+                                        docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
+                                                zap-baseline.py -t https://gcpdev.employee-mgmt.com -g gen.conf -r testreport.html || true
+                                    '''
+                                },
+                                "website-monitor":{
+                                    sh 'python3 gke/monitor-website.py'
+                                }
+                            )
+                            
+                        }
+                    }
+        }
 
         stage("commit change") {
             steps {
@@ -533,8 +538,37 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: '**/employeemanager/target/dependency-check-report/dependency-check-report.json'
-            sh "gcloud auth revoke $CLIENT_EMAIL"
+            script {
+                    sh "gcloud auth revoke $CLIENT_EMAIL"
+                    def jobName = env.JOB_NAME
+                    def buildNumber = env.BUILD_NUMBER
+                    def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+                    def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
+                    def buildUrl = env.BUILD_URL
+
+                    def body = """
+                        <html>
+                        <body>
+                        <div style="border: 4px solid ${bannerColor}; padding: 10px;">
+                            <h2>${jobName} - Build ${buildNumber}</h2>
+                            <div style="background-color: ${bannerColor}; padding: 10px;">
+                                <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
+                            </div>
+                            <p>Check the <a href="${buildUrl}">console output</a>.</p>
+                        </div>
+                        </body>
+                        </html>
+                    """
+
+                    emailext(
+                        subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+                        body: body,
+                        to: 'fadhilahamed98@gmail.com',
+                        from: 'jenkins@example.com',
+                        replyTo: 'jenkins@example.com',
+                        mimeType: 'text/html',
+                    )
+                 }
         }
     }
 }

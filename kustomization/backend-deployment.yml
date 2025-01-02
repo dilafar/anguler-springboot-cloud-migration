@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: mydb-available
           image: busybox:1.28
-          command: ['sh','-c',"until nslookup 34.60.38.43; do echo waiting for database; sleep 4; done"]
+          command: ['sh','-c',"until nslookup 34.31.45.25; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
           image: fadhiljr/nginxapp:employee-backend-v0.0.29-40
@@ -29,7 +29,7 @@ spec:
             - name: SPRING_APPLICATION_NAME
               value: "employee"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://34.60.38.43:3306/employeemanager"
+              value: "jdbc:mysql://34.31.45.25:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
               value: "root"
             - name: SPRING_DATASOURCE_PASSWORD
@@ -47,12 +47,13 @@ spec:
             limits:
               cpu: "250m"
               memory: "250Mi"
-          readinessProbe:
-            httpGet:
-              scheme: HTTP
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 5
+         # readinessProbe:
+          #  httpGet:
+           #   scheme: HTTP
+            #  path: /actuator/health
+             # port: 8080
+            #initialDelaySeconds: 10
+            #periodSeconds: 15
+            #timeoutSeconds: 5
+            
               

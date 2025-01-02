@@ -2,6 +2,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: managed-cert-ingress
+  namespace: employee
 spec:
   domains:
     - gcpdev.cloud-emgmt.com

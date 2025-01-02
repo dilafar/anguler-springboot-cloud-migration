@@ -3,14 +3,12 @@ kind: Namespace
 metadata:
   name: employee
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: jenkins
   namespace: employee
 ---
-
 apiVersion: v1
 kind: Secret
 metadata:
@@ -19,7 +17,6 @@ metadata:
   annotations:
     kubernetes.io/service-account.name: jenkins
 type: kubernetes.io/service-account-token
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -35,6 +32,7 @@ rules:
       - extensions
       - policy
       - rbac.authorization.k8s.io
+      - networking.k8s.io
     resources:
       - pods
       - services
@@ -50,7 +48,7 @@ rules:
       - configmaps
       - events
       - endpoints
-      - ingress
+      - ingresses
       - namespaces
       - clusterrolebindings
       - clusterroles

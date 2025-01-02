@@ -5,6 +5,8 @@ metadata:
   labels:
     app: employee-backend
     tier: backend
+  annotations:
+    cloud.google.com/backend-config: '{"default": "my-backendconfig"}'    
 spec:
   type: NodePort
   selector:

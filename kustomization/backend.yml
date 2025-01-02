@@ -1,0 +1,27 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: my-backendconfig
+  namespace: employee
+spec:
+  timeoutSec: 42 
+  connectionDraining: 
+    drainingTimeoutSec: 62
+  logging:
+    enable: true
+    sampleRate: 1.0
+  cdn:
+    enabled: true
+    cachePolicy:
+      includeHost: true
+      includeProtocol: true
+      includeQueryString: false 
+  securityPolicy:
+    name: "cloud-armor-policy"
+  healthCheck:
+    checkIntervalSec: 5
+    timeoutSec: 5 
+    healthyThreshold: 2 
+    unhealthyThreshold: 2 
+    type: TCP
+    port: 8080

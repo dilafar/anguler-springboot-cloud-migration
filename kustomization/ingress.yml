@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: employee-mgmt-ingress
+#  namespace: employee
   annotations:
     kubernetes.io/ingress.global-static-ip-name: "gke-ingress-external"   
     networking.gke.io/managed-certificates: managed-cert-ingress
@@ -9,7 +10,7 @@ metadata:
     kubernetes.io/ingress.class: "gce"
 spec:
   rules:
-  - host: gcpdev.cloud-emgmt.com
+  - host: gcpdev.employee-mgmt.com
     http:
       paths:
       - pathType: Prefix
@@ -19,7 +20,7 @@ spec:
             name: employee-frontend-service
             port: 
               number: 80
-  - host: gcp.cloud-emgmt.com
+  - host: gcp.employee-mgmt.com
     http:
       paths:
       - pathType: Prefix
