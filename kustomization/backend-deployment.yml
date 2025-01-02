@@ -24,7 +24,7 @@ spec:
         - name: aws-registry-key
       containers:
         - name: employee-backend
-          image: fadhiljr/nginxapp:employee-backend-v0.0.21-70
+          image: 911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:backend-v0.0.22-78
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

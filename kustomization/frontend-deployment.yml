@@ -20,7 +20,7 @@ spec:
         - name: aws-registry-key
       containers:
         - name: employee-frontend
-          image: fadhiljr/nginxapp:employee-frontend-v0.0.21-70
+          image: 911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:frontend-v0.0.22-78
           imagePullPolicy: Always
           ports:
             - containerPort: 80
