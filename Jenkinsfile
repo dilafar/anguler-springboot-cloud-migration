@@ -323,7 +323,7 @@ pipeline{
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     export COSIGN_TLOG_UPLOAD=false
                                                     cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --no-tlog-verify $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
@@ -342,7 +342,7 @@ pipeline{
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     export COSIGN_TLOG_UPLOAD=false
                                                     cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --no-tlog-verify $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
