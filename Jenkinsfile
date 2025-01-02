@@ -444,8 +444,7 @@ pipeline{
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project single-portal-443110-r7
-
+                                        gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
                             '''
                             sh '''
                                         if [ ! -f kubernetes-script.sh ]; then
@@ -456,11 +455,12 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                            sh "kubectl apply -f kustomization/ingress.yml"
-                            sh "kubectl apply -f kustomization/backend.yml"
+                            sh "kubectl apply -f kustomization/externalDNS.yml"
                             sh "kubectl apply -f kustomization/frontendconfig.yml"
                             sh "kubectl apply -f kustomization/managed-certificate.yml"
-                            sh "kubectl apply -f kustomization/externalDNS.yml"
+                            sh "kubectl apply -f kustomization/backend.yml"
+                            sh "kubectl apply -f kustomization/backend-cdn.yml"
+                            sh "kubectl apply -f kustomization/ingress.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
                             sh 'sleep 90'
@@ -475,7 +475,7 @@ pipeline{
                             sh '''
                                         gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
-                                        gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project single-portal-443110-r7
+                                        gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
                             '''
                             parallel (
                                 "kubernetes CIS benchmark": {

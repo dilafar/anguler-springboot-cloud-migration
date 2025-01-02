@@ -4,20 +4,6 @@ metadata:
   name: my-backendconfig
   namespace: employee
 spec:
-  timeoutSec: 42 
-  connectionDraining: 
-    drainingTimeoutSec: 62
-  logging:
-    enable: true
-    sampleRate: 1.0
-  cdn:
-    enabled: true
-    cachePolicy:
-      includeHost: true
-      includeProtocol: true
-      includeQueryString: false 
-  securityPolicy:
-    name: "cloud-armor-policy"
   healthCheck:
     checkIntervalSec: 5
     timeoutSec: 5 
