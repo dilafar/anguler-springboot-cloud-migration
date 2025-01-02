@@ -321,8 +321,9 @@ pipeline{
                                                 sh '''
                                                     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:frontend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY --skip-tlog $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --skip-tlog $IMAGE_DIGEST
+                                                    export COSIGN_TLOG_UPLOAD=false
+                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
@@ -339,8 +340,9 @@ pipeline{
                                                 sh '''
                                                     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:backend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY --skip-tlog $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --skip-tlog $IMAGE_DIGEST
+                                                    export COSIGN_TLOG_UPLOAD=false
+                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
