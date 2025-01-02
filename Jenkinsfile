@@ -456,6 +456,7 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
+                            sh "kubectl apply -f kustomization/ingress.yml"
                             sh "kubectl apply -f kustomization/backend.yml"
                             sh "kubectl apply -f kustomization/frontendconfig.yml"
                             sh "kubectl apply -f kustomization/managed-certificate.yml"

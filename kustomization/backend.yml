@@ -23,5 +23,6 @@ spec:
     timeoutSec: 5 
     healthyThreshold: 2 
     unhealthyThreshold: 2 
-    type: TCP
+    type: HTTP
+    requestPath: /actuator/health
     port: 8080

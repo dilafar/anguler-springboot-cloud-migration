@@ -5,5 +5,5 @@ metadata:
   namespace: employee
 spec:
   domains:
-    - gcpdev.cloud-emgmt.com
-    - gcp.cloud-emgmt.com
+    - gcpdev.employee-mgmt.com
+    - gcp.employee-mgmt.com
