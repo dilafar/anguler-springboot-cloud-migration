@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  labels:
+    tier: {{ .Values.serviceTier }}
+    app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.appReplicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        tier: {{ .Values.serviceTier }}
+        app: {{ .Values.appName }}
+    spec:
+      initContainers:
+        - name: mydb-available
+          image: busybox:1.28
+          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            {{- range .Values.containerEnvVar }}
+            - name:  {{ .name }}
+              value:  {{ .value | quote }}
+            {{- end }}
+            - name: {{ .Values.secretEnv }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.secretKey }}
+                  name: {{ .Values.secretName }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "250Mi"
