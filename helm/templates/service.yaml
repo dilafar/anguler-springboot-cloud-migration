@@ -1,18 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.appName }}-service
+  name: {{ include "helm.fullname" . }}
   labels:
-    app: {{ .Values.appName }}
-    tier: {{ .Values.serviceTier }}
-  annotations:
-    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    {{- include "helm.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.serviceType }}
-  selector:
-    app: {{ .Values.appName }}
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.servicePort }}
-      targetPort: {{ .Values.containerPort }}
+    - port: {{ .Values.service.port }}
+      targetPort: http
       protocol: TCP
       name: http
+  selector:
+    {{- include "helm.selectorLabels" . | nindent 4 }}
