@@ -1,0 +1,17 @@
+appName: employee-backend
+appReplicas: 2
+appTier: backend
+appImage: 911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack
+appVersion: backend-v0.0.23-79
+containerPort: 8080
+containerEnvVar:
+  - name: SPRING_APPLICATION_NAME
+    value: "employee"
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:mysql://mysql:3306/employeemanager"
+  - name: SPRING_DATASOURCE_USERNAME
+    value:  "admin"
+servicePort: 80
+serviceType: ClusterIP
+externalUrl: employeemanager.cfmyc6cwork3.us-east-1.rds.amazonaws.com
+
