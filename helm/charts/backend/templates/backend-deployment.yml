@@ -20,12 +20,9 @@ spec:
         - name: mydb-available
           image: busybox:1.28
           command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
-      imagePullSecrets:
-        - name: aws-registry-key
       containers:
         - name: {{ .Values.appName }}
           image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
-          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.containerPort }}
           env:
