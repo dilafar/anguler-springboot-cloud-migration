@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-configuration
+  namespace: argocd
+stringData:
+  VAULT_ADDR: kubectlhttps://kmsvault.cncloudnet.com:8200
+  VAULT_TOKEN: hvs.iMeZFjEFohtGS753ZWXYA9EN
+  AVP_TYPE: vault
+  AVP_AUTH_TYPE: token
+type: Opaque

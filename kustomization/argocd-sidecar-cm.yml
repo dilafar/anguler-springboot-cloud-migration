@@ -22,5 +22,7 @@ data:
           - argocd-vault-plugin
           - generate
           - "."
+          - "-s"
+          - "vault-configuration"
       lockRepo: false
 ---
