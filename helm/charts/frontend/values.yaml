@@ -1,0 +1,16 @@
+appName: employee-frontend
+appReplicas: 2
+appImage: fadhiljr/nginxapp
+appVersion: employee-frontend-v0.0.32-88
+containerPort: 80
+servicePort: 80
+serviceType: ClusterIP
+serviceTier: frontend
+backendHost: awshelm.cloud-net-mgmt.com
+frontendHost: awshelmdev.cloud-net-mgmt.com
+backendServiceName: employee-backend-service
+backendPort: 80
+ingressAppName: employee-mgmt-ingress-helm
+certificatearn: arn:aws:acm:us-east-1:911167901499:certificate/c8570f67-513e-43bc-aad7-1ac5f3a38f37
+loadbalancerName: employeemgmtingresshelm
+ingressClass: alb
