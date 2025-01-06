@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  labels:
+    tier: {{ .Values.appTier }}
+    app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.appName }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        tier: {{ .Values.appTier }}
+        app: {{ .Values.appName }}
+    spec:
+      initContainers:
+        - name: mydb-available
+          image: busybox:1.28
+          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
+      imagePullSecrets:
+        - name: aws-registry-key
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            {{- range .Values.containerEnvVar }}
+            - name:  {{ .name }}
+              value:  {{ .value | quote }}
+            {{- end }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mysql-db-password
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "250Mi"
