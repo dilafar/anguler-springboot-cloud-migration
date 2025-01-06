@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}
+  name: employee-backend
   labels:
-    tier: {{ .Values.appTier }}
-    app: {{ .Values.appName }}
+    tier: backend
+    app: employee-backend
 spec:
-  replicas: {{ .Values.appName }}
+  replicas: 2
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
+      app: employee-backend
   template:
     metadata:
       labels:
-        tier: {{ .Values.appTier }}
-        app: {{ .Values.appName }}
+        tier: backend
+        app: employee-backend
     spec:
       initContainers:
         - name: mydb-available
@@ -23,16 +23,18 @@ spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-        - name: {{ .Values.appName }}
-          image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
+        - name: employee-backend
+          image: 911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:backend-v0.0.23-79
           imagePullPolicy: Always
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: 8080
           env:
-            {{- range .Values.containerEnvVar }}
-            - name:  {{ .name }}
-              value:  {{ .value | quote }}
-            {{- end }}
+            - name: SPRING_APPLICATION_NAME
+              value: "employee"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/employeemanager"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "admin"
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:

@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}
+  name: employee-frontend
   labels:
-    app: {{ .Values.appName }}
-    tier: {{ .Values.appTier }}
+    app: employee-frontend
+    tier: frontend
 spec:
-  replicas: {{ .Values.appReplicas }}
+  replicas: 2
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
+      app: employee-frontend
   template:
     metadata:
       labels:
-        app: {{ .Values.appName }}
-        tier: {{ .Values.appTier }}
+        app: employee-frontend
+        tier: frontend
     spec:
       containers:
-        - name: {{ .Values.appName }}
-          image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
+        - name: employee-frontend
+          image: fadhiljr/nginxapp:employee-frontend-v40.0
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: 80
           resources:
             requests:
               memory: "100Mi"
