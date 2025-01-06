@@ -1,0 +1,25 @@
+--- 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: argocd
+  name: argocd-repo-server-secret-access
+rules:
+  - apiGroups: [""]
+    resources: ["secrets","configmaps"]
+    verbs: ["get","list","watch"]
+
+--- 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argocd-repo-server-secret-access-binding
+  namespace: argocd
+subjects:
+  - kind: ServiceAccount
+    name: argocd-repo-server
+    namespace: argocd
+roleRef:
+  kind: Role
+  name: argocd-repo-server-secret-access
+  apiGroup: rbac.authorization.k8s.io
