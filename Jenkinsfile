@@ -429,18 +429,9 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "OPA Scan chart frontend": {
+                            "OPA Scan helm chart": {
                                     sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego helm/charts/frontend/templates/*
-                                    '''
-                            },
-                            "OPA Scan chart backend": {
-                                    sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego helm/charts/backend/templates/*
+                                       helm template helm | conftest test -p opa-k8s-security.rego -
                                     '''
                             },
                             "Trivy Scan": {
