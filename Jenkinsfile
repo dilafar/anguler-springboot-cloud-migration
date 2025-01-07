@@ -406,6 +406,19 @@ pipeline{
             }
 
         }
+        stage('Switch to Prod Branch') {
+            steps {
+                script {
+                    // Create or switch to the prod branch
+                    sh """
+                        git checkout gh-pages || git checkout -b gh-pages
+                        git pull origin gh-pages || true
+                        ls -la
+                    """
+                    echo "Switched to gh-pages branch"
+                }
+            }
+        }
 /*
         stage("Vulnerability Scan - kubernetes") {
             steps {
