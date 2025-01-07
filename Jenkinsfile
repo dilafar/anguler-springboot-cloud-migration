@@ -430,6 +430,7 @@ pipeline{
                 script {
                    sshagent(['git-ssh-auth']) {
                         sh """
+                            cr version
                             git fetch origin
                             git checkout gh-pages
                             ls -la
