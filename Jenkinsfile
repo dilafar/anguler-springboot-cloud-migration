@@ -408,7 +408,7 @@ pipeline{
 
         }
 
-        stage("commit change") {
+        stage("commit change for argocd") {
             steps {
                 script {
                     sshagent(['git-ssh-auth']) {
@@ -425,8 +425,97 @@ pipeline{
                 }
             }
         }
+        stage("Vulnerability Scan - kubernetes") {
+            steps {
+                script {
+                        parallel (
+                            "OPA Scan chart frontend": {
+                                    sh '''
+                                        docker run --rm \
+                                            -v $(pwd):/project \
+                                            openpolicyagent/conftest test --policy opa-k8s-security.rego helm/charts/frontend/templates/*
+                                    '''
+                            },
+                            "OPA Scan chart backend": {
+                                    sh '''
+                                        docker run --rm \
+                                            -v $(pwd):/project \
+                                            openpolicyagent/conftest test --policy opa-k8s-security.rego helm/charts/backend/templates/*
+                                    '''
+                            },
+                            "Trivy Scan": {
+                                        sh ''' 
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
 
-        stage('Checkout gh-pages Branch') {
+                                            wait
+                                       '''                           
+                            },
+                           "kubescape": {
+                                dir('helm') {
+                                        script {
+                                            sh '''
+                                                kubescape scan framework nsa .
+                                            '''
+                                        }
+                                }
+                            }
+                        )
+                    }
+            }
+        }
+
+       
+
+        stage ("kubernetes cluster check") {
+                steps {
+                    script {
+                        sh '''
+                            docker system prune -a --volumes --force || true                           
+                        '''
+                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
+                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            parallel (
+                                "kubernetes CIS benchmark": {
+                                    echo "Starting Kubernetes CIS Benchmark scan"
+                                    sh '''
+                                        kubescape scan framework all
+                                    '''
+                                    echo "Kubernetes CIS Benchmark scan completed"
+                                },
+                                "kubernetes cluster scan": {
+                                    sh '''
+                                        kubescape scan
+                                    '''
+                                }
+                            )
+                        }
+                    }
+                }
+
+        }
+
+        stage("DAST-ZAP") {
+                    steps {
+                        script {
+                            parallel (
+                                "DAST": {
+                                    sh 'sleep 30'
+                                    sh '''
+                                        docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
+                                                zap-baseline.py -t https://awsvault.cloud-net-mgmt.com -g gen.conf -r testreport.html || true
+                                    '''
+                                },
+                                "website-monitor":{
+                                    sh 'python3 eks/monitor-website.py'
+                                }
+                            )
+                            
+                        }
+                    }
+        }
+
+         stage('Checkout gh-pages Branch') {
             steps {
                     script {
                         sshagent(['git-ssh-auth']) {
@@ -485,131 +574,6 @@ pipeline{
                 }
             }
         }
-
-/*
-        stage("Vulnerability Scan - kubernetes") {
-            steps {
-                script {
-                        parallel (
-                            "OPA Scan": {
-                                    sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
-                                    '''
-                            },
-                            "Trivy Scan": {
-                                        sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
-
-                                            wait
-                                       '''                           
-                            },
-                           "kubescape": {
-                                dir('kustomization') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
-                                }
-                            }
-                        )
-                    }
-            }
-        }
-
-        stage("Kubernetes Apply") {
-                steps {
-                    script {
-                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
-                            sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
-                                            echo "kubernetes-script.sh file is missing!" >&2
-                                            exit 1
-                                        fi
-                                        chmod +x kubernetes-script.sh
-                                        chmod +x kubernetes-apply.sh
-                            '''
-                            sh "kubectl apply -f kustomization/ingress.yml -n employee"
-                            sh "kubectl config current-context"
-                            sh "kubectl apply -f kustomization/externalDNS.yml"
-                            sh "./kubernetes-script.sh"
-                            sh "./kubernetes-apply.sh"
-                            sh 'sleep 90'
-                        }
-                }
-            }
-        }
-
-        stage ("kubernetes cluster check") {
-                steps {
-                    script {
-                        sh '''
-                            docker system prune -a --volumes --force || true                           
-                        '''
-                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
-                            parallel (
-                                "kubernetes CIS benchmark": {
-                                    echo "Starting Kubernetes CIS Benchmark scan"
-                                    sh '''
-                                        kubescape scan framework all
-                                    '''
-                                    echo "Kubernetes CIS Benchmark scan completed"
-                                },
-                                "kubernetes cluster scan": {
-                                    sh '''
-                                        kubescape scan
-                                    '''
-                                }
-                            )
-                        }
-                    }
-                }
-
-        }
-
-        stage("DAST-ZAP") {
-                    steps {
-                        script {
-                            parallel (
-                                "DAST": {
-                                    sh '''
-                                        docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html || true
-                                    '''
-                                },
-                                "website-monitor":{
-                                    sh 'python3 eks/monitor-website.py'
-                                }
-                            )
-                            
-                        }
-                    }
-        }
-
-        stage("commit change") {
-            steps {
-                script {
-                    sshagent(['git-ssh-auth']) {
-                            sh '''
-                                mkdir -p ~/.ssh
-                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin aws || true
-                                git add .
-                                git commit -m "change added from jenkins"
-                                git push origin HEAD:aws
-                            '''
-                    }
-                }
-            }
-        }
-
-    */  
 
     }
 

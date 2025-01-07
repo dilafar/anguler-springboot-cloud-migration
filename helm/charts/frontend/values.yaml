@@ -6,3 +6,10 @@ appVersion: employee-frontend-v0.0.33-104
 containerPort: 80
 servicePort: 80
 serviceType: ClusterIP
+servicePortBackend: 80
+backendAppName: employee-backend
+frontendUrl: awsvault.cloud-net-mgmt.com
+backendUrl: awstest.cloud-net-mgmt.com
+loadbalancerName: employeemgmtingressvault
+ingressName: employee-mgmt-ingress-vault
+certificateARN: arn:aws:acm:us-east-1:911167901499:certificate/c8570f67-513e-43bc-aad7-1ac5f3a38f37
