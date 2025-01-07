@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-07T21:07:29.395310378Z",
+  "CreatedAt": "2025-01-07T22:24:41.562638872Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
@@ -22,7 +22,7 @@
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:3501523585b3fed89e5d6eb6a9dee191b4b5877af9f9d67c383e567a1804c0be"
+      "maven@sha256:4ad6a3a5842fbb62d2eaee6a59b2f31cf9e769ca38599ae602d7f476b37bfb17"
     ],
     "ImageConfig": {
       "architecture": "amd64",
