@@ -425,17 +425,17 @@ pipeline{
             }
         }
 
-        stage('Switch to Prod Branch') {
+        stage('Checkout gh-pages Branch') {
             steps {
                 script {
-                     sshagent(['git-ssh-auth']) {
+                   sshagent(['git-ssh-auth']) {
                         sh """
-                            git checkout gh-pages || git checkout -b gh-pages
-                            git pull origin gh-pages || true
+                            git fetch origin
+                            git checkout gh-pages
                             ls -la
                         """
                         echo "Switched to gh-pages branch"
-                     }
+                   } 
                 }
             }
         }
