@@ -429,6 +429,7 @@ pipeline{
         stage('Checkout gh-pages Branch') {
             steps {
                     script {
+                        sshagent(['git-ssh-auth']) {
                                 sh '''
                                     cr version
                                     git fetch origin
@@ -447,6 +448,7 @@ pipeline{
                                     cat helm/charts/frontend/values.yaml
                                 '''                          
                                 echo "Switched to gh-pages branch"
+                        }
                     }
             }
         }
