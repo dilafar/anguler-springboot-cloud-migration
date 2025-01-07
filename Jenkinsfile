@@ -355,7 +355,6 @@ pipeline{
                 script {
                     parallel(
                         "Change image backend": {           
-                            dir('kustomization') {
                                 script {
                                     sh '''
                                         sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
@@ -371,7 +370,7 @@ pipeline{
                                         cat helm/charts/frontend/values.yaml
                                     '''
                                 }
-                            }
+                            
                         },
                         "DefectDojo Uploader": {
                             script {
