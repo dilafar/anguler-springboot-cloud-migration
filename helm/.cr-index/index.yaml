@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  eks-argocd-vault:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-01-07T13:40:55.8347978+05:30"
+    description: A Helm chart for Kubernetes
+    digest: 7e5bf1888fb2d02b45cb7a8710512bf96e91046c14c6054d01fbf96af64624dd
+    name: eks-argocd-vault
+    type: application
+    urls:
+    - https://github.com/dilafar/anguler-springboot-aws-migration/releases/download/eks-argocd-vault-0.1.1/eks-argocd-vault-0.1.1.tgz
+    version: 0.1.1
+generated: "2025-01-07T13:40:55.8391384+05:30"
