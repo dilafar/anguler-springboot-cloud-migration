@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-07T19:55:23.514718397Z",
+  "CreatedAt": "2025-01-07T20:10:20.315396381Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
