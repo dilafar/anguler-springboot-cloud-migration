@@ -359,10 +359,10 @@ pipeline{
                                     sh '''
                                         sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
                                         sed -i 's/^appVersion: .*/appVersion: employee-frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
-                                        chmod +x increment_version.sh
-                                        ./increment_version.sh helm/charts/Chart.yaml
-                                        ./increment_version.sh helm/charts/backend/Chart.yaml
-                                        ./increment_version.sh helm/charts/frontend/Chart.yaml
+                                        chmod +x chart-version-increment.sh
+                                        ./chart-version-increment.sh helm/charts/Chart.yaml
+                                        ./chart-version-increment.sh helm/charts/backend/Chart.yaml
+                                        ./chart-version-increment.sh helm/charts/frontend/Chart.yaml
                                         cat helm/charts/Chart.yaml
                                         cat helm/charts/backend/Chart.yaml
                                         cat helm/charts/frontend/Chart.yaml
