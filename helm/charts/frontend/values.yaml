@@ -2,7 +2,7 @@ appName: employee-frontend
 appReplicas: 2
 appTier: frontend
 appImage: fadhiljr/nginxapp
-appVersion: employee-frontend-v0.0.26-96
+appVersion: employee-frontend-v0.0.27-97
 containerPort: 80
 servicePort: 80
 serviceType: ClusterIP
