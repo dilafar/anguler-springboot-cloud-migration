@@ -1,40 +1,40 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-02T05:55:33.381606207Z",
+  "CreatedAt": "2025-01-07T17:20:18.051667299Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
-      "Name": "3.20.3"
+      "Name": "3.20.4"
     },
-    "ImageID": "sha256:503b72e4a4ddf82a8a0d77a57246e8d24b04c3d3a79dd9f808fc3ae487f9c3ac",
+    "ImageID": "sha256:9d372802e80e2e7ffd6df13bd8dec90a61034339830f3aacfd21d06264f1423b",
     "DiffIDs": [
-      "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-      "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-      "sha256:853acf40183c7c12550af6dcd0e4a746139fe2a5fdb10134fb0f9b56ae1c0fe7",
-      "sha256:6a6f3904c1fe9d18a57ae676d6b632ad6297a5f87d0e764077251c4afcbe6c2d",
-      "sha256:e883248e310551a98e85195aa45427313649ebc6662a0bf60bea680aeb31feb5",
+      "sha256:b05f8993843ae754439ae0a7c5b6a401fa1eaebb5f1de01140b19c9a3eb37906",
+      "sha256:11c48536d1ff7494ea2c46f739e1d981be3a1ebcecbb3588a78b72b8fe98bb6d",
+      "sha256:e55374c77bbc06b482936b8cdcf42c02d7dfa16947cb5c071c7fee506977fd5f",
+      "sha256:561afd71c27899c11694071ea653c6d9b54d1279dd0c1c9d3cc3fd545b2a159c",
+      "sha256:0563fdbeeae5f07e58940369bc3fe22ea7ef116f2d8343be4ab44a404a3fb50e",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:b525cc50ae654d4388496f9efe4d8453433f3afbb3889694fe09b689f5972e59"
+      "sha256:95fb08ae5dc788e6a6769182bc8c9c6b5edd4bae0f1ce0f0d59b32c1748be3ac"
     ],
     "RepoTags": [
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:9e0e868c4c786879e065144baed402c9274467a5eae132747520822428535e7f"
+      "maven@sha256:3501523585b3fed89e5d6eb6a9dee191b4b5877af9f9d67c383e567a1804c0be"
     ],
     "ImageConfig": {
       "architecture": "amd64",
       "created": "2024-09-24T11:57:06Z",
       "history": [
         {
-          "created": "2024-09-06T12:05:36Z",
-          "created_by": "ADD alpine-minirootfs-3.20.3-x86_64.tar.gz / # buildkit",
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ADD alpine-minirootfs-3.20.4-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-09-24T11:57:06Z",
           "created_by": "CMD [\"/bin/sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
@@ -158,13 +158,13 @@
       "rootfs": {
         "type": "layers",
         "diff_ids": [
-          "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-          "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-          "sha256:853acf40183c7c12550af6dcd0e4a746139fe2a5fdb10134fb0f9b56ae1c0fe7",
-          "sha256:6a6f3904c1fe9d18a57ae676d6b632ad6297a5f87d0e764077251c4afcbe6c2d",
-          "sha256:e883248e310551a98e85195aa45427313649ebc6662a0bf60bea680aeb31feb5",
+          "sha256:b05f8993843ae754439ae0a7c5b6a401fa1eaebb5f1de01140b19c9a3eb37906",
+          "sha256:11c48536d1ff7494ea2c46f739e1d981be3a1ebcecbb3588a78b72b8fe98bb6d",
+          "sha256:e55374c77bbc06b482936b8cdcf42c02d7dfa16947cb5c071c7fee506977fd5f",
+          "sha256:561afd71c27899c11694071ea653c6d9b54d1279dd0c1c9d3cc3fd545b2a159c",
+          "sha256:0563fdbeeae5f07e58940369bc3fe22ea7ef116f2d8343be4ab44a404a3fb50e",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:b525cc50ae654d4388496f9efe4d8453433f3afbb3889694fe09b689f5972e59"
+          "sha256:95fb08ae5dc788e6a6769182bc8c9c6b5edd4bae0f1ce0f0d59b32c1748be3ac"
         ]
       },
       "config": {
@@ -187,14 +187,13 @@
           "org.opencontainers.image.title": "Apache Maven",
           "org.opencontainers.image.url": "https://github.com/carlossg/docker-maven"
         },
-        "WorkingDir": "/",
-        "ArgsEscaped": true
+        "WorkingDir": "/"
       }
     }
   },
   "Results": [
     {
-      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.3)",
+      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.4)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
