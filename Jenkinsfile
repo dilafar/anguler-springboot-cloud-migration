@@ -434,6 +434,7 @@ pipeline{
                                     cr version
                                     git fetch origin
                                     git checkout gh-pages
+                                    git pull origin gh-pages || true
                                     ls -la
                                     sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
                                     sed -i 's/^appVersion: .*/appVersion: employee-frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
@@ -614,7 +615,8 @@ pipeline{
 
     post {
         always {
-           script {
+           script { 
+                    
                     def jobName = env.JOB_NAME
                     def buildNumber = env.BUILD_NUMBER
                     def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
