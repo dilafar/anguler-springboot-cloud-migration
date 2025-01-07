@@ -15,6 +15,8 @@ pipeline{
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
         SEMGREP_PR_ID = "${env.CHANGE_ID}"     
+        DOCKER_REPO = "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack"
+        DOCKER_REPO_SERVER = "911167901499.dkr.ecr.us-east-1.amazonaws.com"
     }
 
     stages{
@@ -305,22 +307,23 @@ pipeline{
                             // Clean up unused Docker resources
                             sh 'docker system prune -a --volumes --force || true'
 
-                            withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            withCredentials([usernamePassword(credentialsId: 'ecr-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
+                                                    docker build -t $DOCKER_REPO:frontend-v$IMAGE_VERSION .
+                                                    echo $PASS | docker login -u $USER --password-stdin $DOCKER_REPO_SERVER
+                                                    docker push $DOCKER_REPO:frontend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:frontend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    export COSIGN_TLOG_UPLOAD=false
+                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
@@ -329,16 +332,17 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
+                                                    docker build -t $DOCKER_REPO:backend-v$IMAGE_VERSION .
+                                                    echo $PASS | docker login -u $USER --password-stdin $DOCKER_REPO_SERVER
+                                                    docker push $DOCKER_REPO:backend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:backend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    export COSIGN_TLOG_UPLOAD=false
+                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
@@ -358,17 +362,10 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
-                                        sed -i 's/^appVersion: .*/appVersion: employee-frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
-                                        chmod +x increment_version.sh
-                                        ./increment_version.sh helm/charts/Chart.yaml
-                                        ./increment_version.sh helm/charts/backend/Chart.yaml
-                                        ./increment_version.sh helm/charts/frontend/Chart.yaml
-                                        cat helm/charts/Chart.yaml
-                                        cat helm/charts/backend/Chart.yaml
-                                        cat helm/charts/frontend/Chart.yaml
-                                        cat helm/charts/backend/values.yaml
-                                        cat helm/charts/frontend/values.yaml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
+                                        cat backend-deployment.yml
+                                        cat frontend-deployment.yml
                                     '''
                                 }
                             }
@@ -407,7 +404,7 @@ pipeline{
             }
 
         }
-/*
+
         stage("Vulnerability Scan - kubernetes") {
             steps {
                 script {
@@ -421,8 +418,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION &
 
                                             wait
                                        '''                           
@@ -530,7 +527,7 @@ pipeline{
             }
         }
 
-    */  
+      
 
     }
 
