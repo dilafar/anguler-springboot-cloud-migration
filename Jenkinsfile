@@ -14,7 +14,8 @@ pipeline{
         COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
-        SEMGREP_PR_ID = "${env.CHANGE_ID}"     
+        SEMGREP_PR_ID = "${env.CHANGE_ID}" 
+        CR_TOKEN = credentials('cr_cred')    
     }
 
     stages{
@@ -427,19 +428,61 @@ pipeline{
 
         stage('Checkout gh-pages Branch') {
             steps {
+                    script {
+                                sh '''
+                                    cr version
+                                    git fetch origin
+                                    git checkout gh-pages
+                                    ls -la
+                                    sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
+                                    sed -i 's/^appVersion: .*/appVersion: employee-frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
+                                    chmod +x chart-version-increment.sh
+                                    ./chart-version-increment.sh helm/Chart.yaml
+                                    ./chart-version-increment.sh helm/charts/backend/Chart.yaml
+                                    ./chart-version-increment.sh helm/charts/frontend/Chart.yaml
+                                    cat helm/Chart.yaml
+                                    cat helm/charts/backend/Chart.yaml
+                                    cat helm/charts/frontend/Chart.yaml
+                                    cat helm/charts/backend/values.yaml
+                                    cat helm/charts/frontend/values.yaml
+                                '''                          
+                                echo "Switched to gh-pages branch"
+                    }
+            }
+        }
+
+         stage('chart release') {
+            steps {
+                dir('helm') {
+                    script {
+                        sh '''
+                                cr package
+                                cr upload --owner dilafar --git-repo anguler-springboot-aws-migration  --skip-existing
+                                cr index --owner dilafar --git-repo anguler-springboot-aws-migration
+                        '''
+                    }
+                }
+            }
+         }
+
+        stage("commit change on gh-pages") {
+            steps {
                 script {
-                   sshagent(['git-ssh-auth']) {
-                        sh """
-                            cr version
-                            git fetch origin
-                            git checkout gh-pages
-                            ls -la
-                        """
-                        echo "Switched to gh-pages branch"
-                   } 
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin gh-pages || true
+                                git add .
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:gh-pages
+                            '''
+                    }
                 }
             }
         }
+
 /*
         stage("Vulnerability Scan - kubernetes") {
             steps {
