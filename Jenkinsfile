@@ -406,6 +406,25 @@ pipeline{
             }
 
         }
+
+        stage("commit change") {
+            steps {
+                script {
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin argocd-aws || true
+                                git add .
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:argocd-aws
+                            '''
+                    }
+                }
+            }
+        }
+
         stage('Switch to Prod Branch') {
             steps {
                 script {
