@@ -364,11 +364,6 @@ pipeline{
                                         ./chart-version-increment.sh helm/Chart.yaml
                                         ./chart-version-increment.sh helm/charts/backend/Chart.yaml
                                         ./chart-version-increment.sh helm/charts/frontend/Chart.yaml
-                                        cat helm/Chart.yaml
-                                        cat helm/charts/backend/Chart.yaml
-                                        cat helm/charts/frontend/Chart.yaml
-                                        cat helm/charts/backend/values.yaml
-                                        cat helm/charts/frontend/values.yaml
                                     '''
                                 }
                             
@@ -408,23 +403,6 @@ pipeline{
 
         }
 
-        stage("commit change for argocd") {
-            steps {
-                script {
-                    sshagent(['git-ssh-auth']) {
-                            sh '''
-                                mkdir -p ~/.ssh
-                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin argocd-aws || true
-                                git add .
-                                git commit -m "change added from jenkins"
-                                git push origin HEAD:argocd-aws
-                            '''
-                    }
-                }
-            }
-        }
         stage("Vulnerability Scan - kubernetes") {
             steps {
                 script {
@@ -456,6 +434,25 @@ pipeline{
             }
         }
 
+
+        stage("commit change for argocd") {
+            steps {
+                script {
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin argocd-aws || true
+                                git add .
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:argocd-aws
+                            '''
+                    }
+                }
+            }
+        }
+        
        
 
         stage ("kubernetes cluster check") {
@@ -522,11 +519,6 @@ pipeline{
                                     ./chart-version-increment.sh helm/Chart.yaml
                                     ./chart-version-increment.sh helm/charts/backend/Chart.yaml
                                     ./chart-version-increment.sh helm/charts/frontend/Chart.yaml
-                                    cat helm/Chart.yaml
-                                    cat helm/charts/backend/Chart.yaml
-                                    cat helm/charts/frontend/Chart.yaml
-                                    cat helm/charts/backend/values.yaml
-                                    cat helm/charts/frontend/values.yaml
                                 '''                          
                                 echo "Switched to gh-pages branch"
                         }
