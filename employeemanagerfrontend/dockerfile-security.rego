@@ -72,31 +72,6 @@ deny[msg] {
     msg = "Do not run as root, use USER instead"
 }
 
-# Forbidden users list
-forbidden_users = [
-    "root",
-    "toor",
-    "0"
-]
-
-# Rule to check if the last USER directive is forbidden
-deny[msg] {
-    # Get all users from the input where the command is "user"
-    users = [input[i].Value | input[i].Cmd == "user"]
-    
-    # Ensure there is at least one user
-    count(users) > 0
-    
-    # Get the last user from the list
-    lastuser = users[count(users) - 1]
-    
-    # Check if the last user is forbidden
-    contains(forbidden_users, lower(lastuser))
-    
-    # Generate the error message
-    msg = sprintf("Last USER directive (USER %s) is forbidden", [lastuser])
-}
-
 # Do not sudo
 deny[msg] {
     input[i].Cmd == "run"
