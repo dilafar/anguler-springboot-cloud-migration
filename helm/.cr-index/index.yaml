@@ -3,7 +3,17 @@ entries:
   eks-argocd-vault:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.747576213Z"
+    created: "2025-01-15T11:12:15.727627178Z"
+    description: A Helm chart for Kubernetes
+    digest: 9242177e972098d83fe28bfe83d7db3e12fcffd382480174440e45da069b6320
+    name: eks-argocd-vault
+    type: application
+    urls:
+    - https://github.com/dilafar/anguler-springboot-aws-migration/releases/download/eks-argocd-vault-0.1.9/eks-argocd-vault-0.1.9.tgz
+    version: 0.1.9
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-01-15T11:12:15.651842724Z"
     description: A Helm chart for Kubernetes
     digest: a253245f502f0bfbb00bb69cb39fe84ebcd45befb98be18193cc737a88e58ca6
     name: eks-argocd-vault
@@ -13,7 +23,7 @@ entries:
     version: 0.1.8
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.649934464Z"
+    created: "2025-01-15T11:12:15.555937753Z"
     description: A Helm chart for Kubernetes
     digest: 81963aa2bb6883f3aeec5ebb3cba1d3658e4bbed2b68885f2bacf06cbc78705d
     name: eks-argocd-vault
@@ -23,7 +33,7 @@ entries:
     version: 0.1.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.536557285Z"
+    created: "2025-01-15T11:12:15.470387316Z"
     description: A Helm chart for Kubernetes
     digest: 124788414c106122a040d0b987eb1243587878e5b18a6a8b7e6718d714d24db7
     name: eks-argocd-vault
@@ -33,7 +43,7 @@ entries:
     version: 0.1.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.46132313Z"
+    created: "2025-01-15T11:12:15.383155133Z"
     description: A Helm chart for Kubernetes
     digest: fa500e939280552c8b07b14a3c52761940bf108dc7b156092a570d2875f1e680
     name: eks-argocd-vault
@@ -43,7 +53,7 @@ entries:
     version: 0.1.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.387485155Z"
+    created: "2025-01-15T11:12:15.30065042Z"
     description: A Helm chart for Kubernetes
     digest: b7fedeec087a3cc9ade79d1652490fc4fdb64992102876c506cbac779c5ad37d
     name: eks-argocd-vault
@@ -53,7 +63,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.286623297Z"
+    created: "2025-01-15T11:12:15.210881857Z"
     description: A Helm chart for Kubernetes
     digest: 993fc0b5b8d209e5ac555bf00e89eeac6968a6091480d1ca2a335ba0256b786d
     name: eks-argocd-vault
@@ -63,7 +73,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.211291632Z"
+    created: "2025-01-15T11:12:15.13286366Z"
     description: A Helm chart for Kubernetes
     digest: cdde07b530059c5b24313733acda00c1e1243cc941db2e038dec769b40214e74
     name: eks-argocd-vault
@@ -73,7 +83,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-01-15T10:58:12.118214244Z"
+    created: "2025-01-15T11:12:15.061872694Z"
     description: A Helm chart for Kubernetes
     digest: 7e5bf1888fb2d02b45cb7a8710512bf96e91046c14c6054d01fbf96af64624dd
     name: eks-argocd-vault
@@ -81,4 +91,4 @@ entries:
     urls:
     - https://github.com/dilafar/anguler-springboot-aws-migration/releases/download/eks-argocd-vault-0.1.1/eks-argocd-vault-0.1.1.tgz
     version: 0.1.1
-generated: "2025-01-15T10:58:12.747631802Z"
+generated: "2025-01-15T11:12:15.727680139Z"
