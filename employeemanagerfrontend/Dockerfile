@@ -9,7 +9,6 @@ COPY . .
 RUN ng build --configuration production
 
 FROM nginx:stable-alpine-slim
-#RUN addgroup -S pipeline && adduser -S k8-user -G pipeline
+
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ /usr/share/nginx/html
 COPY --from=build /app/generated_openssl_cert/default.conf /etc/nginx/conf.d/default.conf
-#USER k8-user
