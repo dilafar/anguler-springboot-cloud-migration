@@ -1,39 +1,40 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-02T05:59:10.72991673Z",
-  "ArtifactName": "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:frontend-v0.0.23-79",
+  "CreatedAt": "2025-01-15T09:42:48.722297588Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-frontend-v0.0.37-114",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
-      "Name": "3.20.3"
+      "Name": "3.20.5"
     },
-    "ImageID": "sha256:c3973e49bd8fb9263c81ebc717ef206c2e1bf2d1cd0e4c79335c97e24fe9ebfa",
+    "ImageID": "sha256:3a686e4addd7f38859770f53710467efb6b7d8c930306923b441341e4a9f421a",
     "DiffIDs": [
-      "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-      "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
-      "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
-      "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
-      "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
-      "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
-      "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
-      "sha256:dc520d85e8193d57ed5494a00502e786f64e8c8ea13cd723a6566df365d199f6",
-      "sha256:f5cc5f7f7f3967b3098b0e6ea2500eadd22863aa591967149b8c35d32013c30f"
+      "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+      "sha256:ffebbad4cff8032ba3f669c891d8550e8a4b77c549229d45fc667c036fe862e8",
+      "sha256:3012f2d5c309b7c527571e060f8085c2664548e84d456d79ce4960d4da2c6495",
+      "sha256:f8faf11c609ec70f0b1bc754598c41880fa2de9f1d5d518c4c2fd32c98095953",
+      "sha256:abd7f33ec37df392b665442ce9f2e8dc84caddb11cbe3c41e6e19d976acf5cf7",
+      "sha256:ee128c8f01aa9befa24eadfeea9af910cf3b141643ab50d817cc6fb11ab6e93a",
+      "sha256:f80a8fac336fcb1a0dd084655cf1933063e909471ae59e88ca85910a716826dd",
+      "sha256:f19ccb8408ae0865311a1764e308c067b0ccc7035f7af66c6861a2d1c2472e72",
+      "sha256:79f8610f5aa5fd705f8e02144fa33c2bf3aea02f2645dc2e53c12e9b790d613d"
     ],
     "RepoTags": [
-      "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:frontend-v0.0.23-79"
+      "fadhiljr/nginxapp:employee-frontend-v0.0.37-114"
     ],
     "RepoDigests": [
-      "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack@sha256:ac22742d5a08d2fe67e16f03e79471f7761c6ae2071b8c77bb1841026c5fcc06"
+      "fadhiljr/nginxapp@sha256:44537fe2f6dc4a8d505eb9f640b914426a5f0ea5c55e36e2d9146078fd72ffff"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "created": "2025-01-02T05:58:51.431507653Z",
+      "container": "3221eed6b0076593b009a0ba2e0605a75f25447e384de5763fe876721ab36d00",
+      "created": "2025-01-15T09:42:34.192403457Z",
       "docker_version": "24.0.7",
       "history": [
         {
           "created": "2024-08-15T00:20:26Z",
-          "created_by": "ADD alpine-minirootfs-3.20.3-x86_64.tar.gz / # buildkit",
+          "created_by": "ADD alpine-minirootfs-3.20.5-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
@@ -121,27 +122,32 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-02T05:58:51Z",
-          "created_by": "/bin/sh -c #(nop) COPY dir:319384245483e49fff84486cb454f2a44a519f292144b28dd9ea65ac2dc1eece in /usr/share/nginx/html "
+          "created": "2025-01-15T09:42:33Z",
+          "created_by": "/bin/sh -c #(nop) COPY dir:e9090db04398f8577d54ea00b3acbb5d15e32467f2c087b64223ad1642d614e6 in /usr/share/nginx/html "
         },
         {
-          "created": "2025-01-02T05:58:51Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:876430474185dcd89cf28caaaaac4af3a0eafa56f1708c840dcd5493818b3ad1 in /etc/nginx/conf.d/default.conf "
+          "created": "2025-01-15T09:42:34Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:5f60db5cb77d0b47550cdeacc685d43cb885c6dd4c8268ed5ac11608c1306c10 in /etc/nginx/conf.d/default.conf "
+        },
+        {
+          "created": "2025-01-15T09:42:34Z",
+          "created_by": "/bin/sh -c #(nop)  USER nginx",
+          "empty_layer": true
         }
       ],
       "os": "linux",
       "rootfs": {
         "type": "layers",
         "diff_ids": [
-          "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-          "sha256:38efb9d2ae82abb349a6a35aaf7dde53d650d8d59dd989dc4f622a434e1e3669",
-          "sha256:34dcab1046f45c61c53bba691e014af58b1a704eac18fd64c61056d5ee8ed4f3",
-          "sha256:adae2ffee4c3c87f212da79dc031ed0bd0e5e2589845c9a96f8afb31d194a180",
-          "sha256:5203171b6392a390790b53cbe2206807100ba6d4018009297ff07f86c54650b1",
-          "sha256:2a9ed7a63dd99c077e1714ad10ce6c848410572ac14ee2633312e4196038547f",
-          "sha256:bdfaf1e3a3b6849759156d603c112682610147d711c37d8bbadfd1f198a3daa2",
-          "sha256:dc520d85e8193d57ed5494a00502e786f64e8c8ea13cd723a6566df365d199f6",
-          "sha256:f5cc5f7f7f3967b3098b0e6ea2500eadd22863aa591967149b8c35d32013c30f"
+          "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+          "sha256:ffebbad4cff8032ba3f669c891d8550e8a4b77c549229d45fc667c036fe862e8",
+          "sha256:3012f2d5c309b7c527571e060f8085c2664548e84d456d79ce4960d4da2c6495",
+          "sha256:f8faf11c609ec70f0b1bc754598c41880fa2de9f1d5d518c4c2fd32c98095953",
+          "sha256:abd7f33ec37df392b665442ce9f2e8dc84caddb11cbe3c41e6e19d976acf5cf7",
+          "sha256:ee128c8f01aa9befa24eadfeea9af910cf3b141643ab50d817cc6fb11ab6e93a",
+          "sha256:f80a8fac336fcb1a0dd084655cf1933063e909471ae59e88ca85910a716826dd",
+          "sha256:f19ccb8408ae0865311a1764e308c067b0ccc7035f7af66c6861a2d1c2472e72",
+          "sha256:79f8610f5aa5fd705f8e02144fa33c2bf3aea02f2645dc2e53c12e9b790d613d"
         ]
       },
       "config": {
@@ -159,19 +165,19 @@
           "PKG_RELEASE=1",
           "DYNPKG_RELEASE=2"
         ],
-        "Image": "sha256:d1b8ab4e5998eea519485b05ea131db3c8f6809e2a1bd9edf9c2642739985842",
+        "Image": "sha256:8cffab2da3bb3eaf0d9395bd4ee99ecfce735fabc0a79d25332d0083eef48e2e",
         "Labels": {
           "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
         },
+        "User": "nginx",
         "WorkingDir": "/",
-        "ArgsEscaped": true,
         "StopSignal": "SIGQUIT"
       }
     }
   },
   "Results": [
     {
-      "Target": "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:frontend-v0.0.23-79 (alpine 3.20.3)",
+      "Target": "fadhiljr/nginxapp:employee-frontend-v0.0.37-114 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     }
