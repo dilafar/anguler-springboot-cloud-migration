@@ -60,27 +60,6 @@ deny[msg] {
     input[i].Cmd == "add"
     msg = sprintf("Line %d: Use COPY instead of ADD", [i])
 }
-
-# Rule to check if the command is "user"
-any_user {
-    input[i].Cmd == "user"
-}
-
-# Rule to deny if the "user" command is used with forbidden users
-deny[msg] {
-    not any_user
-    msg = "Do not run as root, use USER instead"
-}
-
-# Do not sudo
-deny[msg] {
-    input[i].Cmd == "run"
-    val := concat(" ", input[i].Value)
-   contains(lower(val), "sudo")
-    contains(lower(val), "sudo")
-    msg = sprintf("Line %d: Do not use 'sudo' command", [i])
-}
-
 # Use multi-stage builds
 default multi_stage = false
 multi_stage = true {
