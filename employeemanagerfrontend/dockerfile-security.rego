@@ -61,30 +61,33 @@ deny[msg] {
     msg = sprintf("Line %d: Use COPY instead of ADD", [i])
 }
 
- Any user...
+# Rule to check if the command is "user"
 any_user {
     input[i].Cmd == "user"
 }
 
+# Rule to deny if the "user" command is used with forbidden users
 deny[msg] {
     not any_user
     msg = "Do not run as root, use USER instead"
 }
 
-# ... but do not root
+# Forbidden users list
 forbidden_users = [
     "root",
     "toor",
     "0"
 ]
 
+# Rule to check if the last USER directive is forbidden
 deny[msg] {
     command := "user"
     users := [name | input[i].Cmd == "user"; name := input[i].Value]
-   lastuser := users[count(users)-1]
-    contains(lower(lastuser[_]), forbidden_users[_])
-   msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
+    lastuser := users[count(users)-1]
+    contains(lower(lastuser), forbidden_users)
+    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
+
 
 # Do not sudo
 deny[msg] {
