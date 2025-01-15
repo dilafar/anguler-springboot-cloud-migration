@@ -81,13 +81,21 @@ forbidden_users = [
 
 # Rule to check if the last USER directive is forbidden
 deny[msg] {
-    # Get all users from the input and check the last one
+    # Get all users from the input where the command is "user"
     users = [input[i].Value | input[i].Cmd == "user"]
-    lastuser = users[_] # This will safely get the last user
+    
+    # Ensure there is at least one user
+    count(users) > 0
+    
+    # Get the last user from the list
+    lastuser = users[count(users) - 1]
+    
+    # Check if the last user is forbidden
     contains(forbidden_users, lower(lastuser))
+    
+    # Generate the error message with the line number
     msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
-
 
 # Do not sudo
 deny[msg] {
