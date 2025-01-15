@@ -93,8 +93,8 @@ deny[msg] {
     # Check if the last user is forbidden
     contains(forbidden_users, lower(lastuser))
     
-    # Generate the error message with the line number
-    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
+    # Generate the error message
+    msg = sprintf("Last USER directive (USER %s) is forbidden", [lastuser])
 }
 
 # Do not sudo
