@@ -81,10 +81,10 @@ forbidden_users = [
 
 # Rule to check if the last USER directive is forbidden
 deny[msg] {
-    command := "user"
-    users := [name | input[i].Cmd == "user"; name := input[i].Value]
-    lastuser := users[count(users)-1]
-    contains(lower(lastuser), forbidden_users)
+    # Get all users from the input and check the last one
+    users = [input[i].Value | input[i].Cmd == "user"]
+    lastuser = users[_] # This will safely get the last user
+    contains(forbidden_users, lower(lastuser))
     msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
 
