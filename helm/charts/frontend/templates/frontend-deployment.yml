@@ -21,6 +21,9 @@ spec:
           image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
           ports:
             - containerPort: {{ .Values.containerPort }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
           resources:
             requests:
               memory: "100Mi"

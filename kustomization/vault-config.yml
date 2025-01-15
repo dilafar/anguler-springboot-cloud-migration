@@ -4,8 +4,8 @@ metadata:
   name: vault-configuration
   namespace: argocd
 data:
-  VAULT_ADDR: aHR0cHM6Ly9rbXN2YXVsdC5jbmNsb3VkbmV0LmNvbTo4MjAw
-  VAULT_TOKEN: aHZzLmlNZVpGakVGb2h0R1M3NTNaV1hZQTlFTg==
+  VAULT_ADDR: <base64encoded - address>
+  VAULT_TOKEN: <base64encoded - token>
   AVP_TYPE: dmF1bHQ=
   AVP_AUTH_TYPE: dG9rZW4=
 type: Opaque

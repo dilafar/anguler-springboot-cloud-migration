@@ -21,6 +21,9 @@ spec:
           image: devopsacrnew.azurecr.io/appfrontend
           ports:
             - containerPort: 80
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
           resources:
             requests:
               memory: "100Mi"

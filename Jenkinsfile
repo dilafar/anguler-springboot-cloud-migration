@@ -1,6 +1,12 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
 
+library identifier: "jenkins-shared-library@master" , retriever: modernSCM([
+        $class: "GitSCMSource",
+        remote: "https://github.com/dilafar/jenkins-shared-library.git",
+        credentialsId: "github",
+])
+
 pipeline{
     agent any
 
@@ -36,9 +42,10 @@ pipeline{
                         "Maven Increment": {
                             dir('employeemanager') {
                                     echo "incrimenting app version ..."
-                                    sh 'mvn build-helper:parse-version versions:set \
-                                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                                        versions:commit'
+                                 //   sh 'mvn build-helper:parse-version versions:set \
+                                 //       -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                                 //       versions:commit'
+                                    incrementPatchVersion()
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[1][1]       
                                     env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
@@ -311,7 +318,7 @@ pipeline{
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                                sh '''
+                                             /*   sh '''
                                                     docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
                                                     echo $PASS | docker login -u $USER --password-stdin
                                                     docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
@@ -323,13 +330,19 @@ pipeline{
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                                 '''
+                                                */
+                                                buildImage("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
+                                                dockerLogin()
+                                                dockerPush("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
+                                                sh 'cosign version'
+                                                signImage("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                                sh '''
+                                               /* sh '''
                                                     docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
                                                     echo $PASS | docker login -u $USER --password-stdin
                                                     docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
@@ -341,6 +354,12 @@ pipeline{
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
                                                 '''
+                                                */
+                                                buildImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
+                                                dockerLogin()
+                                                dockerPush("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
+                                                sh 'cosign version'
+                                                signImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     }

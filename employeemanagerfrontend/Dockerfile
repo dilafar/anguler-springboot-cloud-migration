@@ -8,11 +8,9 @@ RUN npm install -g @angular/cli
 COPY . . 
 RUN ng build --configuration production
 
-RUN chown -R node:node /app
-
 FROM nginx:stable-alpine-slim
 
 COPY --from=build /app/dist/employeemanagerfrontend/browser/ /usr/share/nginx/html
 COPY --from=build /app/generated_openssl_cert/default.conf /etc/nginx/conf.d/default.conf
 
-
+USER nginx
