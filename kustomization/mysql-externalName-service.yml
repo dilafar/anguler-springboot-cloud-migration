@@ -4,5 +4,5 @@ metadata:
   name: mysql
 spec:
   type: ExternalName
-  externalName: employeemanager.mysql.database.azure.com
+  externalName: 54.87.49.59
 

@@ -2,12 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: employee-mgmt-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   ingressClassName: nginx
   rules:
-  - host: azure.employee-mgmt.com
+  - host: ingress-nginx-lb-1843944529.us-east-1.elb.amazonaws.com
     http:
       paths:
       - pathType: Prefix
@@ -17,20 +15,3 @@ spec:
             name: employee-frontend-service
             port: 
               number: 80
-  - host: azuredns.employee-mgmt.com
-    http:
-      paths:
-      - pathType: Prefix
-        path: /
-        backend:
-          service:
-            name: employee-backend-service
-            port: 
-              number: 80
-  tls:
-  - hosts:
-      - azure.employee-mgmt.com
-    secretName: azure-employee-mgmt-secret
-  - hosts:
-      - azuredns.employee-mgmt.com
-    secretName: azuredns-employee-mgmt-secret
