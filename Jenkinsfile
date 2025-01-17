@@ -304,7 +304,7 @@ pipeline{
                             // Clean up unused Docker resources
                             sh 'docker system prune -a --volumes --force || true'
 
-                            withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
