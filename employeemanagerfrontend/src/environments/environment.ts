@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiServerUrl: "https://azuredns.employee-mgmt.com/api"
+  apiServerUrl: "Emp-my-app-env.eba-n59f67yw.us-east-1.elasticbeanstalk.com/api"
 };
 

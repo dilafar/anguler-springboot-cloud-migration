@@ -178,31 +178,7 @@ pipeline{
 
         }
 
-        stage("Upload Artifacts"){
-            steps {
-                script {
-                        dir('employeemanager') {
-                                env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
-                                echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusArtifactUploader(
-                                            nexusVersion: 'nexus3',
-                                            protocol: 'http',
-                                            nexusUrl: '172.48.16.120:8081',
-                                            groupId: 'QA',
-                                            version: "${BUILD_ID}",
-                                            repository: 'employee-repo',
-                                            credentialsId: 'nexus',
-                                            artifacts: [
-                                                    [artifactId: 'employeemgmt',
-                                                    classifier: '',
-                                                    file: "${env.JAR_FILE}",
-                                                    type: 'jar']
-                                                ]
-                                )
-                            }               
-                        }
-                    }
-                }
+
 
         stage("Deploy to stage bean"){
            steps {

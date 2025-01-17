@@ -1,4 +1,4 @@
-FROM node:20.18-alpine AS build
+FROM node:23.4.0-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
@@ -7,9 +7,6 @@ RUN npm install -g @angular/cli
 
 COPY . . 
 RUN ng build --configuration production
-
-RUN chown -R node:node /app
-USER node
 
 FROM nginx:stable-alpine-slim
 
