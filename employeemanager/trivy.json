@@ -1,202 +1,206 @@
-[
-  {
-    "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.3)",
-    "Type": "alpine"
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2025-01-17T19:42:11.937578208Z",
+  "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "alpine",
+      "Name": "3.20.5"
+    },
+    "ImageID": "sha256:9522287895947f80db2a273fe64be4af116990f4c40e90e3af837bbe81ed8dff",
+    "DiffIDs": [
+      "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+      "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
+      "sha256:653b7f70696b22731c06d1569f0352550beaaca2310d327034917ac6095467d4",
+      "sha256:a8fb8e3aa55e3aa8810cf658aac105b5221405579b4832031fe29188479750d0",
+      "sha256:0ddb99587d91c436090cb7bff9ec69f142e2608d2f293e9f11ce71b31c1af96f",
+      "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "sha256:d047a68abd4da0767eb07749021bf0cd7ae32666abe2582639a47b5e4d843c88"
+    ],
+    "RepoTags": [
+      "maven:3.9.9-amazoncorretto-17-alpine"
+    ],
+    "RepoDigests": [
+      "maven@sha256:cab0e1f1ede6c0f56118b59dff1bf3e12bafa51ed32677afd29f2818890d9fba"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2024-09-24T11:57:06Z",
+      "history": [
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ADD alpine-minirootfs-3.20.5-x86_64.tar.gz / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "CMD [\"/bin/sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ARG version=17.0.13.11.1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "RUN |1 version=17.0.13.11.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENV LANG=C.UTF-8",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENV JAVA_HOME=/usr/lib/jvm/default-jvm",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "RUN /bin/sh -c apk add --no-cache bash openssh-client # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "LABEL org.opencontainers.image.title=Apache Maven",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "LABEL org.opencontainers.image.source=https://github.com/carlossg/docker-maven",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "LABEL org.opencontainers.image.url=https://github.com/carlossg/docker-maven",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "LABEL org.opencontainers.image.description=Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information.",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENV MAVEN_HOME=/usr/share/maven",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "COPY /usr/share/maven /usr/share/maven # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "COPY /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "COPY /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "RUN /bin/sh -c ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ARG MAVEN_VERSION=3.9.9",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ARG USER_HOME_DIR=/root",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENV MAVEN_CONFIG=/root/.m2",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ENTRYPOINT [\"/usr/local/bin/mvn-entrypoint.sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "CMD [\"mvn\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+          "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
+          "sha256:653b7f70696b22731c06d1569f0352550beaaca2310d327034917ac6095467d4",
+          "sha256:a8fb8e3aa55e3aa8810cf658aac105b5221405579b4832031fe29188479750d0",
+          "sha256:0ddb99587d91c436090cb7bff9ec69f142e2608d2f293e9f11ce71b31c1af96f",
+          "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+          "sha256:d047a68abd4da0767eb07749021bf0cd7ae32666abe2582639a47b5e4d843c88"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "mvn"
+        ],
+        "Entrypoint": [
+          "/usr/local/bin/mvn-entrypoint.sh"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "LANG=C.UTF-8",
+          "JAVA_HOME=/usr/lib/jvm/default-jvm",
+          "MAVEN_HOME=/usr/share/maven",
+          "MAVEN_CONFIG=/root/.m2"
+        ],
+        "Labels": {
+          "org.opencontainers.image.description": "Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information.",
+          "org.opencontainers.image.source": "https://github.com/carlossg/docker-maven",
+          "org.opencontainers.image.title": "Apache Maven",
+          "org.opencontainers.image.url": "https://github.com/carlossg/docker-maven"
+        },
+        "WorkingDir": "/"
+      }
+    }
   },
-  {
-    "Target": "usr/share/maven/boot/plexus-classworlds-2.8.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/aopalliance-1.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/commons-cli-1.8.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/commons-codec-1.17.1.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/failureaccess-1.0.2.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/guava-33.2.1-jre.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/guice-5.1.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/httpclient-4.5.14.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/httpcore-4.4.16.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/jansi-2.4.1.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/javax.annotation-api-1.3.2.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/javax.inject-1.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/jcl-over-slf4j-1.7.36.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-artifact-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-builder-support-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-compat-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-core-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-embedder-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-model-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-model-builder-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-plugin-api-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-repository-metadata-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-api-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-connector-basic-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-impl-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-named-locks-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-provider-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-spi-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-transport-file-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-transport-http-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-transport-wagon-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-resolver-util-1.9.22.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-settings-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-settings-builder-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-shared-utils-3.4.2.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/maven-slf4j-provider-3.9.9.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/org.eclipse.sisu.inject-0.9.0.M3.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/org.eclipse.sisu.plexus-0.9.0.M3.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-cipher-2.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-component-annotations-2.1.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-interpolation-1.27.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-sec-dispatcher-2.0.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-utils-3.5.1.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/plexus-xml-3.0.1.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/slf4j-api-1.7.36.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/wagon-file-3.5.3.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/wagon-http-3.5.3.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/wagon-http-shared-3.5.3.jar",
-    "Type": "jar"
-  },
-  {
-    "Target": "usr/share/maven/lib/wagon-provider-api-3.5.3.jar",
-    "Type": "jar"
-  }
-]
+  "Results": [
+    {
+      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.5)",
+      "Class": "os-pkgs",
+      "Type": "alpine"
+    },
+    {
+      "Target": "Java",
+      "Class": "lang-pkgs",
+      "Type": "jar"
+    }
+  ]
+}
