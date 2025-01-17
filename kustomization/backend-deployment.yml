@@ -19,7 +19,7 @@ spec:
       initContainers:
         - name: mydb-available
           image: busybox:1.28
-          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
+          command: ['sh','-c',"until nslookup 54.87.49.59; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
           image: fadhiljr/nginxapp:employee-backend-v0.0.18-124
@@ -29,7 +29,7 @@ spec:
             - name: SPRING_APPLICATION_NAME
               value: "employee"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://mysql:3306/employeemanager"
+              value: "jdbc:mysql://54.87.49.59:3306/employeemanager"
             - name: SPRING_DATASOURCE_USERNAME
               value: "employee"
             - name: SPRING_DATASOURCE_PASSWORD

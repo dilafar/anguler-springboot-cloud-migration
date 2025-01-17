@@ -437,7 +437,6 @@ pipeline{
                 script {
                          withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh "kubectl apply -k kustomization/"
-                            sh "kubectl apply -f kustomization/ingress.yml"
                         }
 
                     }
