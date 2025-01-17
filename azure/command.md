@@ -123,6 +123,8 @@ spec:
 
 Install Cert-Manager 
 
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.2/cert-manager.yaml
+
 # Label the ingress-basic namespace to disable resource validation
 kubectl label namespace ingress-controller cert-manager.io/disable-validation=true
 
