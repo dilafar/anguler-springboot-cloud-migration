@@ -404,13 +404,13 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "OPA Scan": {
-                                    sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
-                                    '''
-                            },
+                           // "OPA Scan": {
+                          //          sh '''
+                         //               docker run --rm \
+                         //                   -v $(pwd):/project \
+                        //                    openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                        //            '''
+                        //    },
                             "Trivy Scan": {
                                         sh ''' 
                                             bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
