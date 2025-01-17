@@ -6,11 +6,12 @@ metadata:
     app: employee-frontend
     tier: frontend
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: employee-frontend
   ports:
     - port: 80
       targetPort: 80
       protocol: TCP
+      nodePort: 30005
       name: http
