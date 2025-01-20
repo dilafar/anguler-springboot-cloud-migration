@@ -461,10 +461,10 @@ pipeline{
                                             '''
                                         },
                                         "kubenetes resource scan": {
-                                        //    sh '''
-                                        //        kubescape scan workload Deployment/employee-frontend --namespace employee
-                                        //        kubescape scan workload service/employee-frontend-service --namespace employee
-                                        //    '''
+                                            sh '''
+                                                kubescape scan workload Deployment/employee-frontend 
+                                                kubescape scan workload service/employee-frontend-service
+                                            '''
                                         }
                                 )
                         }
