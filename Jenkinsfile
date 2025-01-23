@@ -141,7 +141,7 @@ pipeline{
                                                                 -Dsonar.projectName=employee \
                                                                 -Dsonar.projectVersion=1.0 \
                                                                 -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.220/ \
+                                                                -Dsonar.host.url=http://172.48.16.173/ \
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
@@ -188,7 +188,7 @@ pipeline{
                                 nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
                                             protocol: 'http',
-                                            nexusUrl: '172.48.16.19:8081',
+                                            nexusUrl: '172.48.16.196:8081',
                                             groupId: 'QA',
                                             version: "${BUILD_ID}",
                                             repository: 'employee-repo',
