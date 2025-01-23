@@ -481,7 +481,7 @@ pipeline{
                             docker system prune -a --volumes --force || true                           
                         '''
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
                             parallel (
                                 "kubernetes CIS benchmark": {
                                     echo "Starting Kubernetes CIS Benchmark scan"
