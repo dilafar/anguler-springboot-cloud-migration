@@ -438,7 +438,7 @@ pipeline{
 
                                             wait
                                        '''                           
-                            }
+                            },
                            "kubescape": {
                                 dir('helm') {
                                       script {
