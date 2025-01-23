@@ -438,14 +438,14 @@ pipeline{
 
                                             wait
                                        '''                           
-                            },
-                           "kubescape": {
-                                dir('helm') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
+                            }
+                     //      "kubescape": {
+                        //        dir('helm') {
+                     //  /                 script {
+                          //                  sh '''
+                          //                      kubescape scan framework nsa .
+                             //               '''
+                           //             }
                                 }
                             }
                         )
