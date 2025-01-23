@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-23T18:47:50.596466687Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.44-10",
+  "CreatedAt": "2025-01-23T19:11:57.048577944Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.45-12",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:2abe15e48cad3a22e4696f96d5b623a9c9c36338286170a4150ca8c2408cc06e",
+    "ImageID": "sha256:bf76d7979fb68cea851cd2230945e5eb80e0c65a9e9ab4274e2cf9465ac3ab01",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-      "sha256:19c02a4ddc97ef3a714f179413138ff3998dd0152eeb09eb30d44dcc9db84d95",
-      "sha256:06f1f35eda35d58b2febdab573b75f25c0b84bb87904286424e32e10b971c41a"
+      "sha256:87f6e2ebd420b10a9bd5f4bc030c88de71f65a4dbbc94bf18771bdd5503fccac",
+      "sha256:85fe7a380eadb22e48afbdcfe0e222a4c4af30684de16948a6204cbcac420415"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-backend-v0.0.44-10"
+      "fadhiljr/nginxapp:employee-backend-v0.0.45-12"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:47728adb4d9fe9d22ed9540521f38939125d156cd41d7c953f7fc8139b920ad1"
+      "fadhiljr/nginxapp@sha256:34932e5844b27f439b5666f0a6eb823f03cb0d88d6b06aa27a0c7789197574c2"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "3e760fc404f5a34404b4b2495d7e417ea7b317c7328f2d056d7946cd2f8b64ce",
-      "created": "2025-01-23T18:46:57.830918177Z",
+      "container": "cc2593b320563c9bba061406453c2e5e2a164beaf687d2cfebdc7c0a96a3c9c1",
+      "created": "2025-01-23T19:11:06.794397004Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-23T18:46:56Z",
+          "created": "2025-01-23T19:11:04Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-01-23T18:46:57Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:c1fcf0be4058c2835d60fd036fb6eec7e938b51e3849b119c1c88d6a0704b02f in /home/k8-user/app.jar "
+          "created": "2025-01-23T19:11:06Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:a73de91f96bfe93b1a7a6280932ddfb9216db8bfc35f0f5ca241bb561184b545 in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-01-23T18:46:57Z",
+          "created": "2025-01-23T19:11:06Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-01-23T18:46:57Z",
+          "created": "2025-01-23T19:11:06Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-01-23T18:46:57Z",
+          "created": "2025-01-23T19:11:06Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-          "sha256:19c02a4ddc97ef3a714f179413138ff3998dd0152eeb09eb30d44dcc9db84d95",
-          "sha256:06f1f35eda35d58b2febdab573b75f25c0b84bb87904286424e32e10b971c41a"
+          "sha256:87f6e2ebd420b10a9bd5f4bc030c88de71f65a4dbbc94bf18771bdd5503fccac",
+          "sha256:85fe7a380eadb22e48afbdcfe0e222a4c4af30684de16948a6204cbcac420415"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:3e1d484392d878a5ec8912f83ada91b66ccea67a4b44fefaf6464d5b1915f769",
+        "Image": "sha256:9c6dee087f00f0047f1bbee374dde112fd1a6210ffe5a7961c43dd76d027ad63",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,7 +120,7 @@
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.44-10 (alpine 3.20.5)",
+      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.45-12 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
@@ -141,7 +141,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:06f1f35eda35d58b2febdab573b75f25c0b84bb87904286424e32e10b971c41a"
+            "DiffID": "sha256:85fe7a380eadb22e48afbdcfe0e222a4c4af30684de16948a6204cbcac420415"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-50379",
@@ -211,7 +211,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:06f1f35eda35d58b2febdab573b75f25c0b84bb87904286424e32e10b971c41a"
+            "DiffID": "sha256:85fe7a380eadb22e48afbdcfe0e222a4c4af30684de16948a6204cbcac420415"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-56337",
