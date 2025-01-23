@@ -14,7 +14,7 @@ elif file_name == 'retire.json':
 #   scan_type = 'Dependency Check Scan'
 
 headers = {
-            'Authorization': 'Token 548afd6fab3bea9794a41b31da0e9404f733e222'
+            'Authorization': 'Token 936454dee286e811f75fc711655b5624a4e89e72'
           }
 
 url = 'https://demo.defectdojo.org/api/v2/import-scan/'
@@ -24,7 +24,7 @@ data = {
     'verified': True,
     'scan_type': scan_type,
     'minimum_severity': 'Low',
-    'engagement': 14
+    'engagement': 17
 }
 
 files = {

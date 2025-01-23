@@ -501,7 +501,7 @@ pipeline{
                 }
 
         }
-
+/*
         stage("DAST-ZAP") {
                     steps {
                         script {
@@ -521,7 +521,7 @@ pipeline{
                         }
                     }
         }
-
+*/
          stage('Checkout gh-pages Branch') {
             steps {
                     script {
@@ -578,7 +578,7 @@ pipeline{
         }
 
     }
-
+/*
     post {
         always {
            script { 
@@ -615,4 +615,5 @@ pipeline{
             }
         
          }
+    */
     }
