@@ -2,7 +2,7 @@ appName: employee-backend
 appReplicas: 2
 appTier: backend
 appImage: fadhiljr/nginxapp
-appVersion: employee-backend-v0.0.41-119
+appVersion: employee-backend-v0.0.42-5
 containerPort: 8080
 containerEnvVar:
   - name: SPRING_APPLICATION_NAME

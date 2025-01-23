@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-15T11:28:12.782142619Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.41-119",
+  "CreatedAt": "2025-01-23T17:54:52.649744993Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.42-5",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:54478e2975f35489b30d89cc2bf869981d6d2e282c4e14773aa11ad85884a125",
+    "ImageID": "sha256:05bb643b0643d9727c50c0e7329a274528e80427bdef6079f1af3edc5da45e86",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-      "sha256:8b5cfef9e1643d7e7dcf0cf2dd98d5c861872801190768d29b1d6c48f6f90acf",
-      "sha256:473e7b6da124633e9cb6b6dd0f1ecc5360cd90d28d4f6cf7ade1eeed1d99a138"
+      "sha256:8e7281c2c09c2cc8f73935d6612a82ee7fdcb20b6793b68d2c237b7a58f76fec",
+      "sha256:82725bcc5d9abe2b687d19f50bc735e60efe59091c8f5b3708fd44dd900074d1"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-backend-v0.0.41-119"
+      "fadhiljr/nginxapp:employee-backend-v0.0.42-5"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:e87fd292d4e7978265f2cdeefe3e91a1b4e6029c637c593cf1eb59dacb38ab5b"
+      "fadhiljr/nginxapp@sha256:6450586553c3a48f43ceed331a13362c6e3c930ef0f599ffb62355e5a0c996ca"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "47e34f42e28f4bf09f7054db06316ad04a792b0e0779a337dff4a70888713214",
-      "created": "2025-01-15T11:27:25.84262829Z",
+      "container": "6166f8b67c8ebfecb272e8c1801ed8dca28652288462626e5fcee08482cc6355",
+      "created": "2025-01-23T17:54:02.620156474Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-15T11:27:24Z",
+          "created": "2025-01-23T17:54:00Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-01-15T11:27:25Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:75c81277ff9e1a30b53e8c4d26bf43e84f5cfdebca0dfbae55850b6adb9c1739 in /home/k8-user/app.jar "
+          "created": "2025-01-23T17:54:02Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:efbaaa0084d10e43b020b6b2936b8a53a4f867d6569684cc05444025ae037b72 in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-01-15T11:27:25Z",
+          "created": "2025-01-23T17:54:02Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-01-15T11:27:25Z",
+          "created": "2025-01-23T17:54:02Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-01-15T11:27:25Z",
+          "created": "2025-01-23T17:54:02Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-          "sha256:8b5cfef9e1643d7e7dcf0cf2dd98d5c861872801190768d29b1d6c48f6f90acf",
-          "sha256:473e7b6da124633e9cb6b6dd0f1ecc5360cd90d28d4f6cf7ade1eeed1d99a138"
+          "sha256:8e7281c2c09c2cc8f73935d6612a82ee7fdcb20b6793b68d2c237b7a58f76fec",
+          "sha256:82725bcc5d9abe2b687d19f50bc735e60efe59091c8f5b3708fd44dd900074d1"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:7e569a0ba22b8c6b0c771cfdcde8c66063e1fb79193128f516ccc9b57d736c20",
+        "Image": "sha256:c0c26328237ff9e5f4e542ffb12778a28b1a3105c09e64d1280083817575d4ca",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,14 +120,145 @@
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.41-119 (alpine 3.20.5)",
+      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.42-5 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
     {
       "Target": "Java",
       "Class": "lang-pkgs",
-      "Type": "jar"
+      "Type": "jar",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-50379",
+          "PkgName": "org.apache.tomcat.embed:tomcat-embed-core",
+          "PkgPath": "home/k8-user/app.jar/BOOT-INF/lib/tomcat-embed-core-10.1.31.jar",
+          "PkgIdentifier": {
+            "PURL": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@10.1.31",
+            "UID": "7750282317461138"
+          },
+          "InstalledVersion": "10.1.31",
+          "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:82725bcc5d9abe2b687d19f50bc735e60efe59091c8f5b3708fd44dd900074d1"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-50379",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Maven",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
+          },
+          "Title": "tomcat: RCE due to TOCTOU issue in JSP compilation",
+          "Description": "Time-of-check Time-of-use (TOCTOU) Race Condition vulnerability during JSP compilation in Apache Tomcat permits an RCE on case insensitive file systems when the default servlet is enabled for write (non-default configuration).\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.1, from 10.1.0-M1 through 10.1.33, from 9.0.0.M1 through 9.0.97.\n\nUsers are recommended to upgrade to version 11.0.2, 10.1.34 or 9.0.98, which fixes the issue.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-367"
+          ],
+          "VendorSeverity": {
+            "bitnami": 4,
+            "ghsa": 3,
+            "photon": 4,
+            "redhat": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 9.8
+            },
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 9.8
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 8.1
+            }
+          },
+          "References": [
+            "http://www.openwall.com/lists/oss-security/2024/12/17/4",
+            "http://www.openwall.com/lists/oss-security/2024/12/18/2",
+            "https://access.redhat.com/security/cve/CVE-2024-50379",
+            "https://github.com/apache/tomcat",
+            "https://github.com/apache/tomcat/commit/05ddeeaa54df1e2dc427d0164bedd6b79f78d81f",
+            "https://github.com/apache/tomcat/commit/43b507ebac9d268b1ea3d908e296cc6e46795c00",
+            "https://github.com/apache/tomcat/commit/631500b0c9b2a2a2abb707e3de2e10a5936e5d41",
+            "https://github.com/apache/tomcat/commit/684247ae85fa633b9197b32391de59fc54703842",
+            "https://github.com/apache/tomcat/commit/8554f6b1722b33a2ce8b0a3fad37825f3a75f2d2",
+            "https://github.com/apache/tomcat/commit/cc7a98b57c6dc1df21979fcff94a36e068f4456c",
+            "https://lists.apache.org/thread/y6lj6q1xnp822g6ro70tn19sgtjmr80r",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-50379",
+            "https://security.netapp.com/advisory/ntap-20250103-0003",
+            "https://security.netapp.com/advisory/ntap-20250103-0003/",
+            "https://tomcat.apache.org/security-10.html#Fixed_in_Apache_Tomcat_10.1.34",
+            "https://tomcat.apache.org/security-11.html#Fixed_in_Apache_Tomcat_11.0.2",
+            "https://tomcat.apache.org/security-9.html#Fixed_in_Apache_Tomcat_9.0.98",
+            "https://www.cve.org/CVERecord?id=CVE-2024-50379"
+          ],
+          "PublishedDate": "2024-12-17T13:15:18.81Z",
+          "LastModifiedDate": "2025-01-03T12:15:26.403Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-56337",
+          "PkgName": "org.apache.tomcat.embed:tomcat-embed-core",
+          "PkgPath": "home/k8-user/app.jar/BOOT-INF/lib/tomcat-embed-core-10.1.31.jar",
+          "PkgIdentifier": {
+            "PURL": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@10.1.31",
+            "UID": "7750282317461138"
+          },
+          "InstalledVersion": "10.1.31",
+          "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
+          "Status": "fixed",
+          "Layer": {
+            "DiffID": "sha256:82725bcc5d9abe2b687d19f50bc735e60efe59091c8f5b3708fd44dd900074d1"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-56337",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Maven",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
+          },
+          "Title": "tomcat: Incomplete fix for CVE-2024-50379 - RCE due to TOCTOU issue in JSP compilation",
+          "Description": "Time-of-check Time-of-use (TOCTOU) Race Condition vulnerability in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.1, from 10.1.0-M1 through 10.1.33, from 9.0.0.M1 through 9.0.97.\n\nThe mitigation for CVE-2024-50379 was incomplete.\n\nUsers running Tomcat on a case insensitive file system with the default servlet write enabled (readonly initialisation \nparameter set to the non-default value of false) may need additional configuration to fully mitigate CVE-2024-50379 depending on which version of Java they are using with Tomcat:\n- running on Java 8 or Java 11: the system property sun.io.useCanonCaches must be explicitly set to false (it defaults to true)\n- running on Java 17: the system property sun.io.useCanonCaches, if set, must be set to false (it defaults to false)\n- running on Java 21 onwards: no further configuration is required (the system property and the problematic cache have been removed)\n\nTomcat 11.0.3, 10.1.35 and 9.0.99 onwards will include checks that sun.io.useCanonCaches is set appropriately before allowing the default servlet to be write enabled on a case insensitive file system. Tomcat will also set sun.io.useCanonCaches to false by default where it can.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-367"
+          ],
+          "VendorSeverity": {
+            "bitnami": 4,
+            "ghsa": 3,
+            "photon": 4,
+            "redhat": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 9.8
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+              "V3Score": 8.1
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-56337",
+            "https://github.com/apache/tomcat",
+            "https://lists.apache.org/thread/b2b9qrgjrz1kvo4ym8y2wkfdvwoq6qbp",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-56337",
+            "https://security.netapp.com/advisory/ntap-20250103-0002",
+            "https://security.netapp.com/advisory/ntap-20250103-0002/",
+            "https://tomcat.apache.org/security-10.html#Fixed_in_Apache_Tomcat_10.1.34",
+            "https://tomcat.apache.org/security-11.html#Fixed_in_Apache_Tomcat_11.0.2",
+            "https://tomcat.apache.org/security-9.html#Fixed_in_Apache_Tomcat_9.0.98",
+            "https://www.cve.org/CVERecord?id=CVE-2024-50379",
+            "https://www.cve.org/CVERecord?id=CVE-2024-56337"
+          ],
+          "PublishedDate": "2024-12-20T16:15:24.26Z",
+          "LastModifiedDate": "2025-01-03T12:15:26.787Z"
+        }
+      ]
     }
   ]
 }
