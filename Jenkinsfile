@@ -489,12 +489,12 @@ pipeline{
                                         kubescape scan framework all
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
-                                },
-                                "kubernetes cluster scan": {
-                                    sh '''
-                                        kubescape scan
-                                    '''
                                 }
+                               // "kubernetes cluster scan": {
+                               //     sh '''
+                               //         kubescape scan
+                              //      '''
+                              //  }
                             )
                         }
                     }
