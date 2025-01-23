@@ -446,8 +446,8 @@ pipeline{
                           //                      kubescape scan framework nsa .
                              //               '''
                            //             }
-                                }
-                            }
+                              //  }
+                            //}
                         )
                     }
             }
