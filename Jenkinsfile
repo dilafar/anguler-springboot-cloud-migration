@@ -388,11 +388,11 @@ pipeline{
                             
                         },
                         "DefectDojo Uploader": {
-                            script {
-                                sh '''
-                                    pip install --upgrade urllib3 chardet requests
-                                '''
-                            }
+                          //  script {
+                              //  sh '''
+                                //    pip install --upgrade urllib3 chardet requests
+                               // '''
+                           // }
                             parallel(
                                 "Frontend Reports Upload": {
                                     dir('employeemanagerfrontend') {
