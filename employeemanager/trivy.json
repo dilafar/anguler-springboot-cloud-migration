@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-23T19:58:16.482474043Z",
+  "CreatedAt": "2025-01-24T05:49:29.75535477Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
@@ -8,21 +8,21 @@
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:80a14cdf1c8668f65c05a1790990ce7df196ef0886113b156e6b1557b291eb93",
+    "ImageID": "sha256:c79a30ba0b4a0df63c83cad6d86c51be1c56afe94d08988c6513deae046e0c0a",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
-      "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-      "sha256:4012bc389bec765906910bb209ea6ca6cca2f11df36bb226bd0887500c58fbec",
-      "sha256:f8b895031e681f949377b68aaa01667d1d6064af26260ea2c44cba772b1190dc",
-      "sha256:067e16376d0148dcda3c04e26d58729f2b4e98981eca31c9ba6e014537f511c3",
+      "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
+      "sha256:5fc0f2d818053dab7c02824fc07854a7b5572a108d2f4610955d4ec0213b2a52",
+      "sha256:10906bf9f6e492c1b680114c74470fd758d882a58efc2566e22fcc65c6b9ac6e",
+      "sha256:915ae5537b517221de37545b087437f361e059d0b93ea8efff66e199d7ac9748",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:940ec4533d7e0947a23280f0823d4468cbf41eb478e86572ff22328c047d5f58"
+      "sha256:81769157fdb681a203acfb3449233bd00bad08d87748b97056c1627b6d346e43"
     ],
     "RepoTags": [
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:80a72e78ecffdc68931b9f80dad6f171724513252cbd462582f499dd7352ec18"
+      "maven@sha256:c567c544a0a47ae9af2616c741d4a61a2a1c71324148fa11485d121b192b8782"
     ],
     "ImageConfig": {
       "architecture": "amd64",
@@ -41,13 +41,13 @@
         },
         {
           "created": "2024-09-24T11:57:06Z",
-          "created_by": "ARG version=17.0.13.11.1",
+          "created_by": "ARG version=17.0.14.7.1",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
           "created": "2024-09-24T11:57:06Z",
-          "created_by": "RUN |1 version=17.0.13.11.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "created_by": "RUN |1 version=17.0.14.7.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
@@ -159,12 +159,12 @@
         "type": "layers",
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
-          "sha256:098275dc4b872dc67e642524f6aabb7b29db46c3492df92c590decbb38a1094d",
-          "sha256:4012bc389bec765906910bb209ea6ca6cca2f11df36bb226bd0887500c58fbec",
-          "sha256:f8b895031e681f949377b68aaa01667d1d6064af26260ea2c44cba772b1190dc",
-          "sha256:067e16376d0148dcda3c04e26d58729f2b4e98981eca31c9ba6e014537f511c3",
+          "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
+          "sha256:5fc0f2d818053dab7c02824fc07854a7b5572a108d2f4610955d4ec0213b2a52",
+          "sha256:10906bf9f6e492c1b680114c74470fd758d882a58efc2566e22fcc65c6b9ac6e",
+          "sha256:915ae5537b517221de37545b087437f361e059d0b93ea8efff66e199d7ac9748",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:940ec4533d7e0947a23280f0823d4468cbf41eb478e86572ff22328c047d5f58"
+          "sha256:81769157fdb681a203acfb3449233bd00bad08d87748b97056c1627b6d346e43"
         ]
       },
       "config": {
