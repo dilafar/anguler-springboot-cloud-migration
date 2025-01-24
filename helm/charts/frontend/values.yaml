@@ -8,8 +8,8 @@ servicePort: 80
 serviceType: ClusterIP
 servicePortBackend: 80
 backendAppName: employee-backend
-frontendUrl: awsvault.cloud-net-mgmt.com
-backendUrl: awstest.cloud-net-mgmt.com
+frontendUrl: awsvault.cloud-emgmt.com
+backendUrl: aws.cloud-emgmt.com
 loadbalancerName: employeemgmtingressvault
 ingressName: employee-mgmt-ingress-vault
-certificateARN: arn:aws:acm:us-east-1:911167901499:certificate/c8570f67-513e-43bc-aad7-1ac5f3a38f37
+certificateARN: arn:aws:acm:us-east-1:522814728991:certificate/71552876-67fc-42d3-b5f6-656e0f80c28e
