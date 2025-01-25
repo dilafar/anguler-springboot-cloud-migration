@@ -6,15 +6,15 @@ scan_type = ''
 
 if file_name == 'njsscan.sarif':
     scan_type = 'SARIF'
-#elif file_name == 'semgrep.json':
-#    scan_type = 'Semgrep JSON Report'
+elif file_name == 'semgrep.json':
+    scan_type = 'Semgrep JSON Report'
 elif file_name == 'retire.json':
     scan_type = 'Retire.js Scan'
-#elif file_name == 'dependency-check-report.json':
-#    scan_type = 'Dependency Check Scan'
+elif file_name == 'dependency-check-report.json':
+    scan_type = 'Dependency Check Scan'
 
 headers = {
-            'Authorization': 'Token 936454dee286e811f75fc711655b5624a4e89e72'
+            'Authorization': 'Token fea987f6c02f4bc9db7ba7d3afc28589e720cf6b'
           }
 
 url = 'https://demo.defectdojo.org/api/v2/import-scan/'
@@ -24,7 +24,7 @@ data = {
     'verified': True,
     'scan_type': scan_type,
     'minimum_severity': 'Low',
-    'engagement': 17
+    'engagement': 15
 }
 
 files = {

@@ -397,10 +397,11 @@ pipeline{
                                 "Frontend Reports Upload": {
                                     dir('employeemanagerfrontend') {
                                         script {
-                                            // python3 upload-reports.py semgrep.json 
+                                            // python3 upload-reports.py semgrep.json
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
+                                                python3 upload-reports.py semgrep.json
                                             '''
                                         }
                                     }
@@ -409,7 +410,7 @@ pipeline{
                                     dir('employeemanager') {
                                         script {
                                             sh '''
-                                               echo "python3 upload-reports.py /target/dependency-check-report/dependency-check-report.json"
+                                               echo "python3 upload-reports.py dependency-check-report.json"
                                             '''
                                         }
                                     }
