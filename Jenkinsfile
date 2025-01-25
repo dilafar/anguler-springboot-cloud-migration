@@ -367,16 +367,14 @@ pipeline{
                 script {
                     parallel(
                         "Change image backend": {           
-                            dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" base/backend-deployment.yml
-                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" base/frontend-deployment.yml
-                                        cat base/backend-deployment.yml
-                                        cat base/frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
+                                        cat kustomization/base/frontend-deployment.yml
+                                        cat kustomization/base/backend-deployment.yml
                                     '''
                                 }
-                            }
                         },
                         "DefectDojo Uploader": {
                           //  script {
@@ -468,7 +466,7 @@ pipeline{
                             docker system prune -a --volumes --force || true                           
                         '''
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
                             parallel (
                                 "kubernetes CIS benchmark": {
                                     echo "Starting Kubernetes CIS Benchmark scan"
