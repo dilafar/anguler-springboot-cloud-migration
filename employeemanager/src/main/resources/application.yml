@@ -2,9 +2,9 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://employeemanager.cfmyc6cwork3.us-east-1.rds.amazonaws.com:3306/employeemanager
+    url: jdbc:mysql://employeemanager-rds.cl402myc20q2.us-east-1.rds.amazonaws.com:3306/employeemanager
     username: admin
-    password: Fadhil1234##*
+    password: DPEyuB237Jjw6fvdmDaZ
   jpa:
     show-sql: true
     hibernate:

@@ -15,8 +15,8 @@ pipeline{
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
         SEMGREP_PR_ID = "${env.CHANGE_ID}"     
-        DOCKER_REPO = "911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack"
-        DOCKER_REPO_SERVER = "911167901499.dkr.ecr.us-east-1.amazonaws.com"
+        DOCKER_REPO = "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack"
+        DOCKER_REPO_SERVER = "522814728991.dkr.ecr.us-east-1.amazonaws.com"
     }
 
     stages{
@@ -135,7 +135,7 @@ pipeline{
                                                                 -Dsonar.projectName=employee \
                                                                 -Dsonar.projectVersion=1.0 \
                                                                 -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.220/ \
+                                                                -Dsonar.host.url=http://172.48.16.173/ \
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
@@ -144,7 +144,7 @@ pipeline{
                                                                 -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
                                                                 -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                                            '''
+                                                        '''
                                                 }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
@@ -182,7 +182,7 @@ pipeline{
                                 nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
                                             protocol: 'http',
-                                            nexusUrl: '172.48.16.19:8081',
+                                            nexusUrl: '172.48.16.196:8081',
                                             groupId: 'QA',
                                             version: "${BUILD_ID}",
                                             repository: 'employee-repo',
@@ -346,7 +346,15 @@ pipeline{
                                                 '''
                                             }
                                         }
-                                    }
+                                    },
+                                    "copy reports": {
+                                            sh '''
+                                                cp employeemanagerfrontend/njsscan.sarif  reports/njsscan.sarif
+                                                cp employeemanagerfrontend/retire.json reports/retire.json
+                                                cp semgrep.json  reports/semgrep.json
+                                                cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                            '''
+                                     }
                                 )
                             }
                         }
@@ -362,28 +370,30 @@ pipeline{
                             dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" backend-deployment.yml
-                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
-                                        cat backend-deployment.yml
-                                        cat frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" base/frontend-deployment.yml
+                                        cat base/backend-deployment.yml
+                                        cat base/frontend-deployment.yml
                                     '''
                                 }
                             }
                         },
                         "DefectDojo Uploader": {
-                            script {
-                                sh '''
-                                    pip install --upgrade urllib3 chardet requests
-                                '''
-                            }
+                          //  script {
+                          //      sh '''
+                          //          pip install --upgrade urllib3 chardet requests
+                          //      '''
+                          // }
                             parallel(
                                 "Frontend Reports Upload": {
-                                    dir('employeemanagerfrontend') {
+                                    dir('reports') {
                                         script {
-                                            // python3 upload-reports.py semgrep.json 
+                                            // python3 upload-reports.py semgrep.json
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
+                                                python3 upload-reports.py semgrep.json
+                                                python3 upload-reports.py dependency-check-report.json
                                             '''
                                         }
                                     }
@@ -409,11 +419,9 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "OPA Scan": {
+                            "OPA Scan helm chart": {
                                     sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                                       helm template helm | conftest test -p opa-k8s-security.rego -
                                     '''
                             },
                             "Trivy Scan": {
@@ -423,15 +431,6 @@ pipeline{
 
                                             wait
                                        '''                           
-                            },
-                           "kubescape": {
-                                dir('kustomization') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
-                                }
                             }
                         )
                     }
@@ -442,7 +441,7 @@ pipeline{
                 steps {
                     script {
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks --region us-east-1 update-kubeconfig --name eksdemo"
+                            sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
                             sh '''
                                         if [ ! -f kubernetes-script.sh ]; then
                                             echo "kubernetes-script.sh file is missing!" >&2
@@ -451,9 +450,9 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                            sh "kubectl apply -f kustomization/ingress.yml -n employee"
+                //            sh "kubectl apply -f kustomization/ingress.yml -n employee"
                             sh "kubectl config current-context"
-                            sh "kubectl apply -f kustomization/externalDNS.yml"
+                //            sh "kubectl apply -f kustomization/externalDNS.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
                             sh 'sleep 90'
@@ -477,12 +476,12 @@ pipeline{
                                         kubescape scan framework all
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
-                                },
-                                "kubernetes cluster scan": {
-                                    sh '''
-                                        kubescape scan
-                                    '''
                                 }
+                              //  "kubernetes cluster scan": {
+                              //      sh '''
+                              //          kubescape scan
+                              //      '''
+                              //  }
                             )
                         }
                     }
@@ -497,7 +496,7 @@ pipeline{
                                 "DAST": {
                                     sh '''
                                         docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://awsdev.cloud-net-mgmt.com -g gen.conf -r testreport.html || true
+                                                zap-baseline.py -t https://awsdev.cloud-emgmt.com -g gen.conf -r testreport.html || true
                                     '''
                                 },
                                 "website-monitor":{
@@ -517,10 +516,10 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin aws || true
+                                git pull origin aws-helm || true
                                 git add .
                                 git commit -m "change added from jenkins"
-                                git push origin HEAD:aws
+                                git push origin HEAD:aws-helm
                             '''
                     }
                 }

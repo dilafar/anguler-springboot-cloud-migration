@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiServerUrl: "https://awshelm.cloud-net-mgmt.com/api"
+  apiServerUrl: "https://awsback.cloud-emgmt.com/api"
 };
 
