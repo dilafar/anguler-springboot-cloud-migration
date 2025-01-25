@@ -369,10 +369,10 @@ pipeline{
                         "Change image backend": {           
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
-                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
-                                        cat kustomization/base/frontend-deployment.yml
-                                        cat kustomization/base/backend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomize/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomize/base/frontend-deployment.yml
+                                        cat kustomize/base/frontend-deployment.yml
+                                        cat kustomize/base/backend-deployment.yml
                                     '''
                                 }
                         },
