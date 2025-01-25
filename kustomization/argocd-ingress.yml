@@ -32,5 +32,6 @@ spec:
             service:
               name: argocd-server
               port:
-                number: 443
+                 name: https
+  #              number: 443
           pathType: Prefix

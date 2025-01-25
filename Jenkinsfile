@@ -439,15 +439,6 @@ pipeline{
                                             wait
                                        '''                           
                             }
-                        //   "kubescape": {
-                         //       dir('helm') {
-                         //             script {
-                         //                   sh '''
-                            //                    kubescape scan framework nsa .
-                         //                   '''
-                            //            }
-                           //     }
-                        //    }
                         )
                     }
             }
@@ -501,7 +492,7 @@ pipeline{
                 }
 
         }
-/*
+
         stage("DAST-ZAP") {
                     steps {
                         script {
@@ -510,7 +501,7 @@ pipeline{
                                     sh 'sleep 30'
                                     sh '''
                                         docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://awsvault.cloud-net-mgmt.com -g gen.conf -r testreport.html || true
+                                                zap-baseline.py -t https://awsvault.cloud-emgmt.com -g gen.conf -r testreport.html || true
                                     '''
                                 },
                                 "website-monitor":{
@@ -521,7 +512,7 @@ pipeline{
                         }
                     }
         }
-*/
+
          stage('Checkout gh-pages Branch') {
             steps {
                     script {
@@ -578,7 +569,7 @@ pipeline{
         }
 
     }
-/*
+
     post {
         always {
            script { 
@@ -615,5 +606,5 @@ pipeline{
             }
         
          }
-    */
+    
     }
