@@ -1,28 +1,28 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-24T05:49:29.75535477Z",
+  "CreatedAt": "2025-01-25T09:03:56.218072475Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
-      "Name": "3.20.5"
+      "Name": "3.21.2"
     },
-    "ImageID": "sha256:c79a30ba0b4a0df63c83cad6d86c51be1c56afe94d08988c6513deae046e0c0a",
+    "ImageID": "sha256:e70440499b58726d546e19f1d584696ede63137d79abab3e76895cd84ea86247",
     "DiffIDs": [
-      "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
-      "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-      "sha256:5fc0f2d818053dab7c02824fc07854a7b5572a108d2f4610955d4ec0213b2a52",
-      "sha256:10906bf9f6e492c1b680114c74470fd758d882a58efc2566e22fcc65c6b9ac6e",
-      "sha256:915ae5537b517221de37545b087437f361e059d0b93ea8efff66e199d7ac9748",
+      "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
+      "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
+      "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
+      "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
+      "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:81769157fdb681a203acfb3449233bd00bad08d87748b97056c1627b6d346e43"
+      "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
     ],
     "RepoTags": [
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:c567c544a0a47ae9af2616c741d4a61a2a1c71324148fa11485d121b192b8782"
+      "maven@sha256:ad68ebbf1d7c2b181e51dd06a425081453462eea82923d1b15c7d25fb3548057"
     ],
     "ImageConfig": {
       "architecture": "amd64",
@@ -30,7 +30,7 @@
       "history": [
         {
           "created": "2024-09-24T11:57:06Z",
-          "created_by": "ADD alpine-minirootfs-3.20.5-x86_64.tar.gz / # buildkit",
+          "created_by": "ADD alpine-minirootfs-3.21.2-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
@@ -158,13 +158,13 @@
       "rootfs": {
         "type": "layers",
         "diff_ids": [
-          "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
-          "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-          "sha256:5fc0f2d818053dab7c02824fc07854a7b5572a108d2f4610955d4ec0213b2a52",
-          "sha256:10906bf9f6e492c1b680114c74470fd758d882a58efc2566e22fcc65c6b9ac6e",
-          "sha256:915ae5537b517221de37545b087437f361e059d0b93ea8efff66e199d7ac9748",
+          "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
+          "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
+          "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
+          "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
+          "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:81769157fdb681a203acfb3449233bd00bad08d87748b97056c1627b6d346e43"
+          "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
         ]
       },
       "config": {
@@ -193,7 +193,7 @@
   },
   "Results": [
     {
-      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.5)",
+      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.21.2)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
