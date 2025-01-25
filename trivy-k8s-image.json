@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-25T09:06:12.024532219Z",
-  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.49-18",
+  "CreatedAt": "2025-01-25T11:08:28.837368222Z",
+  "ArtifactName": "fadhiljr/nginxapp:employee-backend-v0.0.50-20",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:be665c4cb9b1c385b82ef0f9e41e6ee5f97aaa00cb29df9a6a7c9caba0d42aa0",
+    "ImageID": "sha256:f131527a4cfcd3fee0cb4b16e75e1f9c78334283c332d717f11b88b6373fb9e3",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-      "sha256:f3384b2375a9b870976717f19521688dc988e32792b07a123cfd7618aab13b07",
-      "sha256:1f6469e0b124c1e3375327066a264d117f643eddbb77bd1bf8b7b5355e340ccf"
+      "sha256:1930ba1e3a0bc5488c9786eb5e3ed7371a5cba9d634c7fd6171e3cdf5d16acc7",
+      "sha256:05b0376b6117a7a2ada9c3fcacf0efc47d890407952eab774054babc97cef228"
     ],
     "RepoTags": [
-      "fadhiljr/nginxapp:employee-backend-v0.0.49-18"
+      "fadhiljr/nginxapp:employee-backend-v0.0.50-20"
     ],
     "RepoDigests": [
-      "fadhiljr/nginxapp@sha256:f60727656636fc8689ea0f977e69641a2dbad785b0b820bef26b0d32d464ded9"
+      "fadhiljr/nginxapp@sha256:bd021cc89d6df031885e75d58c5d7a46c5f855c5050e55dca60579822278efce"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "15419ba23601b222ec68d78abda2a4c6293ca7d97c18539770568bb4d21ef308",
-      "created": "2025-01-25T09:05:32.03270633Z",
+      "container": "116d394ffbf1a29a35a57b8e2cb6ff4f82b42406e40cd6223d72590207599c35",
+      "created": "2025-01-25T11:07:44.232640464Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-25T09:05:30Z",
+          "created": "2025-01-25T11:07:42Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-01-25T09:05:31Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:4a815ad204113a2db3d4bb2ef7fd220e45283f3bf1577f6e7dc7cb7a9f3c1192 in /home/k8-user/app.jar "
+          "created": "2025-01-25T11:07:43Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:83995f64520edda8ff1903d450e09295e0b8f824ca0fc4bd64014c2618465e5c in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-01-25T09:05:31Z",
+          "created": "2025-01-25T11:07:44Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-01-25T09:05:31Z",
+          "created": "2025-01-25T11:07:44Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-01-25T09:05:32Z",
+          "created": "2025-01-25T11:07:44Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-          "sha256:f3384b2375a9b870976717f19521688dc988e32792b07a123cfd7618aab13b07",
-          "sha256:1f6469e0b124c1e3375327066a264d117f643eddbb77bd1bf8b7b5355e340ccf"
+          "sha256:1930ba1e3a0bc5488c9786eb5e3ed7371a5cba9d634c7fd6171e3cdf5d16acc7",
+          "sha256:05b0376b6117a7a2ada9c3fcacf0efc47d890407952eab774054babc97cef228"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:4ffbf4d6ce68f0581e54aa48ff464d79e8386c27d724c20b50f0ec30ef02905e",
+        "Image": "sha256:f719ba9ea1f1d9b9a5d813f6d4060b40f02116f92eb4ea194c10e1df13bda35f",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,7 +120,7 @@
   },
   "Results": [
     {
-      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.49-18 (alpine 3.20.5)",
+      "Target": "fadhiljr/nginxapp:employee-backend-v0.0.50-20 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
