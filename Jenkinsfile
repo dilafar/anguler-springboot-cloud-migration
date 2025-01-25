@@ -362,7 +362,15 @@ pipeline{
                                                 signImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
-                                    }
+                                    },
+                                     "copy reports": {
+                                            sh '''
+                                                cp employeemanagerfrontend/njsscan.sarif  reports/njsscan.sarif
+                                                cp employeemanagerfrontend/retire.json reports/retire.json
+                                                cp semgrep.json  reports/semgrep.json
+                                                cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                            '''
+                                     }
                                 )
                             }
                         }
@@ -395,13 +403,14 @@ pipeline{
                            // }
                             parallel(
                                 "Frontend Reports Upload": {
-                                    dir('employeemanagerfrontend') {
+                                    dir('reports') {
                                         script {
                                             // python3 upload-reports.py semgrep.json
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
                                                 python3 upload-reports.py semgrep.json
+                                                python3 upload-reports.py dependency-check-report.json
                                             '''
                                         }
                                     }
