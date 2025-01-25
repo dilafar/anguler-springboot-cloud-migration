@@ -1,10 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: employee-ingress
-  namespace: employee
+  name: employee-mgmt-ingress
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: employee-lb
+    alb.ingress.kubernetes.io/load-balancer-name: employeemgmtingress
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
@@ -15,12 +14,12 @@ metadata:
     alb.ingress.kubernetes.io/success-codes: '200'
     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:522814728991:certificate/71552876-67fc-42d3-b5f6-656e0f80c28e
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:911167901499:certificate/c8570f67-513e-43bc-aad7-1ac5f3a38f37
     alb.ingress.kubernetes.io/ssl-redirect: '443'
 spec:
   ingressClassName: alb
   rules:
-  - host: awsdev.cloud-emgmt.com
+  - host: awsdev.cloud-net-mgmt.com
     http:
       paths:
       - pathType: Prefix
@@ -30,7 +29,7 @@ spec:
             name: employee-frontend-service
             port: 
               number: 80
-  - host: awsback.cloud-emgmt.com
+  - host: aws.cloud-net-mgmt.com
     http:
       paths:
       - pathType: Prefix
