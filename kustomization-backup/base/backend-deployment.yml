@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-backend
+  labels:
+    tier: backend
+    app: employee-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: employee-backend
+  template:
+    metadata:
+      labels:
+        tier: backend
+        app: employee-backend
+    spec:
+      initContainers:
+        - name: mydb-available
+          image: busybox:1.28
+          command: ['sh','-c',"until nslookup mysql; do echo waiting for database; sleep 4; done"]
+      imagePullSecrets:
+        - name: aws-registry-key
+      containers:
+        - name: employee-backend
+          image: 911167901499.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:backend-v0.0.23-79
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "employee"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/employeemanager"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "admin"
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mysql-db-password
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "250Mi"
