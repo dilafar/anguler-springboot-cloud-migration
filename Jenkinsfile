@@ -444,7 +444,7 @@ pipeline{
                                 eval $(aws sts assume-role \
                                     --role-arn arn:aws:iam::522814728991:role/external-developer \
                                     --role-session-name K8SSession | \
-                                jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\(.AccessKeyId) AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey) AWS_SESSION_TOKEN=\(.SessionToken)"')
+                                jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\\(.AccessKeyId) AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey) AWS_SESSION_TOKEN=\\(.SessionToken)"')
 
                                 chmod +x kubernetes-apply.sh
                                 ./kubernetes-apply.sh
