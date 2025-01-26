@@ -39,7 +39,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: mysql-db-password
+                  name: mysql-password
           securityContext:
             runAsNonRoot: true
             runAsUser: 100
