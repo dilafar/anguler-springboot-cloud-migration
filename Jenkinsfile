@@ -305,8 +305,8 @@ pipeline{
                 steps {
                         script {
                             // Clean up unused Docker resources
-                            sh 'docker system prune -a --volumes --force || true'
-
+                        sh 'docker system prune -a --volumes --force || true'
+                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
                             withCredentials([usernamePassword(credentialsId: 'ecr-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
@@ -357,9 +357,10 @@ pipeline{
                                      }
                                 )
                             }
-                        }
                     }
                 }
+            }
+        }
 
 
         stage("change image in kubeconfig") {
