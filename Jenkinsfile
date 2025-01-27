@@ -318,12 +318,12 @@ pipeline{
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION 
-                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION
+                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION .
+                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -335,12 +335,12 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION .
-                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION
+                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION .
+                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
