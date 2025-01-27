@@ -1,53 +1,53 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-02T20:03:26.554705542Z",
+  "CreatedAt": "2025-01-27T11:14:18.515095236Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
-      "Name": "3.20.3"
+      "Name": "3.21.2"
     },
-    "ImageID": "sha256:503b72e4a4ddf82a8a0d77a57246e8d24b04c3d3a79dd9f808fc3ae487f9c3ac",
+    "ImageID": "sha256:e70440499b58726d546e19f1d584696ede63137d79abab3e76895cd84ea86247",
     "DiffIDs": [
-      "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-      "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-      "sha256:853acf40183c7c12550af6dcd0e4a746139fe2a5fdb10134fb0f9b56ae1c0fe7",
-      "sha256:6a6f3904c1fe9d18a57ae676d6b632ad6297a5f87d0e764077251c4afcbe6c2d",
-      "sha256:e883248e310551a98e85195aa45427313649ebc6662a0bf60bea680aeb31feb5",
+      "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
+      "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
+      "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
+      "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
+      "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:b525cc50ae654d4388496f9efe4d8453433f3afbb3889694fe09b689f5972e59"
+      "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
     ],
     "RepoTags": [
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:9e0e868c4c786879e065144baed402c9274467a5eae132747520822428535e7f"
+      "maven@sha256:ad68ebbf1d7c2b181e51dd06a425081453462eea82923d1b15c7d25fb3548057"
     ],
     "ImageConfig": {
       "architecture": "amd64",
       "created": "2024-09-24T11:57:06Z",
       "history": [
         {
-          "created": "2024-09-06T12:05:36Z",
-          "created_by": "ADD alpine-minirootfs-3.20.3-x86_64.tar.gz / # buildkit",
+          "created": "2024-09-24T11:57:06Z",
+          "created_by": "ADD alpine-minirootfs-3.21.2-x86_64.tar.gz / # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
-          "created": "2024-09-06T12:05:36Z",
+          "created": "2024-09-24T11:57:06Z",
           "created_by": "CMD [\"/bin/sh\"]",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
           "created": "2024-09-24T11:57:06Z",
-          "created_by": "ARG version=17.0.13.11.1",
+          "created_by": "ARG version=17.0.14.7.1",
           "comment": "buildkit.dockerfile.v0",
           "empty_layer": true
         },
         {
           "created": "2024-09-24T11:57:06Z",
-          "created_by": "RUN |1 version=17.0.13.11.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "created_by": "RUN |1 version=17.0.14.7.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
           "comment": "buildkit.dockerfile.v0"
         },
         {
@@ -158,13 +158,13 @@
       "rootfs": {
         "type": "layers",
         "diff_ids": [
-          "sha256:75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
-          "sha256:62a4bef7000d479cf031441354c37f5f3c4ab4251bd57d8b966ad54db735c0df",
-          "sha256:853acf40183c7c12550af6dcd0e4a746139fe2a5fdb10134fb0f9b56ae1c0fe7",
-          "sha256:6a6f3904c1fe9d18a57ae676d6b632ad6297a5f87d0e764077251c4afcbe6c2d",
-          "sha256:e883248e310551a98e85195aa45427313649ebc6662a0bf60bea680aeb31feb5",
+          "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
+          "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
+          "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
+          "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
+          "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:b525cc50ae654d4388496f9efe4d8453433f3afbb3889694fe09b689f5972e59"
+          "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
         ]
       },
       "config": {
@@ -187,14 +187,13 @@
           "org.opencontainers.image.title": "Apache Maven",
           "org.opencontainers.image.url": "https://github.com/carlossg/docker-maven"
         },
-        "WorkingDir": "/",
-        "ArgsEscaped": true
+        "WorkingDir": "/"
       }
     }
   },
   "Results": [
     {
-      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.20.3)",
+      "Target": "maven:3.9.9-amazoncorretto-17-alpine (alpine 3.21.2)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
