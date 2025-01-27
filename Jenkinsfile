@@ -307,20 +307,23 @@ pipeline{
                         script {
                             // Clean up unused Docker resources
                             sh 'docker system prune -a --volumes --force || true'
+                            sh '''
+                                    gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
+                                    gcloud auth configure-docker us-east1-docker.pkg.dev
 
-                            withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            '''
+                   //         withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
+                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION 
+                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-frontend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -332,13 +335,12 @@ pipeline{
                                         dir('employeemanager') {
                                             script {
                                                 sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
+                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION .
+                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION
                                                 '''
                                                 sh 'cosign version'
                                                 sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION)
+                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp:employee-backend-v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
                                                     echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
                                                     cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
@@ -355,7 +357,7 @@ pipeline{
                                             '''
                                      }
                                 )
-                            }
+                        //    }
                         }
                     }
                 }
@@ -444,12 +446,6 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                          //  sh "kubectl apply -f kustomization/externalDNS.yml"
-                         //   sh "kubectl apply -f kustomization/frontendconfig.yml"
-                         //   sh "kubectl apply -f kustomization/managed-certificate.yml"
-                         //   sh "kubectl apply -f kustomization/backend.yml"
-                         //   sh "kubectl apply -f kustomization/backend-cdn.yml"
-                          //  sh "kubectl apply -f kustomization/ingress.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
                             sh 'sleep 90'
