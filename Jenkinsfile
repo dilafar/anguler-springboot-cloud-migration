@@ -121,7 +121,7 @@ pipeline{
             }
         
 
-        stage("SAST - sonar Analysis"){
+        stage("SAST - sonar Analysis(gcp)"){
             environment {
                 scannerHome = tool 'sonar6.2'
             }
@@ -132,11 +132,11 @@ pipeline{
                                     dir('employeemanager') {
                                                 withSonarQubeEnv('sonar') {
                                                     sh '''${scannerHome}/bin/sonar-scanner \
-                                                                -Dsonar.projectKey=employee \
-                                                                -Dsonar.projectName=employee \
+                                                                -Dsonar.projectKey=employee-gcp \
+                                                                -Dsonar.projectName=employee-gcp \
                                                                 -Dsonar.projectVersion=1.0 \
                                                                 -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.220/ \
+                                                                -Dsonar.host.url=http://172.48.16.173/ \
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
@@ -145,7 +145,7 @@ pipeline{
                                                                 -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
                                                                 -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                                            '''
+                                                        '''
                                                 }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
@@ -174,7 +174,7 @@ pipeline{
 
         }
 
-        stage("Upload Artifacts"){
+        stage("Upload Artifacts(gcp)"){
             steps {
                 script {
                         dir('employeemanager') {
@@ -183,8 +183,8 @@ pipeline{
                                 nexusArtifactUploader(
                                             nexusVersion: 'nexus3',
                                             protocol: 'http',
-                                            nexusUrl: '172.48.16.19:8081',
-                                            groupId: 'QA',
+                                            nexusUrl: '172.48.16.196:8081',
+                                            groupId: 'gcp-jar',
                                             version: "${BUILD_ID}",
                                             repository: 'employee-repo',
                                             credentialsId: 'nexus',
@@ -345,7 +345,15 @@ pipeline{
                                                 '''
                                             }
                                         }
-                                    }
+                                    },
+                                    "copy reports": {
+                                            sh '''
+                                                cp employeemanagerfrontend/njsscan.sarif  reports/njsscan.sarif
+                                                cp employeemanagerfrontend/retire.json reports/retire.json
+                                                cp semgrep.json  reports/semgrep.json
+                                                cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                            '''
+                                     }
                                 )
                             }
                         }
@@ -358,31 +366,25 @@ pipeline{
                 script {
                     parallel(
                         "Change image backend": {           
-                            dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g" backend-deployment.yml
-                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
-                                        cat backend-deployment.yml
-                                        cat frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
+                                        cat kustomization/base/frontend-deployment.yml
+                                        cat kustomization/base/backend-deployment.yml
                                     '''
                                 }
-                            }
                         },
                         "DefectDojo Uploader": {
-                            script {
-                                sh '''
-                                    pip install --upgrade urllib3 chardet requests
-                                '''
-                            }
                             parallel(
                                 "Frontend Reports Upload": {
-                                    dir('employeemanagerfrontend') {
+                                    dir('reports') {
                                         script {
-                                            // python3 upload-reports.py semgrep.json 
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
+                                                python3 upload-reports.py semgrep.json
+                                                python3 upload-reports.py dependency-check-report.json
                                             '''
                                         }
                                     }
@@ -408,41 +410,28 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "OPA Scan": {
+                            "OPA Scan helm chart": {
                                     sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                                       helm template helm | conftest test -p opa-k8s-security.rego -
                                     '''
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION &
 
                                             wait
                                        '''                           
-                            },
-                           "kubescape": {
-                                dir('kustomization') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
-                                }
                             }
                         )
                     }
             }
         }
 
-
-        stage("Kubernetes Apply") {
+        stage("Kubernetes deploy(gke)") {
                 steps {
                     script {
                             sh '''
-                                        gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
                                         gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
                             '''
@@ -455,12 +444,12 @@ pipeline{
                                         chmod +x kubernetes-script.sh
                                         chmod +x kubernetes-apply.sh
                             '''
-                            sh "kubectl apply -f kustomization/externalDNS.yml"
-                            sh "kubectl apply -f kustomization/frontendconfig.yml"
-                            sh "kubectl apply -f kustomization/managed-certificate.yml"
-                            sh "kubectl apply -f kustomization/backend.yml"
-                            sh "kubectl apply -f kustomization/backend-cdn.yml"
-                            sh "kubectl apply -f kustomization/ingress.yml"
+                          //  sh "kubectl apply -f kustomization/externalDNS.yml"
+                         //   sh "kubectl apply -f kustomization/frontendconfig.yml"
+                         //   sh "kubectl apply -f kustomization/managed-certificate.yml"
+                         //   sh "kubectl apply -f kustomization/backend.yml"
+                         //   sh "kubectl apply -f kustomization/backend-cdn.yml"
+                          //  sh "kubectl apply -f kustomization/ingress.yml"
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
                             sh 'sleep 90'
@@ -469,11 +458,10 @@ pipeline{
                 }
         }
 
-        stage ("kubernetes cluster check") {
+        stage ("kubernetes cluster check(gke)") {
                 steps {
                     script {
                             sh '''
-                                        gcloud version
                                         gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
                                         gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
                             '''
@@ -484,11 +472,6 @@ pipeline{
                                         kubescape scan framework all
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
-                                },
-                                "kubernetes cluster scan": {
-                                    sh '''
-                                        kubescape scan
-                                     '''
                                 }
                            )     
                     }

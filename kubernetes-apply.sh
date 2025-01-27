@@ -1,10 +1,10 @@
 #!/bin/bash
 
 kubectl config view
-cat kustomization/frontend-deployment.yml
-cat kustomization/frontend-service.yml
-cat kustomization/backend-deployment.yml
-cat kustomization/backend-service.yml
+cat kustomization/base/frontend-deployment.yml
+cat kustomization/base/frontend-service.yml
+cat kustomization/base/backend-deployment.yml
+cat kustomization/base/backend-service.yml
 
 deploy_component() {
     local COMPONENT_NAME=$1
@@ -34,7 +34,7 @@ deploy_component() {
         fi
         echo "$COMPONENT_NAME deployment successful"
     else
-        kubectl apply -k kustomization/
+        kubectl apply -k kustomization/overlays/dev
         kubectl get all -n $NAMESPACE
         kubectl rollout status deploy $COMPONENT_NAME -n $NAMESPACE --timeout 60s
 
@@ -56,10 +56,10 @@ deploy_component() {
 
 # frontend check
 echo "frontend deployment check...!!!\n"
-NEW_FRONTEND_IMAGE="fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION"
+NEW_FRONTEND_IMAGE="$DOCKER_REPO:frontend-v$IMAGE_VERSION"
 deploy_component "employee-frontend" "employee" "$NEW_FRONTEND_IMAGE"
 
 # backend check
 echo "backend deployment check...!!!\n"
-NEW_BACKEND_IMAGE="fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION"
+NEW_BACKEND_IMAGE="$DOCKER_REPO:backend-v$IMAGE_VERSION"
 deploy_component "employee-backend" "employee" "$NEW_BACKEND_IMAGE"
