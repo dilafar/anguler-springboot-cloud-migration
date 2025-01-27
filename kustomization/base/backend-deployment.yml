@@ -22,7 +22,7 @@ spec:
           command: ['sh','-c',"until nslookup 34.31.45.25; do echo waiting for database; sleep 4; done"]
       containers:
         - name: employee-backend
-          image: :backend-v0.0.33-32
+          image: fadhiljr/nginxapp:employee-backend-v0.0.34-33
           ports:
             - containerPort: 8080
           env:
