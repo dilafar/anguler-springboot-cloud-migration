@@ -325,9 +325,9 @@ pipeline{
                                                 sh '''
                                                     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_EXPERIMENTAL=1
+                                                    export COSIGN_TLOG_UPLOAD=false
                                                     cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
@@ -343,9 +343,9 @@ pipeline{
                                                 sh '''
                                                     IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION)
                                                     echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_EXPERIMENTAL=1
+                                                    export COSIGN_TLOG_UPLOAD=false
                                                     cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
+                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
                                                 '''
                                             }
                                         }
