@@ -368,8 +368,8 @@ pipeline{
                         "Change image backend": {           
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
-                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
                                         cat kustomization/base/frontend-deployment.yml
                                         cat kustomization/base/backend-deployment.yml
                                     '''
@@ -417,8 +417,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
 
                                             wait
                                        '''                           
