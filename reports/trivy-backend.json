@@ -8,7 +8,7 @@ Learn more and start using VEX: https://aquasecurity.github.io/trivy/v0.58/docs/
 To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
 
 
-us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.39-45 (alpine 3.20.5)
+us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.40-46 (alpine 3.20.5)
 ====================================================================================================
 Total: 0 (HIGH: 0, CRITICAL: 0)
 
