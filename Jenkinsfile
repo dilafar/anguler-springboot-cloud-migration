@@ -136,23 +136,7 @@ pipeline{
                                     dir('employeemanager') {
                                         sonarAnalysis('sonar',"${scannerHome}","employee-gcp","employee-gcp","1.0","src/","http://172.48.16.173/",
                                             "target/test-classes/com/employees/employeemanager/","target/jacoco.exec","target/surefire-reports/","target/site/jacoco/jacoco.xml","target/dependency-check-report/dependency-check-report.json","target/dependency-check-report/dependency-check-report.html","target/checkstyle-result.xml")
-                                         //      withSonarQubeEnv('sonar') {
-                                          //         sh '''${scannerHome}/bin/sonar-scanner \
-                                         ///                      -Dsonar.projectKey=employee-gcp \
-                                          //                      -Dsonar.projectName=employee-gcp \
-                                          //                      -Dsonar.projectVersion=1.0 \
-                                          //                      -Dsonar.sources=src/ \
-                                           //                     -Dsonar.host.url=http://172.48.16.173/ \
-                                          //                      -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
-                                          //                      -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                                           //                     -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                                           //                     -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                                            //                    -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
-                                            //                    -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
-                                             //                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                              //          '''
-                                             //   }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
                                                 }         
@@ -187,21 +171,6 @@ pipeline{
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
                                 nexusUpload("172.48.16.196:8081","gcp-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
-                             //   nexusArtifactUploader(
-                                 //           nexusVersion: 'nexus3',
-                                //            protocol: 'http',
-                                //            nexusUrl: '172.48.16.196:8081',
-                                //            groupId: 'gcp-jar',
-                                 //           version: "${BUILD_ID}",
-                                 //           repository: 'employee-repo',
-                                 //           credentialsId: 'nexus',
-                                 //           artifacts: [
-                                  //                  [artifactId: 'employeemgmt',
-                                  //                  classifier: '',
-                                   //                 file: "${env.JAR_FILE}",
-                                    //                type: 'jar']
-                                    //            ]
-                               // )
                             }               
                         }
                     }
@@ -312,7 +281,6 @@ pipeline{
         stage("Node.js Image Build") {
                 steps {
                         script {
-                            // Clean up unused Docker resources
                             sh 'docker system prune -a --volumes --force || true'
                             sh '''
                                     gcloud auth activate-service-account --key-file=$GCLOUD_CRDS
@@ -364,8 +332,6 @@ pipeline{
                                     sh '''
                                         sed -i "/containers:/,/^[^ ]/s|image:.*|image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
                                         sed -i "s|image:.*|image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
-                                        cat kustomization/base/frontend-deployment.yml
-                                        cat kustomization/base/backend-deployment.yml
                                     '''
                                 }
                         },
@@ -393,7 +359,7 @@ pipeline{
                         parallel (
                             "OPA Scan helm chart": {
                                     sh '''
-                                       helm template helm | conftest test -p opa-k8s-security.rego -
+                                       conftest test -p opa-k8s-security.rego kustomization/base/*
                                     '''
                             },
                             "Trivy Scan": {
@@ -403,6 +369,14 @@ pipeline{
 
                                             wait
                                        '''                           
+                            },
+                            "CIS Benchmark v1.6.0": {
+                                sh '''
+                                    bash bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                    bash bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-bench-backend.json &
+
+                                    wait
+                                '''
                             }
                         )
                     }
@@ -460,8 +434,7 @@ pipeline{
                             parallel (
                                 "DAST": {
                                     sh '''
-                                        docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://gcpdev.employee-mgmt.com -g gen.conf -r testreport.html || true
+                                        docker run -v /home/ubuntu:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://gcpdev.employee-mgmt.com -g gen.conf | tee reports/zap.conf || true
                                     '''
                                 },
                                 "website-monitor":{
