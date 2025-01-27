@@ -44,9 +44,7 @@ pipeline{
                         "Maven Increment": {
                             dir('employeemanager') {
                                     echo "incrimenting app version ..."
-                                    sh 'mvn build-helper:parse-version versions:set \
-                                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                                        versions:commit'
+                                    incrementPatchVersion()
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[1][1]       
                                     env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
@@ -136,23 +134,25 @@ pipeline{
                     parallel(
                          "sonar Analysis": {
                                     dir('employeemanager') {
-                                                withSonarQubeEnv('sonar') {
-                                                    sh '''${scannerHome}/bin/sonar-scanner \
-                                                                -Dsonar.projectKey=employee-gcp \
-                                                                -Dsonar.projectName=employee-gcp \
-                                                                -Dsonar.projectVersion=1.0 \
-                                                                -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.173/ \
-                                                                -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
-                                                                -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                                                                -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                                                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                                                                -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
-                                                                -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
-                                                                -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                                        sonarAnalysis('sonar',"${scannerHome}","employee-gcp","employee-gcp","1.0","src/","http://172.48.16.173/",
+                                            "target/test-classes/com/employees/employeemanager/","target/jacoco.exec","target/surefire-reports/","target/site/jacoco/jacoco.xml","target/dependency-check-report/dependency-check-report.json","target/dependency-check-report/dependency-check-report.html","target/checkstyle-result.xml")
+                                         //      withSonarQubeEnv('sonar') {
+                                          //         sh '''${scannerHome}/bin/sonar-scanner \
+                                         ///                      -Dsonar.projectKey=employee-gcp \
+                                          //                      -Dsonar.projectName=employee-gcp \
+                                          //                      -Dsonar.projectVersion=1.0 \
+                                          //                      -Dsonar.sources=src/ \
+                                           //                     -Dsonar.host.url=http://172.48.16.173/ \
+                                          //                      -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
+                                          //                      -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                                           //                     -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                                           //                     -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                            //                    -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
+                                            //                    -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
+                                             //                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                                        '''
-                                                }   
+                                              //          '''
+                                             //   }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
                                                 }         
@@ -186,21 +186,22 @@ pipeline{
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusArtifactUploader(
-                                            nexusVersion: 'nexus3',
-                                            protocol: 'http',
-                                            nexusUrl: '172.48.16.196:8081',
-                                            groupId: 'gcp-jar',
-                                            version: "${BUILD_ID}",
-                                            repository: 'employee-repo',
-                                            credentialsId: 'nexus',
-                                            artifacts: [
-                                                    [artifactId: 'employeemgmt',
-                                                    classifier: '',
-                                                    file: "${env.JAR_FILE}",
-                                                    type: 'jar']
-                                                ]
-                                )
+                                nexusUpload("172.48.16.196:8081","gcp-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
+                             //   nexusArtifactUploader(
+                                 //           nexusVersion: 'nexus3',
+                                //            protocol: 'http',
+                                //            nexusUrl: '172.48.16.196:8081',
+                                //            groupId: 'gcp-jar',
+                                 //           version: "${BUILD_ID}",
+                                 //           repository: 'employee-repo',
+                                 //           credentialsId: 'nexus',
+                                 //           artifacts: [
+                                  //                  [artifactId: 'employeemgmt',
+                                  //                  classifier: '',
+                                   //                 file: "${env.JAR_FILE}",
+                                    //                type: 'jar']
+                                    //            ]
+                               // )
                             }               
                         }
                     }
@@ -318,26 +319,14 @@ pipeline{
                                     gcloud auth configure-docker us-east1-docker.pkg.dev
 
                             '''
-                   //         withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                           //     sh '''
-                                          //          docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION .
-                                          //          docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION
-                                          //      '''
                                                 buildCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}")
                                                 dockerCloudPush("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}")
                                                 sh 'cosign version'
                                                 signCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
-                                               // sh '''
-                                             //       IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION)
-                                             //       echo "Image Digest: $IMAGE_DIGEST"
-                                              //      export COSIGN_TLOG_UPLOAD=false
-                                              //      cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                              //      cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                               // '''
                                             }
                                         }
                                     },
@@ -348,18 +337,6 @@ pipeline{
                                                  dockerCloudPush("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend","v${IMAGE_VERSION}")
                                                  sh 'cosign version'
                                                  signCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend","v${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
-                                           //     sh '''
-                                           //         docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION .
-                                           //         docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION
-                                           //     '''
-                                           //     sh 'cosign version'
-                                           //     sh '''
-                                           //         IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION)
-                                           //         echo "Image Digest: $IMAGE_DIGEST"
-                                           //         export COSIGN_TLOG_UPLOAD=false
-                                           ///         cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                            //        cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                           //     '''
                                             }
                                         }
                                     },
@@ -382,7 +359,7 @@ pipeline{
             steps {
                 script {
                     parallel(
-                        "Change image backend": {           
+                        "update image version": {           
                                 script {
                                     sh '''
                                         sed -i "/containers:/,/^[^ ]/s|image:.*|image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
@@ -393,8 +370,6 @@ pipeline{
                                 }
                         },
                         "DefectDojo Uploader": {
-                            parallel(
-                                "Frontend Reports Upload": {
                                     dir('reports') {
                                         script {
                                             sh '''                                           
@@ -404,18 +379,7 @@ pipeline{
                                                 python3 upload-reports.py dependency-check-report.json
                                             '''
                                         }
-                                    }
-                                },
-                                "Backend Reports Upload": {
-                                    dir('employeemanager') {
-                                        script {
-                                            sh '''
-                                               echo "python3 upload-reports.py /target/dependency-check-report/dependency-check-report.json"
-                                            '''
-                                        }
-                                    }
-                                }
-                            )
+                                    }           
                         }
                     )
                 }
@@ -434,8 +398,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-frontend.json &
+                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
@@ -463,7 +427,7 @@ pipeline{
                             '''
                             sh "./kubernetes-script.sh"
                             sh "./kubernetes-apply.sh"
-                            sh 'sleep 90'
+                            sh 'sleep 60'
 
                         }
                 }
