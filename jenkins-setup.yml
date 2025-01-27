@@ -36,6 +36,7 @@ rules:
   - configmaps
   - persistentvolumes
   - serviceaccounts
+  - replicationcontrollers
   verbs:
   - list
   - watch
@@ -43,18 +44,44 @@ rules:
   - get
   - create
   - impersonate
+  - patch
 - apiGroups:
   - apps
   resources:
   - daemonsets
   - statefulsets
   - deployments
+  - replicasets
   verbs:
   - list
   - watch
   - describe
   - get
   - create
+  - patch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - list
+  - watch
+  - describe
+  - get
+  - create
+  - patch
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - list
+  - watch
+  - describe
+  - get
+  - create
+  - patch
 - apiGroups:
   - networking.k8s.io
   resources:
@@ -65,6 +92,7 @@ rules:
   - describe
   - get
   - create
+  - patch
 - apiGroups:
   - external-secrets.io
   resources:
