@@ -10,7 +10,7 @@ def send_notification(email_msg):
         smtp.sendmail("fadhilahamed98@gmail.com","fadhilahamed98@gmail.com",email_msg)
     
 try:
-    response = requests.get('https://awsdev.cloud-net-mgmt.com/')
+    response = requests.get('https://gcpdev.employee-mgmt.com')
     print(response.status_code)
     #response.status_code == 200
     if response.status_code == 200:

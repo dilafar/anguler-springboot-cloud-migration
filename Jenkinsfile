@@ -372,8 +372,8 @@ pipeline{
                             },
                             "CIS Benchmark v1.6.0": {
                                 sh '''
-                                    bash bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-bench-frontend.json || true &
-                                    bash bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-bench-backend.json &
+                                    bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                    bash trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-bench-backend.json &
 
                                     wait
                                 '''
