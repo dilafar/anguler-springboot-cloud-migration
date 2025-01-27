@@ -1,6 +1,12 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
 
+library identifier: "jenkins-shared-library@master" , retriever: modernSCM([
+        $class: "GitSCMSource",
+        remote: "https://github.com/dilafar/jenkins-shared-library.git",
+        credentialsId: "github",
+])
+
 pipeline{
     agent any
 
@@ -317,36 +323,43 @@ pipeline{
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                                sh '''
-                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION .
-                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION
-                                                '''
+                                           //     sh '''
+                                          //          docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION .
+                                          //          docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION
+                                          //      '''
+                                                buildCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}")
+                                                dockerCloudPush("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}")
                                                 sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_TLOG_UPLOAD=false
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                                '''
+                                                signCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend","v${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
+                                               // sh '''
+                                             //       IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION)
+                                             //       echo "Image Digest: $IMAGE_DIGEST"
+                                              //      export COSIGN_TLOG_UPLOAD=false
+                                              //      cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                              //      cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
+                                               // '''
                                             }
                                         }
                                     },
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                                sh '''
-                                                    docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION .
-                                                    docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_TLOG_UPLOAD=false
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                                '''
+                                                 buildCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend","v${IMAGE_VERSION}")
+                                                 dockerCloudPush("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend","v${IMAGE_VERSION}")
+                                                 sh 'cosign version'
+                                                 signCloudImage("us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend","v${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
+                                           //     sh '''
+                                           //         docker build -t us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION .
+                                           //         docker push us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION
+                                           //     '''
+                                           //     sh 'cosign version'
+                                           //     sh '''
+                                           //         IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION)
+                                           //         echo "Image Digest: $IMAGE_DIGEST"
+                                           //         export COSIGN_TLOG_UPLOAD=false
+                                           ///         cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
+                                            //        cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
+                                           //     '''
                                             }
                                         }
                                     },
@@ -372,8 +385,8 @@ pipeline{
                         "Change image backend": {           
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
-                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
                                         cat kustomization/base/frontend-deployment.yml
                                         cat kustomization/base/backend-deployment.yml
                                     '''
@@ -421,8 +434,8 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION &
+                                            bash trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION &
 
                                             wait
                                        '''                           

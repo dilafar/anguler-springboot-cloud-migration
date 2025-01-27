@@ -56,10 +56,10 @@ deploy_component() {
 
 # frontend check
 echo "frontend deployment check...!!!\n"
-NEW_FRONTEND_IMAGE="$DOCKER_REPO:frontend-v$IMAGE_VERSION"
+NEW_FRONTEND_IMAGE="us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION"
 deploy_component "employee-frontend" "employee" "$NEW_FRONTEND_IMAGE"
 
 # backend check
 echo "backend deployment check...!!!\n"
-NEW_BACKEND_IMAGE="$DOCKER_REPO:backend-v$IMAGE_VERSION"
+NEW_BACKEND_IMAGE="us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION"
 deploy_component "employee-backend" "employee" "$NEW_BACKEND_IMAGE"
