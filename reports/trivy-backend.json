@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-28T18:56:30.965906504Z",
-  "ArtifactName": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.43-57",
+  "CreatedAt": "2025-01-28T19:45:51.363522988Z",
+  "ArtifactName": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.44-58",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:b09b12064b117ddbd4e901ef923727533f700f5c74ffeeaa51dd319dd1c387f5",
+    "ImageID": "sha256:dfc3accd16101400c83efc6a173f1b884ff5d52166b1c8b0fa5f7db9e461b7b6",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-      "sha256:eaab34598c927d9dedcdf0f5a5658aa55d3c7c74ee387c4a49279f94fe285b9a",
-      "sha256:4b3c924fb76c325a5727f27a547e6debdd62f487384a357d5e4ef0ce0797a4c5"
+      "sha256:8f521892cdf2d76432b8be8c6f007e4c2c3921dd6aceda092899574779cff4eb",
+      "sha256:049c3b95c42dd1715cb8fea3818c5cc77fa2e2e798d4fcc5ca4f19ed19b54393"
     ],
     "RepoTags": [
-      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.43-57"
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.44-58"
     ],
     "RepoDigests": [
-      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend@sha256:d437e7d30ecae85e0381ea5c6222175d8ee9a3e4c59e5965a0374bb788eb0861"
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend@sha256:06fb5338a78b393e662c2872e6660885852e9932505233e310a0319a2e6f1313"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "7797ddce3daf9b117ddf979719904951ac7b75aec940d11ccf917a7a94029e7e",
-      "created": "2025-01-28T18:55:43.200208995Z",
+      "container": "36b360432fb5dab1fab88c9098099102aa6c7aa740085eb137965c9427458c05",
+      "created": "2025-01-28T19:45:02.307060348Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-28T18:55:41Z",
+          "created": "2025-01-28T19:45:00Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-01-28T18:55:42Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:9dceadfddee15eea5e827ea6bc0a89b638492a61c7a42d11901b15be94f54514 in /home/k8-user/app.jar "
+          "created": "2025-01-28T19:45:01Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:ad44913831322f7de8570b62b2594e100dc8c3013b4943f8c1658293e425bb67 in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-01-28T18:55:42Z",
+          "created": "2025-01-28T19:45:02Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-01-28T18:55:43Z",
+          "created": "2025-01-28T19:45:02Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-01-28T18:55:43Z",
+          "created": "2025-01-28T19:45:02Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-          "sha256:eaab34598c927d9dedcdf0f5a5658aa55d3c7c74ee387c4a49279f94fe285b9a",
-          "sha256:4b3c924fb76c325a5727f27a547e6debdd62f487384a357d5e4ef0ce0797a4c5"
+          "sha256:8f521892cdf2d76432b8be8c6f007e4c2c3921dd6aceda092899574779cff4eb",
+          "sha256:049c3b95c42dd1715cb8fea3818c5cc77fa2e2e798d4fcc5ca4f19ed19b54393"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:7938d4be734eb3aa3e946f1af84de38c58ea1b93a3b63332f8411c2868997b7c",
+        "Image": "sha256:6e97f36b9d69bfdef514ed625eaf41822dcd5554acc3496c0b0134513d11cbfb",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,7 +120,7 @@
   },
   "Results": [
     {
-      "Target": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.43-57 (alpine 3.20.5)",
+      "Target": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.44-58 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },

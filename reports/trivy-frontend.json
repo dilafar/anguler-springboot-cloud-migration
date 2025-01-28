@@ -1,14 +1,14 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-28T18:56:31.870331564Z",
-  "ArtifactName": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.43-57",
+  "CreatedAt": "2025-01-28T19:45:48.118988472Z",
+  "ArtifactName": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.44-58",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:2dfc55f54e88059a185c10d69e3d8cddb19bbb6ee39fe71c6d3783b056491a80",
+    "ImageID": "sha256:7d13e79011b0ccf360ac17b51b94230b4bbbf602635e05066fc3479e97c601a5",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:4dd1a1c234159e63a45fc745ff5ee7bcc25c6f26828853eafd6cd14f9d870dfb",
@@ -20,19 +20,20 @@
       "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
       "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
       "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-      "sha256:53a309c11f855637e03c0540eaf25ebbcf93dd61913ff89e533b2879aeaddc18",
-      "sha256:506a7a0a808eb8cc5b70b2ed422f08913cf8d6a6902a7e121b3043b7ad980585"
+      "sha256:1e7267aa791e4b5690de1600026d80efe2b26645034f4c37a74a26011d82b6df",
+      "sha256:b537db3dc0b98b2fb58b02cd7cf2f2c6e96ef168c520c3b80321a7ef3f83fc59",
+      "sha256:617bed068e8cd792191dfea05d4904f899b5c320edd23084503402f16a5b711d"
     ],
     "RepoTags": [
-      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.43-57"
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.44-58"
     ],
     "RepoDigests": [
-      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend@sha256:9c16f6017feafa1fcd6c6eb1c1a6589f06925439a0396f4257556dff1710f736"
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend@sha256:4c9a7948862e344e1c035c4e26182c3eea9657bbe3d9b6836f0225ccad21ec50"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "28cf16d838aed0ac072424c3698ec34e36a7eaf6e6116cf9017582ef498a3c69",
-      "created": "2025-01-28T18:56:14.28053089Z",
+      "container": "93b4347a96cc88a7c235a30e4dcaec7aa41c4557dbf290b2b92675b9231552da",
+      "created": "2025-01-28T19:45:32.64753743Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -218,15 +219,24 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-28T18:56:14Z",
+          "created": "2025-01-28T19:45:31Z",
           "created_by": "/bin/sh -c #(nop) COPY dir:f0458945878089b65b49c3abce364980a54e13b5acd32e8e3e4aa4e2b9247d40 in /usr/share/nginx/html "
         },
         {
-          "created": "2025-01-28T18:56:14Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:5f60db5cb77d0b47550cdeacc685d43cb885c6dd4c8268ed5ac11608c1306c10 in /etc/nginx/conf.d/default.conf "
+          "created": "2025-01-28T19:45:32Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:22417d649f718ee12739444927f8b1d340e4c2044a42e73a25b4f81ac717c141 in /etc/nginx/conf.d/default.conf "
         },
         {
-          "created": "2025-01-28T18:56:14Z",
+          "created": "2025-01-28T19:45:32Z",
+          "created_by": "/bin/sh -c #(nop)  USER root",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-28T19:45:32Z",
+          "created_by": "/bin/sh -c chown -R nginx:nginx /usr/share/nginx/html /etc/nginx/conf.d/default.conf"
+        },
+        {
+          "created": "2025-01-28T19:45:32Z",
           "created_by": "/bin/sh -c #(nop)  USER nginx",
           "empty_layer": true
         }
@@ -245,8 +255,9 @@
           "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
           "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
           "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-          "sha256:53a309c11f855637e03c0540eaf25ebbcf93dd61913ff89e533b2879aeaddc18",
-          "sha256:506a7a0a808eb8cc5b70b2ed422f08913cf8d6a6902a7e121b3043b7ad980585"
+          "sha256:1e7267aa791e4b5690de1600026d80efe2b26645034f4c37a74a26011d82b6df",
+          "sha256:b537db3dc0b98b2fb58b02cd7cf2f2c6e96ef168c520c3b80321a7ef3f83fc59",
+          "sha256:617bed068e8cd792191dfea05d4904f899b5c320edd23084503402f16a5b711d"
         ]
       },
       "config": {
@@ -266,7 +277,7 @@
           "NJS_VERSION=0.8.8",
           "NJS_RELEASE=1"
         ],
-        "Image": "sha256:6aee7a60bfbdf145c619ba250abfd378d48c3511e65d465779b5e644149f49cc",
+        "Image": "sha256:072f7cf620297ea52cd2e0a25882bab8f924627d12406fe58824afcfd4818971",
         "Labels": {
           "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
           "org.opencontainers.image.created": "2025-01-20T03:20:37.354Z",
@@ -287,7 +298,7 @@
   },
   "Results": [
     {
-      "Target": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.43-57 (alpine 3.20.5)",
+      "Target": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.44-58 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     }
