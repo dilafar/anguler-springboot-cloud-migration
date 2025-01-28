@@ -242,7 +242,7 @@ pipeline{
                                 "opa-back-lint": {
                                     dir("employeemanagerfrontend") {
                                     sh '''
-                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.tx
+                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.txt
                                     '''
                                 }
                             }
@@ -314,6 +314,8 @@ pipeline{
                                                 cp employeemanagerfrontend/retire.json reports/retire.json
                                                 cp semgrep.json  reports/semgrep.json
                                                 cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                                cp employeemanagerfrontend/hadolint_lint_front.txt reports/hadolint_lint_frontend.txt
+                                                cp employeemanager/hadolint_lint.txt reports/hadolint_lint_backend.txt
                                             '''
                                      }
                                 )
