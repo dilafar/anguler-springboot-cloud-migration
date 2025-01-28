@@ -209,7 +209,7 @@ pipeline{
                         },
                         "OPA Conftest":{
                              parallel(
-                                "opa-front": {
+                                "opa-back": {
                                        dir('employeemanager') {
                                         sh '''
                                             docker run --rm \
@@ -218,7 +218,7 @@ pipeline{
                                         '''
                                     }     
                                 },
-                                "opa-back": {
+                                "opa-front": {
                                                 dir("employeemanagerfrontend") {
                                                 sh '''
                                                     docker run --rm \
