@@ -6,7 +6,7 @@
       "ID": "4.1",
       "Name": "Ensure a user for the container has been created",
       "Severity": "HIGH",
-      "TotalFail": 1
+      "TotalFail": 0
     },
     {
       "ID": "4.2",

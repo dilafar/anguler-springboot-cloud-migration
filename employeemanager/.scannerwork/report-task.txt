@@ -2,5 +2,5 @@ projectKey=employee-gcp
 serverUrl=http://172.48.16.173
 serverVersion=9.9.2.77730
 dashboardUrl=http://172.48.16.173/dashboard?id=employee-gcp
-ceTaskId=AZStKQHR8IWHinOGKbIA
-ceTaskUrl=http://172.48.16.173/api/ce/task?id=AZStKQHR8IWHinOGKbIA
+ceTaskId=AZSuP_cr8IWHinOGKbII
+ceTaskUrl=http://172.48.16.173/api/ce/task?id=AZSuP_cr8IWHinOGKbII
