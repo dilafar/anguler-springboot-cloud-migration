@@ -14,7 +14,7 @@ elif file_name == 'dependency-check-report.json':
    scan_type = 'Dependency Check Scan'
 
 headers = {
-            'Authorization': 'Token b3346674c6cd6093709561c7955e7e9e105b8af6'
+            'Authorization': 'Token fa2a42e096e9877180a38e1ab5110df4a3d63c27'
           }
 
 url = 'https://demo.defectdojo.org/api/v2/import-scan/'
