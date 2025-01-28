@@ -1,14 +1,133 @@
-
-For OSS Maintainers: VEX Notice
---------------------------------
-If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
-VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
-Learn more and start using VEX: https://aquasecurity.github.io/trivy/v0.58/docs/supply-chain/vex/repo#publishing-vex-documents
-
-To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
-
-
-us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.40-46 (alpine 3.20.5)
-====================================================================================================
-Total: 0 (HIGH: 0, CRITICAL: 0)
-
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2025-01-28T05:27:04.862896176Z",
+  "ArtifactName": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.41-47",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "alpine",
+      "Name": "3.20.5"
+    },
+    "ImageID": "sha256:af7c4ca374517409d34b2dde4f18c3f56962df62eeb41b59a01e457a76244910",
+    "DiffIDs": [
+      "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+      "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
+      "sha256:0221a8cb4b69b3e8d535f170724830288ce7d12f494962a1fd6c2ecd7b33f669",
+      "sha256:2a145de330ea9a0c342326b9cbba785d68c8a7672a50bf7fc4f63f09edffc81d"
+    ],
+    "RepoTags": [
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.41-47"
+    ],
+    "RepoDigests": [
+      "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend@sha256:503ac22f49b48678f8c7196fac16a57cdfa9110df7b083368292c6df8562fe96"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "container": "8975be5127af55fa4bcb0200d7a8a435fa666341e19de8fabd015ceb2c176414",
+      "created": "2025-01-28T05:24:18.407731441Z",
+      "docker_version": "24.0.7",
+      "history": [
+        {
+          "created": "2025-01-08T12:08:14Z",
+          "created_by": "ADD alpine-minirootfs-3.20.5-x86_64.tar.gz / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-01-08T12:08:14Z",
+          "created_by": "CMD [\"/bin/sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-23T01:09:23Z",
+          "created_by": "ARG version=17.0.14.7.1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-23T01:09:23Z",
+          "created_by": "RUN |1 version=17.0.14.7.1 /bin/sh -c wget -O /THIRD-PARTY-LICENSES-20200824.tar.gz https://corretto.aws/downloads/resources/licenses/alpine/THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     echo \"82f3e50e71b2aee21321b2b33de372feed5befad6ef2196ddec92311bc09becb  /THIRD-PARTY-LICENSES-20200824.tar.gz\" | sha256sum -c - \u0026\u0026     tar x -ovzf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     rm -rf THIRD-PARTY-LICENSES-20200824.tar.gz \u0026\u0026     wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazoncorretto.rsa.pub \u0026\u0026     SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91\" \u0026\u0026     echo \"${SHA_SUM}  /etc/apk/keys/amazoncorretto.rsa.pub\" | sha256sum -c - \u0026\u0026     echo \"https://apk.corretto.aws\" \u003e\u003e /etc/apk/repositories \u0026\u0026     apk add --no-cache amazon-corretto-17=$version-r0 \u0026\u0026     rm -rf /usr/lib/jvm/java-17-amazon-corretto/lib/src.zip # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-01-23T01:09:23Z",
+          "created_by": "ENV LANG=C.UTF-8",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-23T01:09:23Z",
+          "created_by": "ENV JAVA_HOME=/usr/lib/jvm/default-jvm",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-23T01:09:23Z",
+          "created_by": "ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-28T05:24:17Z",
+          "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
+        },
+        {
+          "created": "2025-01-28T05:24:18Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:e5936731b85ec6796f40d32bc6d077608f82df25fac052e1e12a4efead8ab7b3 in /home/k8-user/app.jar "
+        },
+        {
+          "created": "2025-01-28T05:24:18Z",
+          "created_by": "/bin/sh -c #(nop)  USER k8-user",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-28T05:24:18Z",
+          "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-01-28T05:24:18Z",
+          "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
+          "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
+          "sha256:0221a8cb4b69b3e8d535f170724830288ce7d12f494962a1fd6c2ecd7b33f669",
+          "sha256:2a145de330ea9a0c342326b9cbba785d68c8a7672a50bf7fc4f63f09edffc81d"
+        ]
+      },
+      "config": {
+        "Entrypoint": [
+          "java",
+          "-jar",
+          "/home/k8-user/app.jar"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/default-jvm/bin",
+          "LANG=C.UTF-8",
+          "JAVA_HOME=/usr/lib/jvm/default-jvm"
+        ],
+        "Image": "sha256:f96674d55cb18fbab9ae0f6834119c344ac4eaa17aa9950571b4c64f8c8a131e",
+        "User": "k8-user",
+        "WorkingDir": "/"
+      }
+    }
+  },
+  "Results": [
+    {
+      "Target": "us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v0.0.41-47 (alpine 3.20.5)",
+      "Class": "os-pkgs",
+      "Type": "alpine"
+    },
+    {
+      "Target": "Java",
+      "Class": "lang-pkgs",
+      "Type": "jar"
+    }
+  ]
+}
