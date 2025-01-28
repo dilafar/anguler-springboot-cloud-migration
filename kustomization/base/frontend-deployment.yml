@@ -21,6 +21,9 @@ spec:
           image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.42-48
           ports:
             - containerPort: 80
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
           resources:
             requests:
               memory: "100Mi"
