@@ -1,0 +1,75 @@
+---
+- name: Install Java and Net-Tools
+  hosts: jenkins_server
+  become: yes
+  tasks:
+    - name: update packages
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install java 17
+      apt:
+        name: openjdk-17-jdk
+        state: present
+    - name: Install net-tools
+      apt:
+        name: net-tools
+        state: present
+
+- name: Install Jenkins and Dependencies
+  hosts: jenkins_server
+  become: yes
+  tasks:
+    - name: Add the Jenkins public signing key
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+
+    - name: Import Jenkins RPM key
+      apt_repository:
+        repo: 'deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/'
+        filename: 'jenkins'
+        state: present
+
+    - name: update packages
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+    - name: Add NodeSource setup script
+      shell:
+        cmd: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+- name: Monitor Jenkins
+  hosts: jenkins_server
+  become: yes
+  tasks:
+    - name: Reload systemd
+      systemd_service:
+        daemon_reload: true
+    - name: Enable and start jenkins
+      systemd_service:
+        name: jenkins
+        state: started
+        enabled: true
+    - name: Wait 10 seconds to ensure Jenkins is up
+      pause:
+        seconds: 10
+    - name: Check Jenkins status with netstat
+      command: netstat -plnt
+      register: jenkins_status
+    - debug:
+        msg: "{{ jenkins_status.stdout }}"
