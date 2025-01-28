@@ -18,9 +18,9 @@ spec:
     spec:
       containers:
         - name: employee-frontend
-          image: us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v0.0.43-57
+          image: fadhiljr/nginxapp:my-v12
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           securityContext:
             runAsNonRoot: true
             runAsUser: 101
@@ -35,7 +35,7 @@ spec:
             httpGet:
               scheme: HTTP
               path: /
-              port: 80
+              port: 8000
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 5
