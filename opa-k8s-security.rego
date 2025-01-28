@@ -1,7 +1,6 @@
 package main
-import rego.v1
 
-deny[msg] if {
+deny[msg] {
 	input.kind == "Service"
 	not input.spec.type == "LoadBalancer"
 	not input.spec.type == "ClusterIP"
@@ -11,7 +10,7 @@ deny[msg] if {
 	msg := "Service type must be LoadBalancer or ClusterIP, NodePort only for GKE"
 }
 
-deny[msg] if {
+deny[msg] {
 	input.kind == "Deployment"
 	not input.spec.template.spec.containers[0].securityContext.runAsNonRoot
 	msg := "Containers must not run as root - use runAsNonRoot within container security context"
