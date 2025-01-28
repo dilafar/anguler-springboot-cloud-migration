@@ -194,14 +194,14 @@ pipeline{
                                 "Trivy Scan": {
                                     dir('employeemanager') {
                                        sh '''
-                                           bash scripts/trivy/trivy-docker-image-scan.sh
+                                           bash scripts/trivy-scan/trivy-docker-image-scan.sh
                                        '''
                                     }
                                 },
                                 "Trivy Scan frontend": {
                                     dir('employeemanagerfrontend') {
                                        sh '''
-                                           bash scripts/trivy/trivy-docker-image-scan.sh
+                                           bash scripts/trivy-scan/trivy-docker-image-scan.sh
                                        '''
                                     }
                                 }
@@ -366,16 +366,16 @@ pipeline{
                             },
                             "Trivy Scan": {
                                         sh ''' 
-                                            bash scripts/trivy/trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-frontend.json &
-                                            bash scripts/trivy/trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-backend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-frontend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
                             },
                             "CIS Benchmark v1.6.0": {
                                 sh '''
-                                    bash scripts/trivy/trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-bench-frontend.json || true &
-                                    bash scripts/trivy/trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-bench-backend.json &
+                                    bash scripts/trivy-scan/trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-frontend:v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                    bash scripts/trivy-scan/trivy-docker-bench.sh  us-east1-docker.pkg.dev/single-portal-443110-r7/nginxapp/employee-backend:v$IMAGE_VERSION trivy-bench-backend.json &
 
                                     wait
                                 '''
