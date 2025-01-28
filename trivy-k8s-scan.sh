@@ -2,9 +2,8 @@
 
 echo $1 
 echo $2
-
-trivy image --severity HIGH,CRITICAL --exit-code 1 $1 | tee >(cat > reports/$2)  
-#trivy image -f json -o reports/$2 --severity HIGH,CRITICAL --exit-code 1 $1
+ 
+trivy image -f json -o reports/$2 --severity HIGH,CRITICAL --exit-code 1 $1
 
 exit_code=$?
 
