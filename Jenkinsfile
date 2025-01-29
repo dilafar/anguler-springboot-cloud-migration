@@ -191,17 +191,17 @@ pipeline{
                         },
                         "Trivy Scan": {
                             parallel(
-                                "Trivy Scan": {
+                                "Trivy Scan backend": {
                                     dir('employeemanager') {
                                        sh '''
-                                           bash scripts/trivy-scan/trivy-docker-image-scan.sh
+                                           bash trivy-docker-image-scan.sh
                                        '''
                                     }
                                 },
                                 "Trivy Scan frontend": {
                                     dir('employeemanagerfrontend') {
                                        sh '''
-                                           bash scripts/trivy-scan/trivy-docker-image-scan.sh
+                                           bash trivy-docker-image-scan.sh
                                        '''
                                     }
                                 }
