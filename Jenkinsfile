@@ -361,7 +361,7 @@ pipeline{
                         parallel (
                             "OPA Scan helm chart": {
                                     sh '''
-                                       conftest test -p opa-k8s-security.rego kustomization/base/*
+                                       conftest test -p policy/opa-k8s-security.rego kustomization/base/*
                                     '''
                             },
                             "Trivy Scan": {
@@ -393,16 +393,16 @@ pipeline{
                                         gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
                             '''
                             sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
+                                        if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
                                             echo "kubernetes-script.sh file is missing!" >&2
                                             exit 1
                                         fi
 
-                                        chmod +x kubernetes-script.sh
-                                        chmod +x kubernetes-apply.sh
+                                        chmod +x scripts/kubernetes/kubernetes-script.sh
+                                        chmod +x scripts/kubernetes/kubernetes-apply.sh
                             '''
-                            sh "./kubernetes-script.sh"
-                            sh "./kubernetes-apply.sh"
+                            sh "./scripts/kubernetes/kubernetes-script.sh"
+                            sh "./scripts/kubernetes/kubernetes-apply.sh"
                             sh 'sleep 60'
 
                         }
