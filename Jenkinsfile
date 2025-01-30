@@ -123,7 +123,7 @@ pipeline{
             }
         
 
-        stage("SAST - sonar Analysis"){
+        stage("SAST - sonar Analysis(aws)"){
             environment {
                 scannerHome = tool 'sonar6.2'
             }
@@ -162,7 +162,7 @@ pipeline{
 
         }
 
-        stage("Upload Artifacts"){
+        stage("Upload Artifacts(aws)"){
             steps {
                 script {
                         dir('employeemanager') {
@@ -189,7 +189,7 @@ pipeline{
                         },
                         "Trivy Scan": {
                             parallel(
-                                "Trivy Scan": {
+                                "Trivy Scan backend": {
                                     dir('employeemanager') {
                                        sh '''
                                            bash trivy-docker-image-scan.sh
@@ -240,7 +240,7 @@ pipeline{
                                 "opa-back-lint": {
                                     dir("employeemanagerfrontend") {
                                     sh '''
-                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.tx
+                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.txt
                                     '''
                                 }
                             }
