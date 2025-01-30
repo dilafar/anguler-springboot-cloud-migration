@@ -510,10 +510,11 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin gh-pages || true
+                                git fetch origin gh-pages
+                                git reset --hard origin/gh-pages
                                 git add .
                                 git commit -m "change added from jenkins"
-                                git push origin HEAD:gh-pages
+                                git push origin HEAD:gh-pages --force
                             '''
                     }
                 }
