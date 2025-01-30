@@ -1,0 +1,357 @@
+---
+- name: system configuration
+  hosts: sonar_server
+  become: yes
+  tasks:
+    - name: backup config
+      copy:
+        src: /etc/sysctl.conf
+        dest: /root/sysctl.conf_backup
+    - name: add new configs to sysctl
+      template:
+        src: templates/sonarqube/systemctl.j2
+        dest: /etc/sysctl.conf
+    - name: backup limit config
+      copy:
+        src: /etc/security/limits.conf
+        dest: /root/sec_limit.conf_backup
+    - name: add new configs to limit
+      template:
+        src: templates/sonarqube/limits.j2
+        dest: /etc/security/limits.conf
+    - name: Reboot the server
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+        test_command: whoami
+
+- name: install java and net-tools
+  hosts: sonar_server
+  become: yes
+  tasks:
+    - name: update apt repo and cache
+      yum:
+        update_cache: yes
+    - name: update yum
+      yum:
+        name: "*"
+        state: latest
+    - name: Install Amazon Corretto 17
+      yum:
+        name: java-17-amazon-corretto-devel
+        update_cache: yes
+        state: present
+    - name: Append JAVA_HOME setting to /etc/profile
+      lineinfile:
+        path: /etc/profile
+        line: "export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto"
+        state: present
+        insertafter: EOF
+    - name: Append PATH setting to /etc/profile
+      lineinfile:
+        path: /etc/profile
+        line: "export PATH=$JAVA_HOME/bin:$PATH"
+        state: present
+        insertafter: "export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto"
+    - name: Reboot the server
+      reboot:
+        reboot_timeout: 300
+    - name: install net-tools
+      yum:
+        name: net-tools
+        state: present
+    - name: Install Python package manager pip
+      package:
+        name: python3-pip
+        state: present
+    - name: Install psycopg2 library
+      pip:
+        name: psycopg2-binary
+        state: present
+    - name: install postgres latest
+      command: sudo amazon-linux-extras install postgresql13 -y
+    - name: enable postgresql repo
+      command: sudo amazon-linux-extras enable postgresql13
+    - name: Install PostgreSQL repository RPM
+      yum:
+        name:
+          - postgresql-server
+          - postgresql-contrib
+        state: present
+      register: detail
+    - debug:
+        msg: "{{detail}}"
+    - name: init db
+      command: postgresql-setup initdb
+      register: db
+    - debug:
+        msg: "{{db}}"
+    - name: Enable and start Nexus service
+      systemd_service:
+        name: postgresql
+        state: started
+        enabled: true
+    - name: Create a script to change PostgreSQL password
+      copy:
+        dest: /tmp/change_postgres_password.sh
+        content: |
+          #!/bin/bash
+          sudo echo "postgres:admin123" | chpasswd
+        mode: "0755"
+    - name: Run the password change script
+      shell: /tmp/change_postgres_password.sh
+      become: yes
+      register: app_user
+    - debug:
+        msg: "{{app_user}}"
+    - name: Remove the temporary script
+      file:
+        path: /tmp/change_postgres_password.sh
+        state: absent
+    - name: Create script to add PostgreSQL user
+      copy:
+        dest: /tmp/password.sh
+        content: |
+          #!/bin/bash
+          sudo -u postgres createuser sonar
+        mode: "0755"
+    - name: Run the script to create PostgreSQL user
+      shell: /tmp/password.sh
+    - name: Remove the script
+      file:
+        path: /tmp/password.sh
+        state: absent
+      register: script_removal
+    - name: Display script removal status
+      debug:
+        msg: "Script removal status: {{ script_removal }}"
+    - name: change authontication
+      lineinfile:
+        path: /var/lib/pgsql/data/pg_hba.conf
+        regexp: "^local   all             all                                     peer"
+        line: local   all             all                                     md5
+    - name: change host 1
+      lineinfile:
+        path: /var/lib/pgsql/data/pg_hba.conf
+        regexp: "^host    all             all             127.0.0.1/32            ident"
+        line: host    all             all             127.0.0.1/32            md5
+    - name: change host 2
+      lineinfile:
+        path: /var/lib/pgsql/data/pg_hba.conf
+        regexp: "^host    all             all             ::1/128                 ident"
+        line: host    all             all             ::1/128                 md5
+    - name: Create a script to change PostgreSQL user password
+      copy:
+        dest: /tmp/change_postgres_password.sh
+        content: |
+          #!/bin/bash
+          sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'admin123';"
+        mode: "0755"
+
+    - name: Run the password change script
+      shell: /tmp/change_postgres_password.sh
+      become: yes
+
+    - name: Remove the script
+      file:
+        path: /tmp/change_postgres_password.sh
+        state: absent
+      register: script_removal
+
+    - name: Display script removal status
+      debug:
+        msg: "{{ script_removal }}"
+    - name: Restart for conf changes
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: postgresql
+    - name: Ensure PostgreSQL user 'sonar' has the correct password
+      community.postgresql.postgresql_user:
+        name: sonar
+        password: admin123
+        encrypted: yes
+        login_user: postgres
+        login_password: admin123
+        login_host: localhost
+        port: 5432
+    - name: Create a new database with name "sonarqube"
+      community.postgresql.postgresql_db:
+        name: sonarqube
+        owner: sonar
+        login_user: postgres
+        login_password: "admin123"
+        login_host: localhost
+        state: present
+      register: db_creation
+
+    - name: Display database creation status
+      debug:
+        msg: "{{ db_creation }}"
+    - name: Grant all privileges on sonarqube database to sonar user
+      community.postgresql.postgresql_privs:
+        db: sonarqube
+        roles: sonar
+        type: database
+        privs: ALL
+        state: present
+        login_user: postgres
+        login_password: "admin123"
+      register: privs_grant
+
+    - name: Display privilege grant status
+      debug:
+        msg: "{{ privs_grant }}"
+    - name: Restart service cron on centos, in all cases, also issue daemon-reload to pick up config changes
+      ansible.builtin.systemd_service:
+        state: restarted
+        daemon_reload: true
+        name: postgresql
+    - name: check with netstat
+      shell: netstat -plnt
+      register: app_status
+    - debug:
+        msg: "{{app_status.stdout_lines}}"
+    - name: create sonarqube folder
+      file:
+        path: /sonarqube
+        state: directory
+        mode: "0755"
+    - name: download sonar binaries
+      get_url:
+        url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.2.77730.zip
+        dest: /sonarqube/
+      register: sonar_path
+    - debug:
+        msg: "{{sonar_path}}"
+    - name: unarchive sonarqube file
+      unarchive:
+        src: "{{sonar_path.dest}}"
+        dest: /opt/
+        remote_src: yes
+    - name: rename sonarqube path
+      shell: mv /opt/sonarqube-9.9.2.77730 /opt/sonarqube
+    - name: add sonar group
+      group:
+        name: sonar
+        state: present
+    - name: create sonar user with /opt/sonarqube/ home directory
+      user:
+        name: sonar
+        group: sonar
+        comment: "SonarQube - User"
+        home: /opt/sonarqube/
+        create_home: true
+    - name: change ownership of directory /opt/sonarqube/
+      file:
+        path: /opt/sonarqube/
+        owner: sonar
+        group: sonar
+        state: directory
+        recurse: yes
+    - name: back_up sonar properties
+      copy:
+        src: /opt/sonarqube/conf/sonar.properties
+        dest: /root/sonar.properties_backup
+        remote_src: yes
+    - name: assign sonarqube properties
+      template:
+        src: templates/sonarqube/properties.j2
+        dest: /opt/sonarqube/conf/sonar.properties
+    - name: add systemd configuration for sonarqube
+      template:
+        src: templates/sonarqube/sonarqube.service.j2
+        dest: /etc/systemd/system/sonarqube.service
+        mode: "a+x"
+      notify:
+        - Reload systemd
+        - Enable and start sonarqube service
+
+  handlers:
+    - name: Reload systemd
+      systemd_service:
+        daemon_reload: true
+    - name: Enable and start sonarqube service
+      systemd_service:
+        name: sonarqube
+        state: started
+        enabled: true
+
+- name: nginx setup
+  hosts: sonar_server
+  become: yes
+  tasks:
+    - name: update apt repo and cache
+      yum:
+        update_cache: yes
+    - name: Update all packages to the latest version
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+    - name: Enable EPEL repository
+      command: amazon-linux-extras install epel -y
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+        update_cache: yes
+    - name: add nginx conf
+      template:
+        src: templates/sonarqube/nginx.j2
+        dest: /etc/nginx/conf.d/sonarqube.conf
+      notify:
+        - Reload nginx systemd
+        - Enable and start sonarqube service
+
+  handlers:
+    - name: Reload nginx systemd
+      systemd_service:
+        daemon_reload: true
+    - name: Enable and start sonarqube service
+      systemd_service:
+        name: nginx
+        state: started
+        enabled: true
+
+- name: Configure UFW to allow specific ports
+  hosts: sonar_server
+  become: yes
+  tasks:
+    - name: Ensure Python3 is installed
+      yum:
+        name: python3
+        state: present
+    - name: Install firewalld
+      yum:
+        name: firewalld
+        state: present
+    - name: Start and enable firewalld
+      systemd:
+        name: firewalld
+        state: started
+        enabled: true
+    - name: Allow TCP traffic on port 80
+      command: firewall-cmd --permanent --add-port=80/tcp
+      register: firewalld_port_80
+    - name: Allow TCP traffic on port 9000
+      command: firewall-cmd --permanent --add-port=9000/tcp
+      register: firewalld_port_9000
+    - name: Allow TCP traffic on port 9001
+      command: firewall-cmd --permanent --add-port=9001/tcp
+      register: firewalld_port_9001
+    - name: Reload firewalld to apply changes
+      command: firewall-cmd --reload
+
+- name: Reboot the system after a delay
+  hosts: sonar_server
+  become: yes
+  tasks:
+    - name: Update all packages
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+    - name: Echo message
+      shell: echo "System reboot in 30 sec"
+    - name: Wait for 30 seconds
+      pause:
+        seconds: 30
+    - name: Reset ssh connection to allow user changes to affect 'current login user'
+      meta: reset_connection

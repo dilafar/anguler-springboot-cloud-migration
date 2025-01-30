@@ -364,16 +364,24 @@ pipeline{
                         parallel (
                             "OPA Scan helm chart": {
                                     sh '''
-                                       helm template helm | conftest test -p opa-k8s-security.rego -
+                                       helm template helm | conftest test -p policy/opa-k8s-security.rego -
                                     '''
                             },
-                            "Trivy Scan": {
+                            "Trivy Scan": { 
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION trivy-frontend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
+                            },
+                            "CIS Benchmark v1.6.0": {
+                                        sh '''
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh  fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh  fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION trivy-bench-backend.json &
+
+                                        wait
+                                '''
                             }
                         )
                     }
@@ -417,11 +425,6 @@ pipeline{
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
                                 }
-                               // "kubernetes cluster scan": {
-                               //     sh '''
-                               //         kubescape scan
-                              //      '''
-                              //  }
                             )
                         }
                     }
