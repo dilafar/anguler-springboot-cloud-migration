@@ -1,14 +1,14 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-30T09:13:13.603933439Z",
-  "ArtifactName": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.54-65",
+  "CreatedAt": "2025-01-30T09:32:45.804510289Z",
+  "ArtifactName": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.55-66",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:ba88f61df7306fad84809d8d6961a0b3979f56304de6ef620815400b382440b1",
+    "ImageID": "sha256:a2da90da86076fcb5c6c7871193f669b762a1ad413258cad7e085a6625ba8e8a",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:4dd1a1c234159e63a45fc745ff5ee7bcc25c6f26828853eafd6cd14f9d870dfb",
@@ -20,20 +20,20 @@
       "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
       "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
       "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-      "sha256:d05eb581267559b2044a1d4108a9f304cc7701df08362b6965a9aa889e70e750",
-      "sha256:385117847e3cf18df18341c2bbe8d6a73d8fb405490022fce3582330d0ec4289",
-      "sha256:a895ffaa74e55da35fc67d8c94874a3bb795a2d51de578664480b19cbc7c1799"
+      "sha256:59b1c1356cfc8f25bdd06d998721fcbdc7f9921c14dcb357dbc7bbf5057b69ca",
+      "sha256:148e48109cda88e436aadf87a79ad89315e4bc5d2d431cb21a4edab77041bc3f",
+      "sha256:6cd2cbe93b6d89ec7d5c126bf1fc77554cf9a51dfe0a62fdbc479b44b9894c24"
     ],
     "RepoTags": [
-      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.54-65"
+      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.55-66"
     ],
     "RepoDigests": [
-      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd@sha256:e88bcb715d5735a4ea13a53c246d116dc648919ea9239629086e9bf574c79396"
+      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd@sha256:8122fd31fb6c7de784e73488fc1a7696d03b43d6cd1869310f5d8f6a4a486157"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "5b745a9eb6ad7f3be08567ffbcf619f7f2a0d8fe368b6f3c1fbb750917cf787f",
-      "created": "2025-01-30T09:12:53.44783368Z",
+      "container": "785f4be3240b21abc7439aa3c9c70ddb273c6aa2782bd3116ea48ff691c9a039",
+      "created": "2025-01-30T09:32:33.676985086Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -219,24 +219,24 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-30T09:12:52Z",
+          "created": "2025-01-30T09:32:32Z",
           "created_by": "/bin/sh -c #(nop) COPY dir:09b8bc1bdb3bf536b0437bd303854c2f00c61d884924ec041d42755741105fce in /usr/share/nginx/html "
         },
         {
-          "created": "2025-01-30T09:12:52Z",
+          "created": "2025-01-30T09:32:32Z",
           "created_by": "/bin/sh -c #(nop) COPY file:22417d649f718ee12739444927f8b1d340e4c2044a42e73a25b4f81ac717c141 in /etc/nginx/conf.d/default.conf "
         },
         {
-          "created": "2025-01-30T09:12:52Z",
+          "created": "2025-01-30T09:32:33Z",
           "created_by": "/bin/sh -c #(nop)  USER root",
           "empty_layer": true
         },
         {
-          "created": "2025-01-30T09:12:53Z",
+          "created": "2025-01-30T09:32:33Z",
           "created_by": "/bin/sh -c chown -R nginx:nginx /usr/share/nginx/html /etc/nginx/conf.d/default.conf"
         },
         {
-          "created": "2025-01-30T09:12:53Z",
+          "created": "2025-01-30T09:32:33Z",
           "created_by": "/bin/sh -c #(nop)  USER nginx",
           "empty_layer": true
         }
@@ -255,9 +255,9 @@
           "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
           "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
           "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-          "sha256:d05eb581267559b2044a1d4108a9f304cc7701df08362b6965a9aa889e70e750",
-          "sha256:385117847e3cf18df18341c2bbe8d6a73d8fb405490022fce3582330d0ec4289",
-          "sha256:a895ffaa74e55da35fc67d8c94874a3bb795a2d51de578664480b19cbc7c1799"
+          "sha256:59b1c1356cfc8f25bdd06d998721fcbdc7f9921c14dcb357dbc7bbf5057b69ca",
+          "sha256:148e48109cda88e436aadf87a79ad89315e4bc5d2d431cb21a4edab77041bc3f",
+          "sha256:6cd2cbe93b6d89ec7d5c126bf1fc77554cf9a51dfe0a62fdbc479b44b9894c24"
         ]
       },
       "config": {
@@ -277,7 +277,7 @@
           "NJS_VERSION=0.8.8",
           "NJS_RELEASE=1"
         ],
-        "Image": "sha256:339ad85e088a5320b05eefbeecff467997f0483061fb92f08a71c21d0aa7c34d",
+        "Image": "sha256:33de647bd327062eb238368d05899ae8c384354a7d5da60e522ff5252a271878",
         "Labels": {
           "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
           "org.opencontainers.image.created": "2025-01-20T03:20:37.354Z",
@@ -298,7 +298,7 @@
   },
   "Results": [
     {
-      "Target": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.54-65 (alpine 3.20.5)",
+      "Target": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:frontend-v0.0.55-66 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     }

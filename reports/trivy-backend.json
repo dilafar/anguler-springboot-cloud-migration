@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-30T09:13:04.614339262Z",
-  "ArtifactName": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.54-65",
+  "CreatedAt": "2025-01-30T09:32:44.783217854Z",
+  "ArtifactName": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.55-66",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:12c9080ce8ade8d02c5c655732fda64754531192c0d2d7060c1b970d29e9eedd",
+    "ImageID": "sha256:f496b0b37dd4e93d653f8571d91d9aa7c386a5f54b414880880e3eed131e41c9",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-      "sha256:2bc239cb75d258f3490393f10af7428edc14aae3085c4d07523a9c22db52bf94",
-      "sha256:55995fbd069c1d34a56e285c9eef40dffdf9eefe37d027568672379296258e00"
+      "sha256:c799fa3cadba7ea0a92eafd8a563a136435638f622f15ee7a77fb29f85f256f9",
+      "sha256:e3956720f6dd707e1e965e2dd4fb77fd888a74bb4414101c13f4d0aaa91e4eef"
     ],
     "RepoTags": [
-      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.54-65"
+      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.55-66"
     ],
     "RepoDigests": [
-      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd@sha256:4ba174681879c9802791c9adab99514ea38e5609e4071328ac1ff4b221f277e6"
+      "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd@sha256:e5216ad163b49b90ec8eec8eff6f6d36a1fbb77a9edbb78c3fef5cbc9b1dcc71"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "bfbf7d7d5dbf16cbf84d3492a96658867ed1c154ab3695dffe50ff2e8eae9c2b",
-      "created": "2025-01-30T09:12:22.449226747Z",
+      "container": "823f3444d3d81eff689f5eaae29a0c546221a9e476a13c46d61747b498a83561",
+      "created": "2025-01-30T09:32:00.845867405Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-01-30T09:12:20Z",
+          "created": "2025-01-30T09:31:59Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-01-30T09:12:21Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:17589283dc38f4d5f1d5505fcecf117e7c4d11ef51432f7b244c6167aa07538b in /home/k8-user/app.jar "
+          "created": "2025-01-30T09:32:00Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:36b89b21d49739003badd5bead8deea8a0937ecfba6ffb7453eba6ef91392b1a in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-01-30T09:12:22Z",
+          "created": "2025-01-30T09:32:00Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-01-30T09:12:22Z",
+          "created": "2025-01-30T09:32:00Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-01-30T09:12:22Z",
+          "created": "2025-01-30T09:32:00Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-          "sha256:2bc239cb75d258f3490393f10af7428edc14aae3085c4d07523a9c22db52bf94",
-          "sha256:55995fbd069c1d34a56e285c9eef40dffdf9eefe37d027568672379296258e00"
+          "sha256:c799fa3cadba7ea0a92eafd8a563a136435638f622f15ee7a77fb29f85f256f9",
+          "sha256:e3956720f6dd707e1e965e2dd4fb77fd888a74bb4414101c13f4d0aaa91e4eef"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:0e31873f7700b7e8d212b6ae3550cf1dd21ac260fc7533997825c9d568fd968a",
+        "Image": "sha256:1aa2472472d2ebea71b749f7a2a874cf808c197d250c2754fb9b51906b157f52",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,7 +120,7 @@
   },
   "Results": [
     {
-      "Target": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.54-65 (alpine 3.20.5)",
+      "Target": "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd:backend-v0.0.55-66 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
@@ -141,7 +141,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:55995fbd069c1d34a56e285c9eef40dffdf9eefe37d027568672379296258e00"
+            "DiffID": "sha256:e3956720f6dd707e1e965e2dd4fb77fd888a74bb4414101c13f4d0aaa91e4eef"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-50379",
@@ -212,7 +212,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:55995fbd069c1d34a56e285c9eef40dffdf9eefe37d027568672379296258e00"
+            "DiffID": "sha256:e3956720f6dd707e1e965e2dd4fb77fd888a74bb4414101c13f4d0aaa91e4eef"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-56337",
