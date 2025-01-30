@@ -42,9 +42,6 @@ pipeline{
                         "Maven Increment": {
                             dir('employeemanager') {
                                     echo "incrimenting app version ..."
-                                 //   sh 'mvn build-helper:parse-version versions:set \
-                                 //       -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                                 //       versions:commit'
                                     incrementPatchVersion()
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[1][1]       
@@ -135,23 +132,9 @@ pipeline{
                     parallel(
                          "sonar Analysis": {
                                     dir('employeemanager') {
-                                                withSonarQubeEnv('sonar') {
-                                                    sh '''${scannerHome}/bin/sonar-scanner \
-                                                                -Dsonar.projectKey=employee \
-                                                                -Dsonar.projectName=employee \
-                                                                -Dsonar.projectVersion=1.0 \
-                                                                -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.173/ \
-                                                                -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
-                                                                -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                                                                -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                                                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                                                                -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
-                                                                -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
-                                                                -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-
-                                                            '''
-                                                }   
+                                        sonarAnalysis('sonar',"${scannerHome}","employee","employee","1.0","src/","http://172.48.16.173/",
+                                            "target/test-classes/com/employees/employeemanager/","target/jacoco.exec","target/surefire-reports/","target/site/jacoco/jacoco.xml","target/dependency-check-report/dependency-check-report.json","target/dependency-check-report/dependency-check-report.html","target/checkstyle-result.xml")
+                                                
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
                                                 }         
@@ -185,21 +168,7 @@ pipeline{
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusArtifactUploader(
-                                            nexusVersion: 'nexus3',
-                                            protocol: 'http',
-                                            nexusUrl: '172.48.16.196:8081',
-                                            groupId: 'QA',
-                                            version: "${BUILD_ID}",
-                                            repository: 'employee-repo',
-                                            credentialsId: 'nexus',
-                                            artifacts: [
-                                                    [artifactId: 'employeemgmt',
-                                                    classifier: '',
-                                                    file: "${env.JAR_FILE}",
-                                                    type: 'jar']
-                                                ]
-                                )
+                                nexusUpload("172.48.16.196:8081","argo-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
                             }               
                         }
                     }
@@ -318,19 +287,6 @@ pipeline{
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                             /*   sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                '''
-                                                */
                                                 buildImage("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
                                                 dockerLogin()
                                                 dockerPush("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
@@ -342,19 +298,6 @@ pipeline{
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                               /* sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                '''
-                                                */
                                                 buildImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
                                                 dockerLogin()
                                                 dockerPush("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
@@ -369,6 +312,8 @@ pipeline{
                                                 cp employeemanagerfrontend/retire.json reports/retire.json
                                                 cp semgrep.json  reports/semgrep.json
                                                 cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                                cp employeemanagerfrontend/hadolint_lint_front.txt reports/hadolint_lint_frontend.txt
+                                                cp employeemanager/hadolint_lint.txt reports/hadolint_lint_backend.txt
                                             '''
                                      }
                                 )
@@ -396,16 +341,8 @@ pipeline{
                             
                         },
                         "DefectDojo Uploader": {
-                          //  script {
-                              //  sh '''
-                                //    pip install --upgrade urllib3 chardet requests
-                               // '''
-                           // }
-                            parallel(
-                                "Frontend Reports Upload": {
                                     dir('reports') {
                                         script {
-                                            // python3 upload-reports.py semgrep.json
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
@@ -414,17 +351,6 @@ pipeline{
                                             '''
                                         }
                                     }
-                                },
-                                "Backend Reports Upload": {
-                                    dir('employeemanager') {
-                                        script {
-                                            sh '''
-                                               echo "python3 upload-reports.py dependency-check-report.json"
-                                            '''
-                                        }
-                                    }
-                                }
-                            )
                         }
                     )
                 }
