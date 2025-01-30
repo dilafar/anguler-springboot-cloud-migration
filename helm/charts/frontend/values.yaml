@@ -1,8 +1,8 @@
 appName: employee-frontend
 appReplicas: 2
 appTier: frontend
-appImage: fadhiljr/nginxapp
-appVersion: employee-frontend-v0.0.51-61
+appImage: 522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd
+appVersion: frontend-v0.0.51-61
 containerPort: 8000
 servicePort: 80
 serviceType: ClusterIP

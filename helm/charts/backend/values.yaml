@@ -1,8 +1,8 @@
 appName: employee-backend
 appReplicas: 2
 appTier: backend
-appImage: fadhiljr/nginxapp
-appVersion: employee-backend-v0.0.51-61
+appImage: 522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd
+appVersion: backend-v0.0.51-61
 containerPort: 8080
 containerEnvVar:
   - name: SPRING_APPLICATION_NAME

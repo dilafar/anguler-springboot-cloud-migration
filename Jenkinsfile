@@ -21,7 +21,9 @@ pipeline{
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
         SEMGREP_PR_ID = "${env.CHANGE_ID}" 
-        CR_TOKEN = credentials('cr_cred')    
+        CR_TOKEN = credentials('cr_cred')
+        DOCKER_REPO = "522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd"
+        DOCKER_REPO_SERVER = "522814728991.dkr.ecr.us-east-1.amazonaws.com"
     }
 
     stages{
@@ -287,22 +289,20 @@ pipeline{
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                                buildImage("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
-                                                dockerLogin()
-                                                dockerPush("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}")
-                                                sh 'cosign version'
-                                                signImage("fadhiljr/nginxapp:employee-frontend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
+                                                buildImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloud("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                                buildImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
-                                                dockerLogin()
-                                                dockerPush("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}")
-                                                sh 'cosign version'
-                                                signImage("fadhiljr/nginxapp:employee-backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
+                                                buildImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloud("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
@@ -330,8 +330,8 @@ pipeline{
                         "Change image backend": {           
                                 script {
                                     sh '''
-                                        sed -i 's/^appVersion: .*/appVersion: employee-backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
-                                        sed -i 's/^appVersion: .*/appVersion: employee-frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
+                                        sed -i 's/^appVersion: .*/appVersion: backend-v'"$IMAGE_VERSION"'/g' helm/charts/backend/values.yaml
+                                        sed -i 's/^appVersion: .*/appVersion: frontend-v'"$IMAGE_VERSION"'/g' helm/charts/frontend/values.yaml
                                         chmod +x chart-version-increment.sh
                                         ./chart-version-increment.sh helm/Chart.yaml
                                         ./chart-version-increment.sh helm/charts/backend/Chart.yaml
@@ -369,16 +369,16 @@ pipeline{
                             },
                             "Trivy Scan": { 
                                         sh ''' 
-                                            bash scripts/trivy-scan/trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION trivy-frontend.json &
-                                            bash scripts/trivy-scan/trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION trivy-backend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-frontend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
                             },
                             "CIS Benchmark v1.6.0": {
                                         sh '''
-                                            bash scripts/trivy-scan/trivy-docker-bench.sh  fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION trivy-bench-frontend.json || true &
-                                            bash scripts/trivy-scan/trivy-docker-bench.sh  fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION trivy-bench-backend.json &
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-bench-backend.json &
 
                                         wait
                                 '''

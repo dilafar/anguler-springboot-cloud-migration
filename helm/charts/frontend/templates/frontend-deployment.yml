@@ -16,9 +16,12 @@ spec:
         app: {{ .Values.appName }}
         tier: {{ .Values.appTier }}
     spec:
+      imagePullSecrets:
+        - name: aws-registry-key
       containers:
         - name: {{ .Values.appName }}
           image: "{{ .Values.appImage }}:{{ .Values.appVersion }}"
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.containerPort }}
           securityContext:
