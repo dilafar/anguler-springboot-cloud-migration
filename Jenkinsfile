@@ -134,9 +134,22 @@ pipeline{
                     parallel(
                          "sonar Analysis": {
                                     dir('employeemanager') {
-                                        sonarAnalysis('sonar',"${scannerHome}","employee","employee","1.0","src/","http://172.48.16.173/",
-                                            "target/test-classes/com/employees/employeemanager/","target/jacoco.exec","target/surefire-reports/","target/site/jacoco/jacoco.xml","target/dependency-check-report/dependency-check-report.json","target/dependency-check-report/dependency-check-report.html","target/checkstyle-result.xml")
-                                                
+                                                withSonarQubeEnv('sonar') {
+                                                    sh '''${scannerHome}/bin/sonar-scanner \
+                                                                -Dsonar.projectKey=employee \
+                                                                -Dsonar.projectName=employee \
+                                                                -Dsonar.projectVersion=1.0 \
+                                                                -Dsonar.sources=src/ \
+                                                                -Dsonar.host.url=http://172.48.16.173/ \
+                                                                -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
+                                                                -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                                                                -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                                                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                                                -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report/dependency-check-report.json \
+                                                                -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
+                                                                -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                                                        '''
+                                                }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
                                                 }         
