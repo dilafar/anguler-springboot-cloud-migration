@@ -6,5 +6,6 @@
 
 Cluster Architecture
 
+![Frame 2 (4)](https://github.com/user-attachments/assets/f568d303-df7b-4f0a-b4d5-beb2e7e68caf)
 
-![Frame 2 (3)](https://github.com/user-attachments/assets/8722b6db-e972-4881-a4d7-6313bd1d3667)
+
