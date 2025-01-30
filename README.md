@@ -1,4 +1,10 @@
 # Architecture Diagram
 
 
-![Server (1)](https://github.com/user-attachments/assets/0a9a6877-43bb-43b2-b4b4-60e689b22d17)
+
+![Server (2)](https://github.com/user-attachments/assets/1bdfa961-6d32-4897-b454-cba1203dff7d)
+
+Cluster Architecture
+
+
+![Frame 2 (3)](https://github.com/user-attachments/assets/8722b6db-e972-4881-a4d7-6313bd1d3667)
