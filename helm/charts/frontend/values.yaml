@@ -2,7 +2,7 @@ appName: employee-frontend
 appReplicas: 2
 appTier: frontend
 appImage: 522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack-argocd
-appVersion: frontend-v0.0.52-63
+appVersion: frontend-v0.0.53-64
 containerPort: 8000
 servicePort: 80
 serviceType: ClusterIP
