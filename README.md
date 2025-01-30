@@ -4,5 +4,6 @@ Architecture Diagram
 
 EKS Cluster 
 
-![Frame 3](https://github.com/user-attachments/assets/c06020d4-7aed-458c-b08c-ca2e9d7e1ab9)
+![Frame 3 (1)](https://github.com/user-attachments/assets/533d9646-69b9-456b-b931-def1f9ac9073)
+
 
