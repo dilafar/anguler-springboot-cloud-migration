@@ -1,3 +1,4 @@
 # Architecture Diagram
 
-![Server](https://github.com/user-attachments/assets/c4054970-09d5-4ce1-adab-fa20971f10e6)
+
+![Server (1)](https://github.com/user-attachments/assets/0a9a6877-43bb-43b2-b4b4-60e689b22d17)
