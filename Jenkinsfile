@@ -403,13 +403,13 @@ pipeline{
                                             echo "kubernetes-script.sh file is missing!" >&2
                                             exit 1
                                         fi
-                                        chmod +x kubernetes-script.sh
-                                        chmod +x kubernetes-apply.sh
+                                        chmod +x scripts/kubernetes/kubernetes-script.sh
+                                        chmod +x scripts/kubernetes/kubernetes-apply.sh
                             '''
                             sh "kubectl config current-context"
-                            sh "./kubernetes-script.sh"
-                            sh "./kubernetes-apply.sh"
-                            sh 'sleep 90'
+                            sh "./scripts/kubernetes/kubernetes-script.sh"
+                            sh "./scripts/kubernetes/kubernetes-apply.sh"
+                            sh 'sleep 60'
                         }
                 }
             }
