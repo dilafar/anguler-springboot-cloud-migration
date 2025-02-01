@@ -444,8 +444,7 @@ pipeline{
                             parallel (
                                 "DAST": {
                                     sh '''
-                                        docker run  -v /zap/wrk:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable \
-                                                zap-baseline.py -t https://awsdev.cloud-emgmt.com -g gen.conf -r testreport.html || true
+                                        docker run -v /home/ubuntu:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-emgmt.com -g gen.conf | tee reports/zap.conf || true
                                     '''
                                 },
                                 "website-monitor":{
