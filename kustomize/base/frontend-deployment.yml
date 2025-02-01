@@ -23,7 +23,10 @@ spec:
           image: 522814728991.dkr.ecr.us-east-1.amazonaws.com/aws-fullstack:frontend-v0.0.24-23
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8000
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
           resources:
             requests:
               memory: "100Mi"
