@@ -177,7 +177,7 @@ pipeline{
 
         }
 
-        stage("Upload Artifacts"){
+        stage("Upload Artifacts (Nexus)"){
             steps {
                 script {
                         dir('employeemanager') {
@@ -285,7 +285,7 @@ pipeline{
                     }
                 } 
         }
-        stage("Node.js Image Build") {
+        stage("Docker Image Build") {
                 steps {
                         script {
                             // Clean up unused Docker resources
@@ -389,7 +389,7 @@ pipeline{
             }
         }
 
-        stage("Kubernetes Apply") {
+        stage("Kubernetes Apply(AWS STS)") {
                 steps {
                     script {
                         withAWS(credentials: 'awsk8sdeveloper', region: 'us-east-1') {
