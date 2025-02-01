@@ -1,6 +1,12 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
 
+library identifier: "jenkins-shared-library@master" , retriever: modernSCM([
+        $class: "GitSCMSource",
+        remote: "https://github.com/dilafar/jenkins-shared-library.git",
+        credentialsId: "github",
+])
+
 pipeline{
     agent any
 
@@ -37,9 +43,7 @@ pipeline{
                         "Maven Increment": {
                             dir('employeemanager') {
                                     echo "incrimenting app version ..."
-                                    sh 'mvn build-helper:parse-version versions:set \
-                                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                                        versions:commit'
+                                    incrementPatchVersion()
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[1][1]       
                                     env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
@@ -179,30 +183,11 @@ pipeline{
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusArtifactUploader(
-                                            nexusVersion: 'nexus3',
-                                            protocol: 'http',
-                                            nexusUrl: '172.48.16.196:8081',
-                                            groupId: 'QA',
-                                            version: "${BUILD_ID}",
-                                            repository: 'employee-repo',
-                                            credentialsId: 'nexus',
-                                            artifacts: [
-                                                    [artifactId: 'employeemgmt',
-                                                    classifier: '',
-                                                    file: "${env.JAR_FILE}",
-                                                    type: 'jar']
-                                                ]
-                                )
+                                nexusUpload("172.48.16.196:8081","aws-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
                             }               
                         }
                     }
-                }
-
-
-
-
-
+        }
         stage("Vulnerability Scan - Docker") {
             steps {
                 script {
@@ -214,7 +199,7 @@ pipeline{
                         },
                         "Trivy Scan": {
                             parallel(
-                                "Trivy Scan": {
+                                "Trivy Scan backend": {
                                     dir('employeemanager') {
                                        sh '''
                                            bash trivy-docker-image-scan.sh
@@ -265,7 +250,7 @@ pipeline{
                                 "opa-back-lint": {
                                     dir("employeemanagerfrontend") {
                                     sh '''
-                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.tx
+                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.txt
                                     '''
                                 }
                             }
@@ -300,63 +285,43 @@ pipeline{
                     }
                 } 
         }
-
         stage("Node.js Image Build") {
                 steps {
                         script {
                             // Clean up unused Docker resources
-                        sh 'docker system prune -a --volumes --force || true'
-                            withCredentials([usernamePassword(credentialsId: 'ecr-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            sh 'docker system prune -a --volumes --force || true'
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                                sh '''
-                                                    docker build -t $DOCKER_REPO:frontend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin $DOCKER_REPO_SERVER
-                                                    docker push $DOCKER_REPO:frontend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:frontend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_TLOG_UPLOAD=false
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                                '''
+                                                buildImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloud("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                                sh '''
-                                                    docker build -t $DOCKER_REPO:backend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin $DOCKER_REPO_SERVER
-                                                    docker push $DOCKER_REPO:backend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_REPO:backend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    export COSIGN_TLOG_UPLOAD=false
-                                                    cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY --private-infrastructure=true $IMAGE_DIGEST
-                                                '''
+                                                buildImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloud("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
-                                    "copy reports": {
+                                     "copy reports": {
                                             sh '''
                                                 cp employeemanagerfrontend/njsscan.sarif  reports/njsscan.sarif
                                                 cp employeemanagerfrontend/retire.json reports/retire.json
                                                 cp semgrep.json  reports/semgrep.json
                                                 cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                                cp employeemanagerfrontend/hadolint_lint_front.txt reports/hadolint_lint_frontend.txt
+                                                cp employeemanager/hadolint_lint.txt reports/hadolint_lint_backend.txt
                                             '''
                                      }
-                                )
-                            }
-                    
+                                )    
                 }
             }
         }
@@ -377,16 +342,8 @@ pipeline{
                                 }
                         },
                         "DefectDojo Uploader": {
-                          //  script {
-                          //      sh '''
-                          //          pip install --upgrade urllib3 chardet requests
-                          //      '''
-                          // }
-                            parallel(
-                                "Frontend Reports Upload": {
                                     dir('reports') {
                                         script {
-                                            // python3 upload-reports.py semgrep.json
                                             sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
@@ -395,17 +352,6 @@ pipeline{
                                             '''
                                         }
                                     }
-                                },
-                                "Backend Reports Upload": {
-                                    dir('employeemanager') {
-                                        script {
-                                            sh '''
-                                               echo "python3 upload-reports.py /target/dependency-check-report/dependency-check-report.json"
-                                            '''
-                                        }
-                                    }
-                                }
-                            )
                         }
                     )
                 }
@@ -419,16 +365,24 @@ pipeline{
                         parallel (
                             "OPA Scan helm chart": {
                                     sh '''
-                                       helm template helm | conftest test -p opa-k8s-security.rego -
+                                       conftest test -p policy/opa-k8s-security.rego kustomization/base/*
                                     '''
                             },
-                            "Trivy Scan": {
+                            "Trivy Scan": { 
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-frontend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
+                            },
+                            "CIS Benchmark v1.6.0": {
+                                        sh '''
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-bench-backend.json &
+
+                                        wait
+                                '''
                             }
                         )
                     }
@@ -445,10 +399,10 @@ pipeline{
                                     --role-session-name K8SSession | \
                                 jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\\(.AccessKeyId) AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey) AWS_SESSION_TOKEN=\\(.SessionToken)"')
 
-                                chmod +x kubernetes-apply.sh
-                                ./kubernetes-apply.sh
+                                chmod +x scripts/kubernetes/kubernetes-apply.sh
+                                ./scripts/kubernetes/kubernetes-apply.sh
                             '''
-                            sh 'sleep 90'
+                            sh 'sleep 60'
                         }
                 }
             }
@@ -470,11 +424,6 @@ pipeline{
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
                                 }
-                              //  "kubernetes cluster scan": {
-                              //      sh '''
-                              //          kubescape scan
-                              //      '''
-                              //  }
                             )
                         }
                     }

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 kubectl config view
-cat kustomization/base/frontend-deployment.yml
-cat kustomization/base/frontend-service.yml
-cat kustomization/base/backend-deployment.yml
-cat kustomization/base/backend-service.yml
+cat ../../kustomization/base/frontend-deployment.yml
+cat ../../kustomization/base/frontend-service.yml
+cat ../../kustomization/base/backend-deployment.yml
+cat ../../kustomization/base/backend-service.yml
 
 deploy_component() {
     local COMPONENT_NAME=$1
@@ -34,7 +34,7 @@ deploy_component() {
         fi
         echo "$COMPONENT_NAME deployment successful"
     else
-        kubectl apply -k kustomization/overlays/dev
+        kubectl apply -k ../../kustomization/overlays/dev
         kubectl get all -n $NAMESPACE
         kubectl rollout status deploy $COMPONENT_NAME -n $NAMESPACE --timeout 60s
 

@@ -18,7 +18,6 @@ deny[msg] {
     contains(lower(val[_]), secrets_env[_])
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
 }
-
 # Only use trusted base images
 deny[msg] {
     input[i].Cmd == "from"
@@ -26,7 +25,6 @@ deny[msg] {
     count(val) > 1
     msg = sprintf("Line %d: use a trusted base image", [i])
 }
-
 # Do not use 'latest' tag for base imagedeny[msg]
 deny[msg] {
     input[i].Cmd == "from"
