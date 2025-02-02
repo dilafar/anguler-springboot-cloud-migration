@@ -3,12 +3,14 @@ kind: Namespace
 metadata:
   name: employee
 ---
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: jenkins
   namespace: employee
 ---
+
 apiVersion: v1
 kind: Secret
 metadata:
@@ -17,6 +19,7 @@ metadata:
   annotations:
     kubernetes.io/service-account.name: jenkins
 type: kubernetes.io/service-account-token
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -33,6 +36,7 @@ rules:
   - configmaps
   - persistentvolumes
   - serviceaccounts
+  - replicationcontrollers
   verbs:
   - list
   - watch
@@ -40,18 +44,44 @@ rules:
   - get
   - create
   - impersonate
+  - patch
 - apiGroups:
   - apps
   resources:
   - daemonsets
   - statefulsets
   - deployments
+  - replicasets
   verbs:
   - list
   - watch
   - describe
   - get
   - create
+  - patch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - list
+  - watch
+  - describe
+  - get
+  - create
+  - patch
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - list
+  - watch
+  - describe
+  - get
+  - create
+  - patch
 - apiGroups:
   - networking.k8s.io
   resources:
@@ -62,6 +92,7 @@ rules:
   - describe
   - get
   - create
+  - patch
 - apiGroups:
   - external-secrets.io
   resources:
@@ -72,6 +103,7 @@ rules:
   - describe
   - get
   - create
+  - patch
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1

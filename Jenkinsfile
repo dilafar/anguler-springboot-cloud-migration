@@ -399,7 +399,7 @@ pipeline{
                         withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
                             sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
                             sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
+                                        if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
                                             echo "kubernetes-script.sh file is missing!" >&2
                                             exit 1
                                         fi
