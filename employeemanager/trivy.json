@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-01-26T12:23:22.239688617Z",
+  "CreatedAt": "2025-02-02T10:59:30.37149447Z",
   "ArtifactName": "maven:3.9.9-amazoncorretto-17-alpine",
   "ArtifactType": "container_image",
   "Metadata": {
@@ -8,21 +8,21 @@
       "Family": "alpine",
       "Name": "3.21.2"
     },
-    "ImageID": "sha256:e70440499b58726d546e19f1d584696ede63137d79abab3e76895cd84ea86247",
+    "ImageID": "sha256:1eb81cacfc4316e8e0b842254210e366339131704853f56efb291da5c14ef7ae",
     "DiffIDs": [
       "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
       "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
-      "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
-      "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
-      "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
+      "sha256:d6cd489aba850f5d5bdafd8a3e50c807216c06da8ad4f2f517cf874f3b2bde91",
+      "sha256:b878c59c48de47e90ca613dede1c6350472e12e71ba4211cbf7f95ce39a8f1f8",
+      "sha256:cd44883a8c5fa7eb469829df6f23ce7e8f8f651c0be4064752e6144f276ac280",
       "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-      "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
+      "sha256:de46d8eec6733d139ac82c51c31b49cf86e1af5e6d8305841048a2ad4f8f7bb9"
     ],
     "RepoTags": [
       "maven:3.9.9-amazoncorretto-17-alpine"
     ],
     "RepoDigests": [
-      "maven@sha256:ad68ebbf1d7c2b181e51dd06a425081453462eea82923d1b15c7d25fb3548057"
+      "maven@sha256:f3d6e643d59077009f5355ad1af766f29e1899393d56709381897321ff1063b5"
     ],
     "ImageConfig": {
       "architecture": "amd64",
@@ -160,11 +160,11 @@
         "diff_ids": [
           "sha256:a0904247e36a7726c03c71ee48f3e64462021c88dafeb13f37fdaf613b27f11c",
           "sha256:4a8dbaf510ba24025ec6357ca8def16a4fb491d931a8ae430bc9c482b3fd18d9",
-          "sha256:b7c79db967b2d9f9326a5811a421c22de84273499f4b3bc95b3fc3802f8c70a4",
-          "sha256:d17cc48b2f63c89336e8bf2a322953bf28ccd4e9179b858ebd7d94e5231b336e",
-          "sha256:f97e99fa4a9eeb8b1bbb18f7c0afb761a0f1d8742c08e4b199c45f566815cdbf",
+          "sha256:d6cd489aba850f5d5bdafd8a3e50c807216c06da8ad4f2f517cf874f3b2bde91",
+          "sha256:b878c59c48de47e90ca613dede1c6350472e12e71ba4211cbf7f95ce39a8f1f8",
+          "sha256:cd44883a8c5fa7eb469829df6f23ce7e8f8f651c0be4064752e6144f276ac280",
           "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
-          "sha256:852e8955ec35c771c5fcab0321cb35bf4459fa215cfd81f3ba2cb524c6349c84"
+          "sha256:de46d8eec6733d139ac82c51c31b49cf86e1af5e6d8305841048a2ad4f8f7bb9"
         ]
       },
       "config": {

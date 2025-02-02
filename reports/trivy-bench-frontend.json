@@ -1,0 +1,72 @@
+{
+  "ID": "docker-cis-1.6.0",
+  "Title": "CIS Docker Community Edition Benchmark v1.6.0",
+  "SummaryControls": [
+    {
+      "ID": "4.1",
+      "Name": "Ensure a user for the container has been created",
+      "Severity": "HIGH",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.2",
+      "Name": "Ensure that containers use only trusted base images (Manual)",
+      "Severity": "HIGH"
+    },
+    {
+      "ID": "4.3",
+      "Name": "Ensure unnecessary packages are not installed in the container (Manual)",
+      "Severity": "HIGH"
+    },
+    {
+      "ID": "4.4",
+      "Name": "Ensure images are scanned and rebuilt to include security patches",
+      "Severity": "CRITICAL",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.5",
+      "Name": "Ensure Content trust for Docker is Enabled (Manual)",
+      "Severity": "LOW"
+    },
+    {
+      "ID": "4.6",
+      "Name": "Ensure HEALTHCHECK instructions have been added to the container image",
+      "Severity": "LOW",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.7",
+      "Name": "Ensure update instructions are not used alone in the Dockerfile",
+      "Severity": "HIGH",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.8",
+      "Name": "Ensure setuid and setgid permissions are removed in the images (Manual)",
+      "Severity": "HIGH"
+    },
+    {
+      "ID": "4.9",
+      "Name": "Ensure COPY is used instead of ADD",
+      "Severity": "LOW",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.10",
+      "Name": "Ensure secrets are not stored in Dockerfiles",
+      "Severity": "CRITICAL",
+      "TotalFail": 0
+    },
+    {
+      "ID": "4.11",
+      "Name": "Ensure only verified packages are installed (Manual)",
+      "Severity": "MEDIUM"
+    },
+    {
+      "ID": "4.12",
+      "Name": "Ensure all signed artifacts are validated (Manual)",
+      "Severity": "MEDIUM"
+    }
+  ]
+}
