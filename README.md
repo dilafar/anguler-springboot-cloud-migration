@@ -1,6 +1,6 @@
 # Architecture Diagram
 
-![Server (3)](https://github.com/user-attachments/assets/91e8041a-530e-4f45-ba41-85df070b5f88)
+![Server (4)](https://github.com/user-attachments/assets/3a4f0655-2c0e-43b5-94e2-6fb302685b83)
 
 
 Cluster Architecture
