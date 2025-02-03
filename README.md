@@ -1,6 +1,7 @@
 Architecture Diagram 
 
-![2nd one  (1)](https://github.com/user-attachments/assets/cf7e332f-9118-4e84-9959-7f52f7dee491)
+![2nd one  (2)](https://github.com/user-attachments/assets/830dd029-c67b-4ebe-a18d-57d9a9f3d226)
+
 
 
 EKS Cluster 
