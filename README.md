@@ -1,6 +1,7 @@
 Architecture Diagram
 
-![3rd one  (1)](https://github.com/user-attachments/assets/4848688c-f8b2-4a8c-bc50-86cf85fa17f5)
+![3rd one  (2)](https://github.com/user-attachments/assets/ef93fec7-200c-473e-8b8b-629086b469b4)
+
 
 
 Cluster Architecture
