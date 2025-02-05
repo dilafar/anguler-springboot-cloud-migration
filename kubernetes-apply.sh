@@ -1,60 +1,65 @@
 #!/bin/bash
 
 kubectl config view
-cat kustomization/frontend-deployment.yml
-cat kustomization/frontend-service.yml
+cat ../../kustomize/base/frontend-deployment.yml
+cat ../../kustomize/base/frontend-service.yml
+cat ../../kustomize/base/backend-deployment.yml
+cat ../../kustomize/base/backend-service.yml
 
-if kubectl get deploy -n employee | grep -q 'employee-frontend'; then
-    
-    CURRENT_IMAGE=$(kubectl get deploy employee-frontend -n employee -o=jsonpath='{.spec.template.spec.containers[0].image}')
-    echo "Current image: $CURRENT_IMAGE"
-    
-    NEW_IMAGE="fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION"
-    
-    kubectl set image deploy employee-frontend employee-frontend=$NEW_IMAGE -n employee
+deploy_component() {
+    local COMPONENT_NAME=$1
+    local NAMESPACE=$2
+    local NEW_IMAGE=$3
 
-    kubectl rollout restart deploy employee-frontend -n employee 
+    if kubectl get deploy -n $NAMESPACE | grep -q "$COMPONENT_NAME"; then
+        CURRENT_IMAGE=$(kubectl get deploy $COMPONENT_NAME -n $NAMESPACE -o=jsonpath='{.spec.template.spec.containers[0].image}')
+        echo "Current image for $COMPONENT_NAME: $CURRENT_IMAGE"
 
-    kubectl get all -n employee
+        kubectl set image deploy $COMPONENT_NAME $COMPONENT_NAME=$NEW_IMAGE -n $NAMESPACE
+        kubectl rollout restart deploy $COMPONENT_NAME -n $NAMESPACE
+        kubectl get all -n $NAMESPACE
+        kubectl rollout status deploy $COMPONENT_NAME -n $NAMESPACE --timeout 60s
 
-    kubectl rollout status deploy employee-frontend -n employee --timeout 60s
+        POD_STATUS=$(kubectl get pods -n $NAMESPACE -l app=$COMPONENT_NAME -o jsonpath='{.items[0].status.phase}')
 
-    POD_STATUS=$(kubectl get pods -n employee -l app=employee-frontend -o jsonpath='{.items[0].status.phase}')
-
-    if [ "$POD_STATUS" != "Running" ]; then
-        echo "Error: Container image is crashing."
-
-        if kubectl rollout history deploy employee-frontend -n employee | grep -q "REVISION"; then
-            echo "Rolling back to previous version..."
-            kubectl rollout undo deploy employee-frontend -n employee
-        else
-            echo "Error: No previous version to roll back to."
-            exit 1
+        if [ "$POD_STATUS" != "Running" ]; then
+            echo "Error: Container image for $COMPONENT_NAME is crashing."
+            if kubectl rollout history deploy $COMPONENT_NAME -n $NAMESPACE | grep -q "REVISION"; then
+                echo "Rolling back $COMPONENT_NAME to previous version..."
+                kubectl rollout undo deploy $COMPONENT_NAME -n $NAMESPACE
+            else
+                echo "Error: No previous version to roll back to for $COMPONENT_NAME."
+                exit 1
+            fi
         fi
-    fi
-    echo "deployment successfull"
-else
+        echo "$COMPONENT_NAME deployment successful"
+    else
+        kubectl apply -k ../../kustomize/overlays/dev
+        kubectl get all -n $NAMESPACE
+        kubectl rollout status deploy $COMPONENT_NAME -n $NAMESPACE --timeout 60s
 
-    kubectl apply -k kustomization/
-    kubectl get all -n employee
+        POD_STATUS=$(kubectl get pods -n $NAMESPACE -l app=$COMPONENT_NAME -o jsonpath='{.items[0].status.phase}')
 
-    kubectl rollout status deploy employee-frontend -n employee --timeout 60s
-
-
-    POD_STATUS=$(kubectl get pods -n employee -l app=employee-frontend -o jsonpath='{.items[0].status.phase}')
-
-
-    if [ "$POD_STATUS" != "Running" ]; then
-        echo "Error: Container image is crashing."
-
-
-        if kubectl rollout history deploy employee-frontend -n employee | grep -q "REVISION"; then
-            echo "Rolling back to previous version..."
-            kubectl rollout undo deploy employee-frontend -n employee
-        else
-            echo "Error: No previous version to roll back to."
-            exit 1
+        if [ "$POD_STATUS" != "Running" ]; then
+            echo "Error: Container image for $COMPONENT_NAME is crashing."
+            if kubectl rollout history deploy $COMPONENT_NAME -n $NAMESPACE | grep -q "REVISION"; then
+                echo "Rolling back $COMPONENT_NAME to previous version..."
+                kubectl rollout undo deploy $COMPONENT_NAME -n $NAMESPACE
+            else
+                echo "Error: No previous version to roll back to for $COMPONENT_NAME."
+                exit 1
+            fi
         fi
+        echo "$COMPONENT_NAME deployment successful"
     fi
-    echo "deployment successfull"
-fi
+}
+
+# frontend check
+echo "frontend deployment check...!!!\n"
+NEW_FRONTEND_IMAGE="$DOCKER_REPO:frontend-v$IMAGE_VERSION"
+deploy_component "employee-frontend" "employee" "$NEW_FRONTEND_IMAGE"
+
+# backend check
+echo "backend deployment check...!!!\n"
+NEW_BACKEND_IMAGE="$DOCKER_REPO:backend-v$IMAGE_VERSION"
+deploy_component "employee-backend" "employee" "$NEW_BACKEND_IMAGE"
