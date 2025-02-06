@@ -400,20 +400,20 @@ pipeline{
         stage("Kubernetes Apply") {
             steps {
                 script {
-                            sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                            sh "az aks get-credentials --resource-group aks-rg --name aks-demo --overwrite-existing"
                             sh '''
-                                        if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
-                                            echo "kubernetes-script.sh file is missing!" >&2
-                                            exit 1
-                                        fi
-                                        chmod +x scripts/kubernetes/kubernetes-script.sh
-                                        chmod +x scripts/kubernetes/kubernetes-apply.sh
+                                sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
+                                sh "az aks get-credentials --resource-group aks-rg --name aks-demo --overwrite-existing"
                                 
+                                if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
+                                    echo "kubernetes-script.sh file is missing!" >&2
+                                    exit 1
+                                fi
+                                chmod +x scripts/kubernetes/kubernetes-script.sh
+                                chmod +x scripts/kubernetes/kubernetes-apply.sh
+                                ./scripts/kubernetes/kubernetes-script.sh
+                                ./scripts/kubernetes/kubernetes-apply.sh
+                                sleep 300
                             '''
-                            sh "./scripts/kubernetes/kubernetes-script.sh"
-                            sh "./scripts/kubernetes/kubernetes-apply.sh"
-                            sh 'sleep 300'
 
                         }
                 }
