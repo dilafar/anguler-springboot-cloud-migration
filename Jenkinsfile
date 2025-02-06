@@ -408,9 +408,9 @@ pipeline{
                                     echo "kubernetes-script.sh file is missing!" >&2
                                     exit 1
                                 fi
+                                kubectl get nodes
                                 chmod +x scripts/kubernetes/kubernetes-script.sh
                                 chmod +x scripts/kubernetes/kubernetes-apply.sh
-                                ./scripts/kubernetes/kubernetes-script.sh
                                 ./scripts/kubernetes/kubernetes-apply.sh
                                 sleep 300
                             '''
