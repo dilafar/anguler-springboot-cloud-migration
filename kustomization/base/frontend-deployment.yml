@@ -20,7 +20,7 @@ spec:
         - name: azure-registry-key
       containers:
         - name: employee-frontend
-          image: fadhiljr/nginxapp:employee-frontend-v0.0.17-190
+          image: aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.18-79
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
