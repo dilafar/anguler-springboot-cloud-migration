@@ -187,7 +187,7 @@ pipeline{
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusUpload("172.48.16.196:8081","QA","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
+                                nexusUpload("172.48.16.196:8081","azure-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
                             }               
                         }
                     }
