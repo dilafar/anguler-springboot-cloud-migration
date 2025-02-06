@@ -181,19 +181,19 @@ pipeline{
 
         }
 
-       /* stage("Upload Artifacts"){
+       stage("Upload Artifacts"){
             steps {
                 script {
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusUpload("172.48.16.196:8081","azure-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
+                         //       nexusUpload("172.48.16.196:8081","azure-jar","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
                             }               
                         }
                     }
                 }
 
-*/
+
 
 
 
@@ -397,7 +397,7 @@ pipeline{
             }
         }
 
-         stage("commit change") {
+         stage("commit change for argocd") {
             steps {
                 script {
                     sshagent(['git-ssh-auth']) {
@@ -405,39 +405,17 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin aws-helm || true
+                                git pull origin azure || true
                                 git add .
                                 git commit -m "change added from jenkins"
                                 git push origin HEAD:azure
+                                sleep 90
                             '''
                     }
                 }
             }
         }
-/*
-        stage("Kubernetes Apply") {
-            steps {
-                script {
-                            sh '''
-                                az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-                                az aks get-credentials --resource-group aks-rg --name aks-demo --overwrite-existing
-                                
-                                if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
-                                    echo "kubernetes-script.sh file is missing!" >&2
-                                    exit 1
-                                fi
-                                kubectl get nodes
-                                chmod +x scripts/kubernetes/kubernetes-script.sh
-                                chmod +x scripts/kubernetes/kubernetes-apply.sh
-                                ./scripts/kubernetes/kubernetes-apply.sh
-                                sleep 300
-                            '''
 
-                        }
-                }
-            
-        }
-*/
         stage ("kubernetes cluster check") {
                 steps {
                     script {
@@ -453,28 +431,54 @@ pipeline{
                                         kubescape scan framework all
                                     '''
                                     echo "Kubernetes CIS Benchmark scan completed"
+                                },
+                                "kubenetes workload scan": {
+                                    sh '''
+                                        kubescape scan workload Deployment/employee-backend 
+                                        kubescape scan workload service/employee-backend-service 
+                                        kubescape scan workload Deployment/employee-frontend
+                                        kubescape scan workload service/employee-frontend-service 
+                                    '''
                                 }
                             )
                     }
                 }
 
         }
-/*
+
         stage("DAST-ZAP") {
                     steps {
                         script {
                             parallel (
                                 "DAST": {
                                     sh '''
-                                        docker run -v /home/ubuntu:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-emgmt.com -g gen.conf | tee reports/zap.conf || true
+                                        docker run -v /home/ubuntu:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://azure.employee-mgmt.com -g gen.conf | tee reports/zap.conf || true
                                     '''
                                 }
                             )
                             
                         }
                     }
+        }
+
+        stage("commit zap config file") {
+            steps {
+                script {
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin azure || true
+                                git add .
+                                git commit -m "zap config file added to repository"
+                                git push origin HEAD:azure
+                            '''
+                    }
+                }
+            }
         }    
-*/
+
     }
 
     post {
