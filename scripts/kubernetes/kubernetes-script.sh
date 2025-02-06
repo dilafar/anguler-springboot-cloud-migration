@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubectl apply -f ../../kustomize/platform/rbac/jenkins-setup.yml
+kubectl apply -f ../../kustomization/platform/rbac/jenkins-setup.yml
 
 JENKINS_TOKEN=$(kubectl get secret jenkins-token -n employee -o jsonpath='{.data.token}' | base64 --decode)
 

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: a9d49648-35d5-4676-98ce-aeebe2d93cdc
+    azure.workload.identity/tenant-id: ae17a4a1-3bbe-4772-adf3-ed2a5b101ef6
+  name: external-secrets-sa
+  namespace: external-secrets

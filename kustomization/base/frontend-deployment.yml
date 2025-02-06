@@ -16,11 +16,17 @@ spec:
         app: employee-frontend
         tier: frontend
     spec:
+      imagePullSecrets:
+        - name: azure-registry-key
       containers:
         - name: employee-frontend
           image: fadhiljr/nginxapp:employee-frontend-v0.0.17-190
+          imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8000
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
           resources:
             requests:
               memory: "100Mi"

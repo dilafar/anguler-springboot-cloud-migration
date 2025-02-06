@@ -1,6 +1,12 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
 
+library identifier: "jenkins-shared-library@master" , retriever: modernSCM([
+        $class: "GitSCMSource",
+        remote: "https://github.com/dilafar/jenkins-shared-library.git",
+        credentialsId: "github",
+])
+
 pipeline{
     agent any
 
@@ -8,17 +14,15 @@ pipeline{
         maven 'maven3'
     }
 
-    environment {
-        AWS_S3_BUCKET = 'cicdbeans3'
-        AWS_EB_APP_NAME = 'employee-test'
-        AWS_EB_ENVIRONMENT = 'Employee-test-env'
-        AWS_EB_APP_VERSION = "${BUILD_ID}"
+    environment {     
         ARTIFACT_NAME = "employeemanager-v${BUILD_ID}.jar"
         COSIGN_PASSWORD = credentials('cosign-password') 
         COSIGN_PRIVATE_KEY = credentials('cosign-private-key') 
         COSIGN_PUBLIC_KEY = credentials('cosign-public-key')
         SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
-        SEMGREP_PR_ID = "${env.CHANGE_ID}"
+        SEMGREP_PR_ID = "${env.CHANGE_ID}"     
+        DOCKER_REPO = "aksemployeerepo.azurecr.io/employee/azure-fullstack"
+        DOCKER_REPO_SERVER = "aksemployeerepo.azurecr.io"
         AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
         AZURE_CLIENT_ID = credentials('azure-client-id')
         AZURE_CLIENT_SECRET = credentials('azure-client-secret')
@@ -43,9 +47,7 @@ pipeline{
                         "Maven Increment": {
                             dir('employeemanager') {
                                     echo "incrimenting app version ..."
-                                    sh 'mvn build-helper:parse-version versions:set \
-                                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                                        versions:commit'
+                                    incrementPatchVersion()
                                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                                     def version = matcher[1][1]       
                                     env.IMAGE_VERSION = "$version-$BUILD_NUMBER"
@@ -141,7 +143,7 @@ pipeline{
                                                                 -Dsonar.projectName=employee \
                                                                 -Dsonar.projectVersion=1.0 \
                                                                 -Dsonar.sources=src/ \
-                                                                -Dsonar.host.url=http://172.48.16.144/ \
+                                                                -Dsonar.host.url=http://172.48.16.173/ \
                                                                 -Dsonar.java.binaries=target/test-classes/com/employees/employeemanager/ \
                                                                 -Dsonar.jacoco.reportsPath=target/jacoco.exec \
                                                                 -Dsonar.junit.reportsPath=target/surefire-reports/ \
@@ -150,21 +152,22 @@ pipeline{
                                                                 -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report/dependency-check-report.html \
                                                                 -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
 
-                                                            '''
+                                                        '''
                                                 }   
                                                 timeout(time: 1, unit: 'HOURS'){
                                                             waitForQualityGate abortPipeline: true
                                                 }         
                                     }
                                 },
-                                "Semgrep": {
-                                    dir('employeemanagerfrontend') {
+                                "Semgrep": {                     
                                            sh '''
-                                                    pip3 install --user --upgrade semgrep
-                                                    export PATH=$PATH:$HOME/.local/bin
-                                                    semgrep ci --json --output semgrep.json
-                                              '''
-                                    }
+                                                    docker pull semgrep/semgrep && \
+                                                    docker run \
+                                                        -e SEMGREP_APP_TOKEN=$SEMGREP_APP_TOKEN \
+                                                        -e SEMGREP_PR_ID=$SEMGREP_PR_ID \
+                                                        -v "$(pwd):$(pwd)" --workdir $(pwd) \
+                                                    semgrep/semgrep semgrep ci --json --output semgrep.json
+                                              '''   
                                 }
 
                     )
@@ -172,7 +175,7 @@ pipeline{
             }
             post {
                     always {
-                        archiveArtifacts artifacts: '**/employeemanagerfrontend/semgrep.json', allowEmptyArchive: true
+                        archiveArtifacts artifacts: '**/semgrep.json', allowEmptyArchive: true
                     }
                 }   
 
@@ -184,21 +187,7 @@ pipeline{
                         dir('employeemanager') {
                                 env.JAR_FILE = sh(script: "ls target/employeemanager-*.jar", returnStdout: true).trim()
                                 echo "Found JAR File: ${env.JAR_FILE}"
-                                nexusArtifactUploader(
-                                            nexusVersion: 'nexus3',
-                                            protocol: 'http',
-                                            nexusUrl: '172.48.16.120:8081',
-                                            groupId: 'QA',
-                                            version: "${BUILD_ID}",
-                                            repository: 'employee-repo',
-                                            credentialsId: 'nexus',
-                                            artifacts: [
-                                                    [artifactId: 'employeemgmt',
-                                                    classifier: '',
-                                                    file: "${env.JAR_FILE}",
-                                                    type: 'jar']
-                                                ]
-                                )
+                                nexusUpload("172.48.16.196:8081","QA","employeemgmt","${BUILD_ID}","employee-repo","nexus","${env.JAR_FILE}","jar")
                             }               
                         }
                     }
@@ -219,7 +208,7 @@ pipeline{
                         },
                         "Trivy Scan": {
                             parallel(
-                                "Trivy Scan": {
+                                "Trivy Scan backend": {
                                     dir('employeemanager') {
                                        sh '''
                                            bash trivy-docker-image-scan.sh
@@ -270,7 +259,7 @@ pipeline{
                                 "opa-back-lint": {
                                     dir("employeemanagerfrontend") {
                                     sh '''
-                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.tx
+                                        docker run --rm -i hadolint/hadolint < Dockerfile | tee hadolint_lint_front.txt
                                     '''
                                 }
                             }
@@ -306,101 +295,71 @@ pipeline{
                 } 
         }
 
-        stage("Node.js Image Build") {
+        stage("Docker Image Build") {
                 steps {
                         script {
                             // Clean up unused Docker resources
                             sh 'docker system prune -a --volumes --force || true'
-
-                            withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 parallel(
                                     "frontend-image-scan": {
                                         dir('employeemanagerfrontend') {
                                             script {
-                                                sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                '''
+                                                buildImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloudAzure("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:frontend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:frontend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
                                     },
                                     "backend-image-scan": {
                                         dir('employeemanager') {
                                             script {
-                                                sh '''
-                                                    docker build -t fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION .
-                                                    echo $PASS | docker login -u $USER --password-stdin
-                                                    docker push fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION
-                                                '''
-                                                sh 'cosign version'
-                                                sh '''
-                                                    IMAGE_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION)
-                                                    echo "Image Digest: $IMAGE_DIGEST"
-                                                    echo "y" | cosign sign --key $COSIGN_PRIVATE_KEY $IMAGE_DIGEST
-                                                    cosign verify --key $COSIGN_PUBLIC_KEY $IMAGE_DIGEST
-                                                '''
+                                                buildImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                dockerLoginPrivateCloudAzure("${DOCKER_REPO_SERVER}")
+                                                dockerPush("${DOCKER_REPO}:backend","${IMAGE_VERSION}")
+                                                signCloudImage("${DOCKER_REPO}:backend","${IMAGE_VERSION}","${COSIGN_PRIVATE_KEY}","${COSIGN_PUBLIC_KEY}")
                                             }
                                         }
-                                    }
-                                )
-                            }
+                                    },
+                                     "copy reports": {
+                                            sh '''
+                                                cp employeemanagerfrontend/njsscan.sarif  reports/njsscan.sarif
+                                                cp employeemanagerfrontend/retire.json reports/retire.json
+                                                cp semgrep.json  reports/semgrep.json
+                                                cp employeemanager/target/dependency-check-report/dependency-check-report.json reports/dependency-check-report.json
+                                                cp employeemanagerfrontend/hadolint_lint_front.txt reports/hadolint_lint_frontend.txt
+                                                cp employeemanager/hadolint_lint.txt reports/hadolint_lint_backend.txt
+                                            '''
+                                     }
+                            )
                         }
                     }
-                }
-
-
+            }
         stage("change image in kubeconfig") {
             steps {
                 script {
                     parallel(
                         "Change image backend": {           
-                            dir('kustomization') {
                                 script {
                                     sh '''
-                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION|g" backend-deployment.yml
-                                        sed -i "s|image:.*|image: fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION|g" frontend-deployment.yml
-                                        cat backend-deployment.yml
-                                        cat frontend-deployment.yml
+                                        sed -i "/containers:/,/^[^ ]/s|image:.*|image: $DOCKER_REPO:backend-v$IMAGE_VERSION|g" kustomization/base/backend-deployment.yml
+                                        sed -i "s|image:.*|image: $DOCKER_REPO:frontend-v$IMAGE_VERSION|g" kustomization/base/frontend-deployment.yml
+                                        cat kustomize/base/frontend-deployment.yml
+                                        cat kustomize/base/backend-deployment.yml
                                     '''
                                 }
-                            }
                         },
                         "DefectDojo Uploader": {
-                            script {
-                                sh '''
-                                    pip install --upgrade urllib3 chardet requests
-                                '''
-                            }
-                            parallel(
-                                "Frontend Reports Upload": {
-                                    dir('employeemanagerfrontend') {
-                                        script {
-                                            sh '''
-                                                python3 upload-reports.py semgrep.json 
+                                dir('reports') {
+                                    script {
+                                            sh '''                                           
                                                 python3 upload-reports.py njsscan.sarif
                                                 python3 upload-reports.py retire.json
+                                                python3 upload-reports.py semgrep.json
+                                                python3 upload-reports.py dependency-check-report.json
                                             '''
-                                        }
                                     }
-                                },
-                                "Backend Reports Upload": {
-                                    dir('employeemanager') {
-                                        script {
-                                            sh '''
-                                               echo "python3 upload-reports.py /target/dependency-check-report/dependency-check-report.json"
-                                            '''
-                                        }
-                                    }
-                                }
-                            )
+                            }
                         }
                     )
                 }
@@ -412,29 +371,26 @@ pipeline{
             steps {
                 script {
                         parallel (
-                            "OPA Scan": {
+                            "OPA Scan helm chart": {
                                     sh '''
-                                        docker run --rm \
-                                            -v $(pwd):/project \
-                                            openpolicyagent/conftest test --policy opa-k8s-security.rego kustomization/*
+                                       conftest test -p policy/opa-k8s-security.rego kustomization/base/*
                                     '''
                             },
-                            "Trivy Scan": {
+                            "Trivy Scan": { 
                                         sh ''' 
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-frontend-v$IMAGE_VERSION &
-                                            bash trivy-k8s-scan.sh fadhiljr/nginxapp:employee-backend-v$IMAGE_VERSION &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-frontend.json &
+                                            bash scripts/trivy-scan/trivy-k8s-scan.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-backend.json &
 
                                             wait
                                        '''                           
                             },
-                            "kubescape": {
-                                dir('kustomization') {
-                                        script {
-                                            sh '''
-                                                kubescape scan framework nsa .
-                                            '''
-                                        }
-                                }
+                            "CIS Benchmark v1.6.0": {
+                                        sh '''
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:frontend-v$IMAGE_VERSION trivy-bench-frontend.json || true &
+                                            bash scripts/trivy-scan/trivy-docker-bench.sh $DOCKER_REPO:backend-v$IMAGE_VERSION trivy-bench-backend.json &
+
+                                        wait
+                                '''
                             }
                         )
                     }
@@ -445,20 +401,20 @@ pipeline{
             steps {
                 script {
                             sh "az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID"
-                            sh "az aks get-credentials --resource-group aks-rg1 --name aks-demo --overwrite-existing"
+                            sh "az aks get-credentials --resource-group aks-rg --name aks-demo --overwrite-existing"
                             sh '''
-                                        if [ ! -f kubernetes-script.sh ]; then
+                                        if [ ! -f scripts/kubernetes/kubernetes-script.sh ]; then
                                             echo "kubernetes-script.sh file is missing!" >&2
                                             exit 1
                                         fi
-                                        chmod +x kubernetes-script.sh
+                                        chmod +x scripts/kubernetes/kubernetes-script.sh
+                                        chmod +x scripts/kubernetes/kubernetes-apply.sh
                                 
                             '''
-                         //   sh "./kubernetes-script.sh"
-                            sh "kubectl config use-context aks-demo"
                             sh "kubectl config current-context"
-                            sh "kubectl apply -k kustomization/"
-                            sh "kubectl get all"
+                            sh "./scripts/kubernetes/kubernetes-script.sh"
+                            sh "./scripts/kubernetes/kubernetes-apply.sh"
+                            sh 'sleep 90'
 
                         }
                 }
@@ -466,33 +422,41 @@ pipeline{
         }
 
         stage ("kubernetes cluster check") {
-            steps {
-                script {
+                steps {
+                    script {
                         sh '''
-                            kubectl config use-context aks-demo
+                            docker system prune -a --volumes --force || true                           
                         '''
-                    parallel (
-                        "kubernetes CIS benchmark": {
-                            sh '''
-                                kubescape scan framework all
-                            '''
-                        },
-                        "kubernetes cluster scan": {
-                             sh '''
-                                kubescape scan
-                            '''
-                        },
-                        "kubenetes resource scan": {
-                             sh '''
-                                kubescape scan workload Deployment/employee-backend 
-                                kubescape scan workload service/employee-backend-service 
-                            '''
+                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
+                            sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
+                            parallel (
+                                "kubernetes CIS benchmark": {
+                                    echo "Starting Kubernetes CIS Benchmark scan"
+                                    sh '''
+                                        kubescape scan framework all
+                                    '''
+                                    echo "Kubernetes CIS Benchmark scan completed"
+                                }
+                            )
                         }
-                    )
-                            
-
+                    }
                 }
-            }
+
+        }
+
+        stage("DAST-ZAP") {
+                    steps {
+                        script {
+                            parallel (
+                                "DAST": {
+                                    sh '''
+                                        docker run -v /home/ubuntu:/zap/wrk:rw -u 1000:1000 -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://awsdev.cloud-emgmt.com -g gen.conf | tee reports/zap.conf || true
+                                    '''
+                                }
+                            )
+                            
+                        }
+                    }
         }
 
         stage("commit change") {
@@ -503,10 +467,10 @@ pipeline{
                                 mkdir -p ~/.ssh
                                 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
                                 git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin master || true
+                                git pull origin aws-helm || true
                                 git add .
-                                git commit -m "change added"
-                                git push origin HEAD:master
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:azure
                             '''
                     }
                 }
@@ -519,8 +483,37 @@ pipeline{
 
     post {
         always {
-            dependencyCheckPublisher pattern: '**/employeemanager/target/dependency-check-report/dependency-check-report.json'
-        }
-    }
-}
+           script {
+                    def jobName = env.JOB_NAME
+                    def buildNumber = env.BUILD_NUMBER
+                    def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+                    def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
+                    def buildUrl = env.BUILD_URL
 
+                    def body = """
+                        <html>
+                        <body>
+                        <div style="border: 4px solid ${bannerColor}; padding: 10px;">
+                            <h2>${jobName} - Build ${buildNumber}</h2>
+                            <div style="background-color: ${bannerColor}; padding: 10px;">
+                                <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
+                            </div>
+                            <p>Check the <a href="${buildUrl}">console output</a>.</p>
+                        </div>
+                        </body>
+                        </html>
+                    """
+
+                    emailext(
+                        subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+                        body: body,
+                        to: 'fadhilahamed98@gmail.com',
+                        from: 'jenkins@example.com',
+                        replyTo: 'jenkins@example.com',
+                        mimeType: 'text/html',
+                    )
+                 }
+            }
+        
+         }
+    }

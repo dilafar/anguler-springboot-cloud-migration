@@ -8,7 +8,7 @@
                                 --allocation-method static \
                                 --query publicIp.ipAddress \
                                 -o tsv
-    20.248.120.175
+    172.190.56.149
 
 install ingress controller
 
@@ -30,7 +30,7 @@ install ingress controller
         --set controller.nodeSelector."kubernetes\.io/os"=linux \
         --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
         --set controller.service.externalTrafficPolicy=Local \
-        --set controller.service.loadBalancerIP="20.248.120.175"     
+        --set controller.service.loadBalancerIP="172.190.56.149"     
 
 # List Pods
     kubectl get pods -n ingress-basic

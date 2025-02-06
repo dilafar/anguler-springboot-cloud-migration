@@ -2,8 +2,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: external-dns
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::911167901499:role/eksctl-eksdemo-addon-iamserviceaccount-defaul-Role1-9R1QUVaJgMwB
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -11,14 +9,11 @@ metadata:
   name: external-dns
 rules:
   - apiGroups: [""]
-    resources: ["services","endpoints","pods"]
+    resources: ["services","endpoints","pods", "nodes"]
     verbs: ["get","watch","list"]
   - apiGroups: ["extensions","networking.k8s.io"]
     resources: ["ingresses"]
     verbs: ["get","watch","list"]
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["list","watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -37,8 +32,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-dns
-  labels:
-    app.kubernetes.io/name: external-dns
 spec:
   strategy:
     type: Recreate
@@ -57,12 +50,15 @@ spec:
           args:
             - --source=service
             - --source=ingress
-            - --provider=aws
-            - --aws-zone-type=public
-            - --registry=txt
-            - --txt-owner-id=my-hostedzone-identifier
-          env:
-            - name: AWS_DEFAULT_REGION
-              value: us-east-1
-      securityContext:
-        fsGroup: 65534
+            #- --domain-filter=example.com # (optional) limit to only example.com domains; change to match the zone created above.
+            - --provider=azure
+            #- --azure-resource-group=MyDnsResourceGroup # (optional) use the DNS zones from the tutorial's resource group
+            - --txt-prefix=externaldns-
+          volumeMounts:
+            - name: azure-config-file
+              mountPath: /etc/kubernetes
+              readOnly: true
+      volumes:
+        - name: azure-config-file
+          secret:
+            secretName: azure-config-file
