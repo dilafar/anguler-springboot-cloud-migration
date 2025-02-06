@@ -1,30 +1,30 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-02-06T17:08:49.694609436Z",
-  "ArtifactName": "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.18-79",
+  "CreatedAt": "2025-02-06T17:54:06.270990426Z",
+  "ArtifactName": "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.19-80",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:715ad923ea2aded013ca914cfe1763d96da3b482d030b848dc72d0dc2ca55ede",
+    "ImageID": "sha256:b62c547e825c85db330b9d22b29a7b07151cfd862609c3b126c601bbc06a7579",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-      "sha256:efab5bb14edc51f6410f6bb973ff3acda2d142fdc0e90ca53f4f71f48a063a6e",
-      "sha256:ca17dcf538c1395a1c9a2a7930b3979e04dd66b3d8127776dcb033e55006d742"
+      "sha256:9547612f48b02a6373e07ed56caec5ea41e4d11b100a3109a9af2a1ec2f2b87a",
+      "sha256:be04844ad3d804ffa7d2893c8af85872cd437fa1d18d1427da87366ee5ee99f8"
     ],
     "RepoTags": [
-      "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.18-79"
+      "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.19-80"
     ],
     "RepoDigests": [
-      "aksemployeerepo.azurecr.io/employee/azure-fullstack@sha256:b15c57e22c614a22ba2066707c941a3edd5aafe7f007b5cd5d6377e9bb8e2b65"
+      "aksemployeerepo.azurecr.io/employee/azure-fullstack@sha256:738528aa8a61e27538538adfef9a865185b5400e8e090b4bf08be337fd57f8df"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "6fa55491de556c37b7e01165006d154f254e29c44ab2c1a4c2cd2fcabd8a7828",
-      "created": "2025-02-06T17:07:57.792904636Z",
+      "container": "bb0dc2302a098ed9d1d03fa0ff31a10ab15d496390e841acf9c2393f0cfef9d5",
+      "created": "2025-02-06T17:53:24.519287793Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -68,25 +68,25 @@
           "empty_layer": true
         },
         {
-          "created": "2025-02-06T17:07:56Z",
+          "created": "2025-02-06T17:53:22Z",
           "created_by": "/bin/sh -c addgroup -S pipeline \u0026\u0026 adduser -S k8-user -G pipeline"
         },
         {
-          "created": "2025-02-06T17:07:57Z",
-          "created_by": "/bin/sh -c #(nop) COPY file:d41539f97f604c465f8a8c9bb435d6e2b353553ccedf05aa7b15883220e52f3b in /home/k8-user/app.jar "
+          "created": "2025-02-06T17:53:23Z",
+          "created_by": "/bin/sh -c #(nop) COPY file:3eba04f99af25a674421ef472c61bb73e25ff35634506111badba7f0b86a1e81 in /home/k8-user/app.jar "
         },
         {
-          "created": "2025-02-06T17:07:57Z",
+          "created": "2025-02-06T17:53:24Z",
           "created_by": "/bin/sh -c #(nop)  USER k8-user",
           "empty_layer": true
         },
         {
-          "created": "2025-02-06T17:07:57Z",
+          "created": "2025-02-06T17:53:24Z",
           "created_by": "/bin/sh -c #(nop)  EXPOSE 8080",
           "empty_layer": true
         },
         {
-          "created": "2025-02-06T17:07:57Z",
+          "created": "2025-02-06T17:53:24Z",
           "created_by": "/bin/sh -c #(nop)  ENTRYPOINT [\"java\" \"-jar\" \"/home/k8-user/app.jar\"]",
           "empty_layer": true
         }
@@ -97,8 +97,8 @@
         "diff_ids": [
           "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
           "sha256:319681b9d2f9217e50cee83cdd9ffc7a18e93b83401ba92711538c9d316951d9",
-          "sha256:efab5bb14edc51f6410f6bb973ff3acda2d142fdc0e90ca53f4f71f48a063a6e",
-          "sha256:ca17dcf538c1395a1c9a2a7930b3979e04dd66b3d8127776dcb033e55006d742"
+          "sha256:9547612f48b02a6373e07ed56caec5ea41e4d11b100a3109a9af2a1ec2f2b87a",
+          "sha256:be04844ad3d804ffa7d2893c8af85872cd437fa1d18d1427da87366ee5ee99f8"
         ]
       },
       "config": {
@@ -112,7 +112,7 @@
           "LANG=C.UTF-8",
           "JAVA_HOME=/usr/lib/jvm/default-jvm"
         ],
-        "Image": "sha256:9d6161ab15de88a98ab5eb2afe7e5b298b653c354de49b56e108c1ea61a57137",
+        "Image": "sha256:2e979759ebe2fcbc82add5eba2f556ff56c1a67701901956a590d7bf6b8f9b65",
         "User": "k8-user",
         "WorkingDir": "/"
       }
@@ -120,7 +120,7 @@
   },
   "Results": [
     {
-      "Target": "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.18-79 (alpine 3.20.5)",
+      "Target": "aksemployeerepo.azurecr.io/employee/azure-fullstack:backend-v0.0.19-80 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     },
@@ -141,7 +141,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:ca17dcf538c1395a1c9a2a7930b3979e04dd66b3d8127776dcb033e55006d742"
+            "DiffID": "sha256:be04844ad3d804ffa7d2893c8af85872cd437fa1d18d1427da87366ee5ee99f8"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-50379",
@@ -212,7 +212,7 @@
           "FixedVersion": "11.0.2, 10.1.34, 9.0.98",
           "Status": "fixed",
           "Layer": {
-            "DiffID": "sha256:ca17dcf538c1395a1c9a2a7930b3979e04dd66b3d8127776dcb033e55006d742"
+            "DiffID": "sha256:be04844ad3d804ffa7d2893c8af85872cd437fa1d18d1427da87366ee5ee99f8"
           },
           "SeveritySource": "ghsa",
           "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-56337",

@@ -1,14 +1,14 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-02-06T17:08:38.318503Z",
-  "ArtifactName": "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.18-79",
+  "CreatedAt": "2025-02-06T17:54:12.310873837Z",
+  "ArtifactName": "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.19-80",
   "ArtifactType": "container_image",
   "Metadata": {
     "OS": {
       "Family": "alpine",
       "Name": "3.20.5"
     },
-    "ImageID": "sha256:9d581027527ad7a6341fcfb51d12f80dfb267f8b0e8153437697a304b4345945",
+    "ImageID": "sha256:3abdb2b3af63f3ccae76a7779a72bf1051233e875be0df45f8dd94500d83c650",
     "DiffIDs": [
       "sha256:ce5a8cde9eeef09160653b9c3d14f0c1c0e2900033476a5f2a9fc950161c0eb2",
       "sha256:4dd1a1c234159e63a45fc745ff5ee7bcc25c6f26828853eafd6cd14f9d870dfb",
@@ -20,20 +20,20 @@
       "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
       "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
       "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-      "sha256:6da51f55c358d9129f45ed67690e6c8d296000de5c417b7caa95532ddc7db720",
-      "sha256:fac375bdfcaacc346ad40c99320c26dc51169d3185a4a12c6594cfef9a5107d1",
-      "sha256:41c1185be148936168123925a492140dd4522586dcaaea5f229795764a814a88"
+      "sha256:fcd3c0d33ced685f3d3e86ee23dab79ffcde63995093a56d504f2a6fb74ebfa0",
+      "sha256:f0f99aa749f89be934609999af7436cedc6b29e8eb58b96a4b6d73c6fada5f4a",
+      "sha256:2fb5ab8a638c7f8080b8ba10556c3d355c0a96e5dbbb38bfe901544adab5ba3c"
     ],
     "RepoTags": [
-      "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.18-79"
+      "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.19-80"
     ],
     "RepoDigests": [
-      "aksemployeerepo.azurecr.io/employee/azure-fullstack@sha256:3ce3e713033346a173fb901dd109df21116d2580d57ac6a0fce4c21be45583ed"
+      "aksemployeerepo.azurecr.io/employee/azure-fullstack@sha256:5914cc43defa37eb88d8b58a5b0d913ac8f117cbef0bd9c8186e87426e96c70e"
     ],
     "ImageConfig": {
       "architecture": "amd64",
-      "container": "a3105da9e2b599108ab43999464aafcf7165bfb55b45150f9972506ea609569e",
-      "created": "2025-02-06T17:08:27.380804873Z",
+      "container": "9b4fe74e50126052402a11818b1b420e9dbe0995c425eb959653a70042e047dd",
+      "created": "2025-02-06T17:53:55.606460703Z",
       "docker_version": "24.0.7",
       "history": [
         {
@@ -219,24 +219,24 @@
           "empty_layer": true
         },
         {
-          "created": "2025-02-06T17:08:26Z",
+          "created": "2025-02-06T17:53:54Z",
           "created_by": "/bin/sh -c #(nop) COPY dir:ccc00b840d6fd1132eb3ee4ac8ed6b3670884b7b44e69d2524a71b4131a3f03b in /usr/share/nginx/html "
         },
         {
-          "created": "2025-02-06T17:08:26Z",
+          "created": "2025-02-06T17:53:54Z",
           "created_by": "/bin/sh -c #(nop) COPY file:22417d649f718ee12739444927f8b1d340e4c2044a42e73a25b4f81ac717c141 in /etc/nginx/conf.d/default.conf "
         },
         {
-          "created": "2025-02-06T17:08:26Z",
+          "created": "2025-02-06T17:53:54Z",
           "created_by": "/bin/sh -c #(nop)  USER root",
           "empty_layer": true
         },
         {
-          "created": "2025-02-06T17:08:27Z",
+          "created": "2025-02-06T17:53:55Z",
           "created_by": "/bin/sh -c chown -R nginx:nginx /usr/share/nginx/html /etc/nginx/conf.d/default.conf"
         },
         {
-          "created": "2025-02-06T17:08:27Z",
+          "created": "2025-02-06T17:53:55Z",
           "created_by": "/bin/sh -c #(nop)  USER nginx",
           "empty_layer": true
         }
@@ -255,9 +255,9 @@
           "sha256:9b0109da1061cf237f7028aa1549e543051857f5c0d90ed81eafe95d6ba996d7",
           "sha256:bbbe6686f29ea795695a42668d2cb05ca9477d857de216c9888605c90ac06bc8",
           "sha256:4f0b20d05c2087c2b04d3d4701a6b4ef68e35361f4f24e30b24d9cf3f9072eb2",
-          "sha256:6da51f55c358d9129f45ed67690e6c8d296000de5c417b7caa95532ddc7db720",
-          "sha256:fac375bdfcaacc346ad40c99320c26dc51169d3185a4a12c6594cfef9a5107d1",
-          "sha256:41c1185be148936168123925a492140dd4522586dcaaea5f229795764a814a88"
+          "sha256:fcd3c0d33ced685f3d3e86ee23dab79ffcde63995093a56d504f2a6fb74ebfa0",
+          "sha256:f0f99aa749f89be934609999af7436cedc6b29e8eb58b96a4b6d73c6fada5f4a",
+          "sha256:2fb5ab8a638c7f8080b8ba10556c3d355c0a96e5dbbb38bfe901544adab5ba3c"
         ]
       },
       "config": {
@@ -277,7 +277,7 @@
           "NJS_VERSION=0.8.8",
           "NJS_RELEASE=1"
         ],
-        "Image": "sha256:9f848bba0bf77dad089810c7d13030a91011181a6f150374d2076d3c93d75f8c",
+        "Image": "sha256:133872811ac50a0f9f92807412d5600e527fd13cc3d17ed703f58c3a274ec1a0",
         "Labels": {
           "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e",
           "org.opencontainers.image.created": "2025-01-20T03:20:37.354Z",
@@ -298,7 +298,7 @@
   },
   "Results": [
     {
-      "Target": "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.18-79 (alpine 3.20.5)",
+      "Target": "aksemployeerepo.azurecr.io/employee/azure-fullstack:frontend-v0.0.19-80 (alpine 3.20.5)",
       "Class": "os-pkgs",
       "Type": "alpine"
     }
