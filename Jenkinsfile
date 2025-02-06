@@ -397,6 +397,24 @@ pipeline{
             }
         }
 
+         stage("commit change") {
+            steps {
+                script {
+                    sshagent(['git-ssh-auth']) {
+                            sh '''
+                                mkdir -p ~/.ssh
+                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
+                                git pull origin aws-helm || true
+                                git add .
+                                git commit -m "change added from jenkins"
+                                git push origin HEAD:azure
+                            '''
+                    }
+                }
+            }
+        }
+/*
         stage("Kubernetes Apply") {
             steps {
                 script {
@@ -419,15 +437,15 @@ pipeline{
                 }
             
         }
-
+*/
         stage ("kubernetes cluster check") {
                 steps {
                     script {
                         sh '''
-                            docker system prune -a --volumes --force || true                           
+                            docker system prune -a --volumes --force || true  
+                            az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                            az aks get-credentials --resource-group aks-rg --name aks-demo --overwrite-existing                         
                         '''
-                        withAWS(credentials: 'awseksadmin', region: 'us-east-1') {
-                            sh "aws eks update-kubeconfig --name eks-terraform-2 --region us-east-1"
                             parallel (
                                 "kubernetes CIS benchmark": {
                                     echo "Starting Kubernetes CIS Benchmark scan"
@@ -437,12 +455,11 @@ pipeline{
                                     echo "Kubernetes CIS Benchmark scan completed"
                                 }
                             )
-                        }
                     }
                 }
 
         }
-
+/*
         stage("DAST-ZAP") {
                     steps {
                         script {
@@ -456,28 +473,8 @@ pipeline{
                             
                         }
                     }
-        }
-
-        stage("commit change") {
-            steps {
-                script {
-                    sshagent(['git-ssh-auth']) {
-                            sh '''
-                                mkdir -p ~/.ssh
-                                ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-                                git remote set-url origin git@github.com:dilafar/anguler-springboot-aws-migration.git
-                                git pull origin aws-helm || true
-                                git add .
-                                git commit -m "change added from jenkins"
-                                git push origin HEAD:azure
-                            '''
-                    }
-                }
-            }
-        }
-
-      
-
+        }    
+*/
     }
 
     post {
