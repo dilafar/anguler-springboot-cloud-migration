@@ -411,10 +411,9 @@ pipeline{
                                         chmod +x scripts/kubernetes/kubernetes-apply.sh
                                 
                             '''
-                            sh "kubectl config current-context"
                             sh "./scripts/kubernetes/kubernetes-script.sh"
                             sh "./scripts/kubernetes/kubernetes-apply.sh"
-                            sh 'sleep 90'
+                            sh 'sleep 300'
 
                         }
                 }
