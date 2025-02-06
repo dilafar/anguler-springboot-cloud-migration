@@ -181,7 +181,7 @@ pipeline{
 
         }
 
-        stage("Upload Artifacts"){
+       /* stage("Upload Artifacts"){
             steps {
                 script {
                         dir('employeemanager') {
@@ -193,7 +193,7 @@ pipeline{
                     }
                 }
 
-
+*/
 
 
 
