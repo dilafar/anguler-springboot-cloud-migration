@@ -1,3 +1,7 @@
+server
+![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
+
+
 Architecture Diagram 
 
 ![2nd one  (2)](https://github.com/user-attachments/assets/830dd029-c67b-4ebe-a18d-57d9a9f3d226)
