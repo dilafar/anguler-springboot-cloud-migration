@@ -14,7 +14,9 @@ EKS Cluster
 
 Backup and Restore
 
-![Frame 6](https://github.com/user-attachments/assets/c33a2841-3d20-43bf-911b-e149dca2322a)
+![Untitled design (9)](https://github.com/user-attachments/assets/2fac4fe6-42f3-4a7d-a384-b73c65e52a85)
+
+
 
 
 
