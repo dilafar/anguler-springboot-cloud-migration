@@ -82,40 +82,44 @@ ng serve --open
 ```
 
 ### Starting services locally with docker-compose
-🏗️ How to Start Services
 
-1️⃣ Start All Services
-Run the following command to start the application:
+### 1️⃣ Start All Services
 
+#### 🔹 Run the following command to start the application:
+
+```sh
 docker-compose up -d
-
+```
 The -d flag runs the services in detached mode.
 
-2️⃣ Verify Running Containers
+### 2️⃣ Verify Running Containers
 
-Check the status of running containers:
+#### 🔹 Check the status of running containers:
 
+```sh
 docker ps
+```
 
-3️⃣ Access the Application
+### 3️⃣ Access the Application
 
+```sh
 Frontend (Client UI): https://localhost
+```
 
-4️⃣ Stop Services
+### 4️⃣ Stop Services
 
-To stop all running containers:
+#### 🔹 To stop all running containers:
 
+```sh
 docker-compose down
+```
 
-🔍 Additional Notes
+### 🔍 Additional Notes
 
-The MySQL container has a health check configured to ensure it is ready before the backend services start.
-
-Nginx serves as a reverse proxy to route traffic between services.
-
-The backend services depend on the MySQL service to be healthy before they can start.
-
-The frontend communicates via Nginx, which handles routing and SSL termination.
+- The MySQL container has a health check configured to ensure it is ready before the backend services start.
+- Nginx serves as a reverse proxy to route traffic between services.
+- The backend services depend on the MySQL service to be healthy before they can start.
+- The frontend communicates via Nginx, which handles routing and SSL termination.
 
 ## 🤝 Contributing
 
