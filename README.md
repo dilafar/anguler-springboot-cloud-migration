@@ -52,6 +52,7 @@ This project is a full-stack Employee Management System developed using **Spring
 ![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
 
 ## 🚀 Setup & Installation
+### Starting services locally without Docker
 
 ### 1️⃣ Clone the Repository
 
@@ -70,13 +71,6 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-#### 🔹 Dockerize the Backend
-
-```sh
-docker build -t employee-management-backend .
-docker run -p 8080:8080 employee-management-backend
-```
-
 ### 3️⃣ Frontend Setup (Angular)
 
 #### 🔹 Install Dependencies & Start
@@ -86,14 +80,6 @@ cd frontend
 npm install
 ng serve --open
 ```
-
-#### 🔹 Dockerize the Frontend
-
-```sh
-docker build -t employee-management-frontend .
-docker run -p 4200:80 employee-management-frontend
-```
-
 
 ## 🤝 Contributing
 
