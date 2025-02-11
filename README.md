@@ -81,6 +81,8 @@ npm install
 ng serve --open
 ```
 
+### Starting services locally with docker-compose
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
