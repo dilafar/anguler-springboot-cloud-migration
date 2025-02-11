@@ -192,6 +192,17 @@ mvn spring-boot:run
 
 Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
 
+## 🧾 Argocd App
+
+![argo-aws-employee](https://github.com/user-attachments/assets/1e4241ca-e52c-4e94-82a1-8bf798187fc3)
+
+## 🧾 Prometheus and Grafana
+
+
+
+## 🧾 Hasicorp Vault
+
+![vault-img](https://github.com/user-attachments/assets/5fb9d1f2-7d0d-4c25-9469-d2489e66f3a2)
 
 ## 🤝 Contributing
 
