@@ -43,12 +43,12 @@ This project is a full-stack Employee Management System developed using **Spring
 
 ### Domain & DNS Management
 
-- **The domain was registered on Google Cloud and hosted on AWS Route 53.
-- **Kubernetes ExternalDNS was used to manage DNS records dynamically, ensuring a cloud-agnostic approach.
-- **To handle Route 53 access, an IAM policy and IAM service account were created, assigning the necessary IAM role to the Kubernetes service account.
-- **The ExternalDNS deployment was configured with the service account, allowing DNS record management through Kubernetes ingress or service resources.
-- **Since the application uses an Application Load Balancer (ALB), ExternalDNS manages DNS records via Kubernetes ingress resources.
-- **TLS certificates were provisioned using AWS Certificate Manager, ensuring secure HTTPS connections through Kubernetes ingress resources.
+- The domain was registered on Google Cloud and hosted on AWS Route 53.
+- Kubernetes ExternalDNS was used to manage DNS records dynamically, ensuring a cloud-agnostic approach.
+- To handle Route 53 access, an IAM policy and IAM service account were created, assigning the necessary IAM role to the Kubernetes service account.
+- The ExternalDNS deployment was configured with the service account, allowing DNS record management through Kubernetes ingress or service resources.
+- Since the application uses an Application Load Balancer (ALB), ExternalDNS manages DNS records via Kubernetes ingress resources.
+- TLS certificates were provisioned using AWS Certificate Manager, ensuring secure HTTPS connections through Kubernetes ingress resources.
 
 ## 🚀 Setup & Installation
 
