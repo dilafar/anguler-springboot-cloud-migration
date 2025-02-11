@@ -57,8 +57,8 @@ This project is a full-stack Employee Management System developed using **Spring
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone https://github.com/your-repo/employee-management.git
-cd employee-management
+git clone https://github.com/dilafar/anguler-springboot-aws-migration.git
+cd anguler-springboot-aws-migration
 ```
 
 ### 2️⃣ Backend Setup (Spring Boot)
@@ -66,7 +66,7 @@ cd employee-management
 #### 🔹 Build & Run Locally
 
 ```sh
-cd backend
+cd employeemanager
 mvn clean install
 mvn spring-boot:run
 ```
@@ -76,7 +76,7 @@ mvn spring-boot:run
 #### 🔹 Install Dependencies & Start
 
 ```sh
-cd frontend
+cd employeemanagerfrontend
 npm install
 ng serve --open
 ```
