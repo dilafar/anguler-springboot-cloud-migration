@@ -193,7 +193,8 @@ mvn spring-boot:run
 Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
 
 ## 🧾 Argocd App
-https://argocd.cloud-emgmt.com
+argocd url : https://argocd.cloud-emgmt.com
+
 ![argo-aws-employee](https://github.com/user-attachments/assets/1e4241ca-e52c-4e94-82a1-8bf798187fc3)
 
 ## 🧾 Prometheus and Grafana
