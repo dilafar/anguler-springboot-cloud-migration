@@ -49,6 +49,8 @@ This project is a full-stack Employee Management System developed using **Spring
 - Since the application uses an Application Load Balancer (ALB), ExternalDNS manages DNS records via Kubernetes ingress resources.
 - TLS certificates were provisioned using AWS Certificate Manager, ensuring secure HTTPS connections through Kubernetes ingress resources.
 
+![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
+
 ## 🚀 Setup & Installation
 
 ### 1️⃣ Clone the Repository
