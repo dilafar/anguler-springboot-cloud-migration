@@ -34,6 +34,22 @@ This project is a full-stack Employee Management System developed using **Spring
 - **Storage & Secrets Management**: AWS RDS (MySQL), AWS Secrets Manager, AWS S3 Bucket
 - **Container Registry & CDN**: Amazon ECR, Amazon CloudFront
 
+### AWS Load Balancer Controller Installation
+#### To install the AWS Load Balancer Controller:
+
+- **An IAM policy was created to grant the necessary permissions.
+- **An IAM service account was created and linked to the policy.
+- **The AWS Load Balancer Controller was installed using Helm, utilizing the created service account.
+
+### Domain & DNS Management
+
+- **The domain was registered on Google Cloud and hosted on AWS Route 53.
+- **Kubernetes ExternalDNS was used to manage DNS records dynamically, ensuring a cloud-agnostic approach.
+- **To handle Route 53 access, an IAM policy and IAM service account were created, assigning the necessary IAM role to the Kubernetes service account.
+- **The ExternalDNS deployment was configured with the service account, allowing DNS record management through Kubernetes ingress or service resources.
+- **Since the application uses an Application Load Balancer (ALB), ExternalDNS manages DNS records via Kubernetes ingress resources.
+- **TLS certificates were provisioned using AWS Certificate Manager, ensuring secure HTTPS connections through Kubernetes ingress resources.
+
 ## 🚀 Setup & Installation
 
 ### 1️⃣ Clone the Repository
@@ -77,130 +93,6 @@ docker build -t employee-management-frontend .
 docker run -p 4200:80 employee-management-frontend
 ```
 
-### 4️⃣ Deploying to Kubernetes (AWS EKS)
-
-#### 🔹 Apply Kubernetes Manifests
-
-```sh
-kubectl apply -f k8s/
-```
-
-#### 🔹 Check Pod Status
-
-```sh
-kubectl get pods
-```
-
-### 5️⃣ AWS Load Balancer Controller Installation
-
-#### 🔹 Create IAM Policy
-
-```sh
-aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam-policy.json
-```
-
-#### 🔹 Create IAM Service Account
-
-```sh
-eksctl create iamserviceaccount \  
-    --cluster <CLUSTER_NAME> \  
-    --namespace kube-system \  
-    --name aws-load-balancer-controller \  
-    --attach-policy-arn arn:aws:iam::<ACCOUNT_ID>:policy/AWSLoadBalancerControllerIAMPolicy \  
-    --approve
-```
-
-#### 🔹 Install ALB Controller Using Helm
-
-```sh
-helm repo add eks https://aws.github.io/eks-charts
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \  
-    --set clusterName=<CLUSTER_NAME> \  
-    --set serviceAccount.create=false \  
-    --set serviceAccount.name=aws-load-balancer-controller \  
-    -n kube-system
-```
-
-### 6️⃣ Domain & DNS Management
-
-#### 🔹 ExternalDNS Setup
-
-```sh
-kubectl apply -f external-dns.yaml
-```
-
-#### 🔹 Check ExternalDNS Logs
-
-```sh
-kubectl logs -f deployment/external-dns -n kube-system
-```
-
-### 7️⃣ TLS Certificate for HTTPS
-
-#### 🔹 Request Certificate Using AWS Certificate Manager
-
-```sh
-kubectl apply -f cert-manager.yaml
-```
-
-### 8️⃣ Continuous Deployment with ArgoCD
-
-#### 🔹 Install ArgoCD
-
-```sh
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-#### 🔹 Access ArgoCD UI
-
-```sh
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
-### 9️⃣ Monitoring & Logging Setup
-
-#### 🔹 Install Prometheus & Grafana
-
-```sh
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
-helm install grafana grafana/grafana -n monitoring
-```
-
-#### 🔹 Access Grafana
-
-```sh
-kubectl port-forward svc/grafana -n monitoring 3000:3000
-```
-
-## 🔐 Security & Compliance Checks
-
-#### 🔹 Code Quality Analysis
-
-```sh
-checkstyle -c /google_checks.xml src/
-nodejsscan -d frontend/
-```
-
-#### 🔹 SAST Scans
-
-```sh
-sonar-scanner
-semgrep --config=auto .
-```
-
-#### 🔹 Vulnerability Scanning
-
-```sh
-trivy image employee-management-backend
-kubescape scan framework nsa
-```
-
-#### 🔹 DAST Scanning
-
-```sh
-owasp-zap -daemon -host 0.0.0.0 -port 8080 -config api.key=12345
-```
 
 ## 🤝 Contributing
 
