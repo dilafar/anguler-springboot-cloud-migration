@@ -1,5 +1,4 @@
 # Full CI/CD pipelines for employee management application, a Java-based dynamic web application with a database.
-# Employee Management Full-Stack Application
 
 ## Overview
 
