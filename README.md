@@ -52,7 +52,7 @@ This project is a full-stack Employee Management System developed using **Spring
 ![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
 
 ## 🚀 Setup & Installation
-### Starting services locally without Docker
+### ✅ Starting services locally without Docker
 
 ### 1️⃣ Clone the Repository
 
@@ -81,7 +81,7 @@ npm install
 ng serve --open
 ```
 
-### Starting services locally with docker-compose
+### ✅ Starting services locally with docker-compose
 
 ### 1️⃣ Start All Services
 
