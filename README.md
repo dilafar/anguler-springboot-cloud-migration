@@ -132,6 +132,12 @@ docker-compose down
 
 ![Frame 3 (6)](https://github.com/user-attachments/assets/1a39213c-f513-4564-b832-083188eea7a9)
 
+## 🧾 server provisioning & monitoring
+![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
+
+## 🧾 Backup and Restore
+
+![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
 ## 🤝 Contributing
 
@@ -141,24 +147,6 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 
 This project is licensed under the **MIT License**.
 
-
-
-
-server
-![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
-
-
-Architecture Diagram 
-
-
-
-
-
-
-
-Backup and Restore
-
-![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
 
 
