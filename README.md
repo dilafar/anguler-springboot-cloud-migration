@@ -139,6 +139,60 @@ docker-compose down
 
 ![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
+
+## Database Configuration
+
+### 🏢 Default Database (HSQLDB)
+By default, the Employee Management application uses an **in-memory database (HSQLDB)**. This database is automatically populated with data at startup. 
+
+### 🛠️ MySQL Configuration
+If a persistent database is required, the application can be configured to use **MySQL**. The necessary **Connector/J (MySQL JDBC Driver)** dependency is already included in the `pom.xml` file.
+
+### 🚀 Start a MySQL Database with Docker
+You can start a MySQL database using **Docker** with the following command:
+
+```sh
+docker run -e MYSQL_ROOT_PASSWORD=petclinic \  
+    -e MYSQL_DATABASE=petclinic \  
+    -p 3306:3306 \  
+    mysql:5.7.8
+```
+
+Alternatively, you can install **MySQL Community Server 5.7 GA** manually from the official [MySQL downloads page](https://dev.mysql.com/downloads/).
+
+### 🔧 Configuring MySQL for Production
+For **production deployment**, it is recommended to use **AWS RDS (Relational Database Service)** to ensure scalability and reliability.
+
+### 1️⃣ Set Up an AWS RDS Database
+- Create an **Amazon RDS instance** with **MySQL** as the database engine.
+- Configure **username, password, and host** details.
+
+### 2️⃣ Update `application.yml` with RDS Configuration
+Modify the `application.yml` file to include the **AWS RDS** database configuration:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://<RDS_HOST>:3306/employeemanager
+    username: <RDS_USERNAME>
+    password: <RDS_PASSWORD>
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+```
+
+### 3️⃣ Start the Application
+Run the application with the configured **AWS RDS** database:
+
+```sh
+mvn spring-boot:run
+```
+
+Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
+
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
