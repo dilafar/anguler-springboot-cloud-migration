@@ -37,9 +37,9 @@ This project is a full-stack Employee Management System developed using **Spring
 ### AWS Load Balancer Controller Installation
 #### To install the AWS Load Balancer Controller:
 
-- **An IAM policy was created to grant the necessary permissions.
-- **An IAM service account was created and linked to the policy.
-- **The AWS Load Balancer Controller was installed using Helm, utilizing the created service account.
+- An IAM policy was created to grant the necessary permissions.
+- An IAM service account was created and linked to the policy.
+- The AWS Load Balancer Controller was installed using Helm, utilizing the created service account.
 
 ### Domain & DNS Management
 
