@@ -18,13 +18,50 @@ This project is a full-stack Employee Management System developed using **Spring
 
 ### DevOps Tools
 
-- **CI/CD & Configuration Management**: Jenkins, Ansible, GitHub
-- **Containerization & Orchestration**: Kubernetes, Helm, Kustomize, Docker, Docker Compose
-- **Security & Compliance**: Cosign, HashiCorp Vault, TruffleHog, Checkstyle, NodeJsScan, SonarQube, Semgrep, Trivy, Kubescape, Hadolint, Retire.js, Maven Dependency Check, OWASP ZAP, Open Policy Agent (OPA), DefectDojo
-- **Artifact & Dependency Management**: Nexus Repository, Maven, ArtifactHub
-- **Monitoring & Alerting**: Prometheus, Grafana, Alert Manager
-- **Infrastructure as Code (IaC)**: Terraform
-- **Continuous Deployment & GitOps**: ArgoCD
+#### **CI/CD & Configuration Management**
+- Jenkins
+- Ansible
+- GitHub
+- GitHub Actions
+
+#### **Containerization & Orchestration**
+- Kubernetes
+- Helm
+- Kustomize
+- Docker
+- Docker Compose
+
+#### **Security & Compliance**
+- Cosign (Secure Container Image Signing)
+- HashiCorp Vault (Secret Management)
+- TruffleHog (Detecting Leaked Credentials)
+- Checkstyle & NodeJsScan (Code Quality Analysis)
+- SonarQube & Semgrep (SAST Scanning)
+- Trivy (Vulnerability Scanning & CIS Benchmark for Docker)
+- Kubescape (CIS Benchmark for Kubernetes)
+- Hadolint (Dockerfile Linting)
+- Retire.js (JavaScript Security Scanner)
+- Maven Dependency Check
+- OWASP ZAP (DAST Scanning)
+- Open Policy Agent (OPA) (Policy Enforcement)
+- DefectDojo (Vulnerability Findings Analysis)
+
+#### **Artifact & Dependency Management**
+- AWS S3 Bucket
+- Maven
+- ArtifactHub
+
+#### **Monitoring & Alerting**
+- Prometheus
+- Grafana
+- Alert Manager
+
+#### **Infrastructure as Code (IaC)**
+- Terraform
+
+#### **Continuous Deployment & GitOps**
+- ArgoCD
+
 
 ### AWS Services Used
 
