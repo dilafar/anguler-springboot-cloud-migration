@@ -18,20 +18,19 @@ This project is a full-stack Employee Management System developed using **Spring
 
 ### DevOps Tools
 
-#### **CI/CD & Configuration Management**
+#### 🔹 **CI/CD & Configuration Management**
 - Jenkins
 - Ansible
 - GitHub
-- GitHub Actions
 
-#### **Containerization & Orchestration**
+#### 🔹 **Containerization & Orchestration**
 - Kubernetes
 - Helm
 - Kustomize
 - Docker
 - Docker Compose
 
-#### **Security & Compliance**
+#### 🔹 **Security & Compliance**
 - Cosign (Secure Container Image Signing)
 - HashiCorp Vault (Secret Management)
 - TruffleHog (Detecting Leaked Credentials)
@@ -46,20 +45,20 @@ This project is a full-stack Employee Management System developed using **Spring
 - Open Policy Agent (OPA) (Policy Enforcement)
 - DefectDojo (Vulnerability Findings Analysis)
 
-#### **Artifact & Dependency Management**
-- AWS S3 Bucket
+#### 🔹 **Artifact & Dependency Management**
+- Nexus Repository
 - Maven
 - ArtifactHub
 
-#### **Monitoring & Alerting**
+#### 🔹 **Monitoring & Alerting**
 - Prometheus
 - Grafana
 - Alert Manager
 
-#### **Infrastructure as Code (IaC)**
+#### 🔹 **Infrastructure as Code (IaC)**
 - Terraform
 
-#### **Continuous Deployment & GitOps**
+#### 🔹 **Continuous Deployment & GitOps**
 - ArgoCD
 
 
