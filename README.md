@@ -22,6 +22,7 @@ This project is a full-stack Employee Management System developed using **Spring
 - Jenkins
 - Ansible
 - GitHub
+- Chart Releaser
 
 #### 🔹 **Containerization & Orchestration**
 - Kubernetes
