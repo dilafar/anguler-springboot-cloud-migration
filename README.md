@@ -199,7 +199,7 @@ Argocd UI : https://argocd.cloud-emgmt.com
 
 ## 🧾 Prometheus and Grafana
 
-
+![employee-prom](https://github.com/user-attachments/assets/d51287a3-48ea-4a60-a910-0b84cbd26a85)
 
 ## 🧾 Hasicorp Vault
 Hasicorp Vault UI : https://kmsvault.cncloudnet.com:8200/
