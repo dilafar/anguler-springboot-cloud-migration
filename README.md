@@ -2,14 +2,14 @@
 
 ## Overview
 
-This project is a full-stack Employee Management System developed using **Spring Boot** for the backend and **Angular** for the frontend. It follows **DevSecOps** principles and is deployed on **AWS** using Kubernetes.
+This project is a full-stack Employee Management System developed using **Spring Boot** for the backend and **Angular** for the frontend. It follows **DevSecOps** principles and is deployed on **Azure** using Kubernetes.
 
 ## 🛠 Technologies Used
 
 ### Backend
 
 - **Spring Boot** (REST API)
-- **MySQL** (AWS RDS)
+- **MySQL** (Azure MySql)
 - **Maven** (Build tool)
 
 ### Frontend
