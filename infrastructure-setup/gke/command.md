@@ -46,35 +46,38 @@ ExternalDNS is used to automatically manage DNS records in Google Cloud DNS for 
    ```sh
    kubectl annotate serviceaccount external-dns-ksa -n external-dns-ns iam.gke.io/gcp-service-account=external-dns-gsa@warm-axle-445714-v1.iam.gserviceaccount.com
    ```
-
-7. **Verify the Service Account Setup:**
+7. **deploy External DNS using the provided configuration file:**
+   ```sh
+   kubectl apply -f kustomization/platform/external-dns/externalDNS.yml
+   ```
+8. **Verify the Service Account Setup:**
    ```sh
    kubectl -n external-dns-ns describe sa external-dns-ksa
    ```
 
-8. **Check All Resources in the Namespace:**
+9. **Check All Resources in the Namespace:**
    ```sh
    kubectl -n external-dns-ns get all
    ```
 
-9. **List and Verify the ExternalDNS Pod:**
+10. **List and Verify the ExternalDNS Pod:**
    ```sh
    kubectl -n external-dns-ns get pods
    ```
 
-10. **Check ExternalDNS Logs to Verify Deployment:**
+11. **Check ExternalDNS Logs to Verify Deployment:**
     ```sh
     kubectl -n external-dns-ns logs -f $(kubectl -n external-dns-ns get po | egrep -o 'external-dns[A-Za-z0-9-]+')
     ```
 
 ## Managed Certificates
 
-11. **List Managed Certificates:**
+12. **List Managed Certificates:**
     ```sh
     kubectl get managedcertificate
     ```
 
-12. **Describe a Managed Certificate:**
+13. **Describe a Managed Certificate:**
     ```sh
     kubectl describe managedcertificate managed-cert-for-ingress
     ```
