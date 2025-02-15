@@ -1,12 +1,15 @@
 # Configure kubectl
-gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
-
+ ```sh
+   gcloud container clusters get-credentials standered-gke --region us-central1 --project single-portal-443110-r7
+ ```
 # Verify Kubernetes Worker Nodes
-kubectl get nodes
-
+ ```sh
+   kubectl get nodes
+ ```
 # Verify System Pod in kube-system Namespace
-kubectl -n kube-system get pods
-
+ ```sh
+   kubectl -n kube-system get pods
+ ```
 # ExternalDNS and External Secrets Configuration on GKE
 
 ## ExternalDNS Setup
