@@ -65,7 +65,9 @@ This project is a full-stack Employee Management System developed using **Spring
 
 view the code on infrastructure-setup/gke/command.md
 
-![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
+
+![ssl-certification-valied](https://github.com/user-attachments/assets/f0a8466c-436e-4583-a50f-b19d6c3a09bc)
+
 
 ## 🚀 Setup & Installation
 ### Starting services locally without Docker
