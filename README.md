@@ -26,15 +26,15 @@ This project is a full-stack Employee Management System developed using **Spring
 - **Infrastructure as Code (IaC)**: Terraform
 - **Continuous Deployment & GitOps**: ArgoCD
 
-### AWS Services Used
+### gcp Services Used
 
-- **Networking & Load Balancing**: ALB, Route 53, AWS Certificate Manager, VPC
-- **Compute & Container Management**: Amazon EKS, Amazon EC2
-- **Storage & Secrets Management**: AWS RDS (MySQL), AWS Secrets Manager, AWS S3 Bucket
-- **Container Registry & CDN**: Amazon ECR, Amazon CloudFront
+- **Networking & Load Balancing**: cloud load balancing, cloud dns, google managed ssl sertificate, VPC networks, cloud external ip address
+- **Compute & Container Management**: gke, Compute Engine
+- **Storage & Secrets Management**: cloud sql, secret manager
+- **Container Registry & CDN**: google artifact repository, cloud cdn
 
-### AWS Load Balancer Controller Installation
-#### To install the AWS Load Balancer Controller:
+### External Secret Installation
+#### To install the External Secret on GKE:
 
 - An IAM policy was created to grant the necessary permissions.
 - An IAM service account was created and linked to the policy.
