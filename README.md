@@ -2,14 +2,14 @@
 
 ## Overview
 
-This project is a full-stack Employee Management System developed using **Spring Boot** for the backend and **Angular** for the frontend. It follows **DevSecOps** principles and is deployed on **AWS** using Kubernetes.
+This project is a full-stack Employee Management System developed using **Spring Boot** for the backend and **Angular** for the frontend. It follows **DevSecOps** principles and is deployed on **GCP** using Kubernetes.
 
 ## 🛠 Technologies Used
 
 ### Backend
 
 - **Spring Boot** (REST API)
-- **MySQL** (AWS RDS)
+- **MySQL** (Cloud SQL)
 - **Maven** (Build tool)
 
 ### Frontend
@@ -178,16 +178,12 @@ docker-compose down
 
 ![Server (4)](https://github.com/user-attachments/assets/3a4f0655-2c0e-43b5-94e2-6fb302685b83)
 
-## 🧾 EKS Cluster 
+## 🧾 GKE Cluster 
 
 ![Frame 2 (5)](https://github.com/user-attachments/assets/9c54b075-e467-42ee-8f00-b79b1a14a856)
 
 ## 🧾 server provisioning & monitoring
 ![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
-
-## 🧾 Backup and Restore
-
-![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
 
 ## Database Configuration
@@ -245,7 +241,7 @@ Now, the Employee Management application is connected to a persistent **AWS RDS 
 
 ## 🧾 Prometheus and Grafana
 
-
+![employee-prom](https://github.com/user-attachments/assets/c0509af9-585a-4a97-b487-3d5399b1b12b)
 
 ## 🧾 Secret Manager
 
