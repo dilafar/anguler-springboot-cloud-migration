@@ -399,16 +399,12 @@ docker-compose down
 
 ![4th one ](https://github.com/user-attachments/assets/6100fa5c-c928-4bc2-9d99-e3130c7be536)
 
-## 🧾 EKS Cluster 
+## 🧾 AKS Cluster 
 
 ![Frame 4 (1)](https://github.com/user-attachments/assets/f0e8ddaa-1ff6-47dc-9e6e-6c197cdb7d09)
 
 ## 🧾 server provisioning & monitoring
 ![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
-
-## 🧾 Backup and Restore
-
-![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
 
 ## Database Configuration
@@ -464,18 +460,16 @@ mvn spring-boot:run
 Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
 
 ## 🧾 Argocd App
-Argocd UI : https://argocd.cloud-emgmt.com
 
-![argo-aws-employee](https://github.com/user-attachments/assets/1e4241ca-e52c-4e94-82a1-8bf798187fc3)
+![argo-azure](https://github.com/user-attachments/assets/b7c3b041-61cf-4bb4-8c30-19c73934b611)
 
 ## 🧾 Prometheus and Grafana
 
 ![employee-prom-2](https://github.com/user-attachments/assets/de3c3eef-1a39-4c7a-a2dc-2f675744e698)
 
-## 🧾 Hasicorp Vault
-Hasicorp Vault UI : https://kmsvault.cncloudnet.com:8200/
+## 🧾 Azure Key Vault Vault
 
-![vault-img](https://github.com/user-attachments/assets/5fb9d1f2-7d0d-4c25-9469-d2489e66f3a2)
+![azure-key-vault](https://github.com/user-attachments/assets/f9c334c4-92f5-47b2-b7a8-00a347523c16)
 
 ## 🤝 Contributing
 
