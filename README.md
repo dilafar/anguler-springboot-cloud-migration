@@ -467,7 +467,7 @@ Now, the Employee Management application is connected to a persistent **AWS RDS 
 
 ![employee-prom-2](https://github.com/user-attachments/assets/de3c3eef-1a39-4c7a-a2dc-2f675744e698)
 
-## 🧾 Azure Key Vault Vault
+## 🧾 Azure Key Vault
 
 ![azure-key-vault](https://github.com/user-attachments/assets/f9c334c4-92f5-47b2-b7a8-00a347523c16)
 
