@@ -97,6 +97,8 @@ This project is a full-stack Employee Management System developed using **Spring
 ### 7. Deploying External DNS
 - The final step involves deploying the ExternalDNS application in the Kubernetes cluster. This ensures that DNS records are dynamically managed and kept up to date based on Kubernetes resources.
 
+view the code on infrastructure-setup/gke/command.md
+
 ![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
 
 ## 🚀 Setup & Installation
