@@ -320,7 +320,8 @@ spec:
    kubectl logs -n external-secrets <external-secrets-pod-name>
    ```
 
-![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
+![azure-ui](https://github.com/user-attachments/assets/754fa815-84d4-4d54-b9dc-d56a2163788a)
+
 
 ## 🚀 Setup & Installation
 ### Starting services locally without Docker
