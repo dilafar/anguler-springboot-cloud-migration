@@ -7,10 +7,6 @@ kubectl get nodes
 # Verify System Pod in kube-system Namespace
 kubectl -n kube-system get pods
 
-# Verify kubeconfig file
-cat $HOME/.kube/config
-kubectl config view
-
 # ExternalDNS and External Secrets Configuration on GKE
 
 ## ExternalDNS Setup
