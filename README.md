@@ -26,7 +26,7 @@ This project is a full-stack Employee Management System developed using **Spring
 - **Infrastructure as Code (IaC)**: Terraform
 - **Continuous Deployment & GitOps**: ArgoCD
 
-### gcp Services Used
+### GCP Services Used
 
 - **Networking & Load Balancing**: cloud load balancing, cloud dns, google managed ssl sertificate, VPC networks, cloud external ip address
 - **Compute & Container Management**: gke, Compute Engine
@@ -36,18 +36,66 @@ This project is a full-stack Employee Management System developed using **Spring
 ### External Secret Installation
 #### To install the External Secret on GKE:
 
-- An IAM policy was created to grant the necessary permissions.
-- An IAM service account was created and linked to the policy.
-- The AWS Load Balancer Controller was installed using Helm, utilizing the created service account.
+### 1. Create a Google Cloud IAM Service Account for External Secrets
+- A new IAM service account is created for External Secrets to securely access Google Secret Manager.
+
+### 2. Assign Secret Manager Access Role
+- The IAM service account needs permission to access secrets stored in Google Secret Manager. The `roles/secretmanager.secretAccessor` role is assigned to allow retrieval of secrets.
+
+### 3. Create a Kubernetes Namespace
+- A dedicated namespace is created to manage External Secrets components separately from other workloads.
+
+### 4. Create a Kubernetes Service Account
+- A Kubernetes service account is created in the `external-secret-ns` namespace, which will be linked to the Google Cloud IAM service account for authentication.
+
+### 5. Bind Workload Identity for External Secrets
+- The Kubernetes service account is bound to the IAM service account, enabling External Secrets to securely access Google Secret Manager using Workload Identity.
+
+### 6. Generate and Store IAM Service Account Key (Optional)
+- A service account key is created and stored as a Kubernetes secret. This allows External Secrets to authenticate with Google Secret Manager.
+
+### 7. Annotate the Kubernetes Service Account
+- Annotations are added to the Kubernetes service account to associate it with the corresponding Google Cloud IAM service account, ensuring seamless authentication.
+
+### 8. Install External Secrets via Helm
+- The External Secrets Helm chart is added, and the deployment is installed with the necessary annotations and namespace settings. This ensures that External Secrets is correctly configured to fetch secrets from 
+  Google Secret Manager.
+
+### 9. Verify the External Secrets Deployment
+- After deploying External Secrets, all related Kubernetes resources are checked to confirm successful installation and proper functionality.
+
+### 10. Configure ClusterSecretStore for External Secrets
+- A `ClusterSecretStore` resource is created, specifying Google Cloud Secret Manager as the provider. This configuration allows External Secrets to retrieve secrets from Google Secret Manager securely.
+
+### 11. Define an ExternalSecret Resource
+- An `ExternalSecret` resource is created, specifying how secrets should be fetched from Google Secret Manager and stored within Kubernetes. This ensures that applications can retrieve secrets dynamically 
+  without manually managing them.
+
 
 ### Domain & DNS Management
 
-- The domain was registered on Google Cloud and hosted on AWS Route 53.
-- Kubernetes ExternalDNS was used to manage DNS records dynamically, ensuring a cloud-agnostic approach.
-- To handle Route 53 access, an IAM policy and IAM service account were created, assigning the necessary IAM role to the Kubernetes service account.
-- The ExternalDNS deployment was configured with the service account, allowing DNS record management through Kubernetes ingress or service resources.
-- Since the application uses an Application Load Balancer (ALB), ExternalDNS manages DNS records via Kubernetes ingress resources.
-- TLS certificates were provisioned using AWS Certificate Manager, ensuring secure HTTPS connections through Kubernetes ingress resources.
+### 1. Domain Registration and Hosting
+- The domain is registered on Google Cloud and hosted using Cloud DNS. This allows Kubernetes External DNS to manage DNS records dynamically in a cloud-native manner.
+
+### 2. Using Kubernetes ExternalDNS for Dynamic DNS Management
+- Kubernetes ExternalDNS is configured to automatically create, update, and delete DNS records based on Kubernetes ingress and service resources, ensuring a cloud-agnostic approach.
+
+### 3. IAM Policy and Service Account Setup
+- To handle Cloud DNS access securely, an IAM service account is created along with the necessary IAM policy. The appropriate IAM role (`roles/dns.admin`) is assigned to this service account, enabling -     
+  ExternalDNS to manage DNS records.
+
+### 4. Configuring ExternalDNS Deployment
+- The ExternalDNS deployment is configured to use the Google Cloud IAM service account. This allows ExternalDNS to interact with Cloud DNS and manage DNS records dynamically through Kubernetes ingress or service 
+  resources.
+
+### 5. Managing DNS Records with Google Cloud LoadBalancer
+- Since the application uses a Google Cloud LoadBalancer, ExternalDNS manages DNS records by monitoring and updating Kubernetes ingress resources, ensuring proper routing and accessibility.
+
+### 6. Enabling TLS Certificates for Secure Connections
+- TLS certificates are provisioned using Google Managed SSL Certificates. These certificates are integrated with Kubernetes ingress resources to enable secure HTTPS connections for applications running on GKE.
+
+### 7. Deploying External DNS
+- The final step involves deploying the ExternalDNS application in the Kubernetes cluster. This ensures that DNS records are dynamically managed and kept up to date based on Kubernetes resources.
 
 ![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
 
