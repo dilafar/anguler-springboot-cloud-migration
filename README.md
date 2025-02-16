@@ -72,7 +72,7 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
 
 - **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
 - **Azure Subscription ID**: Retrieve using `az account show --query "id"`
-- **The `azure.json` file contains authentication details for External DNS to interact with Azure DNS. It includes:
+- The `azure.json` file contains authentication details for External DNS to interact with Azure DNS. It includes:
    - **Tenant ID**
    - **Subscription ID**
    - **Resource Group containing DNS zones**
@@ -99,11 +99,11 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
 
 ### Cert-Manager Installation and Configuration with Let's Encrypt
   
-- **Install cert-manager
+- Install cert-manager
 ```sh
   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.6.3/cert-manager.yaml
 ```
-- **Once cert-manager is installed, you can configure a ClusterIssuer that uses Let's Encrypt's ACME protocol to request certificates. Below is an example of a ClusterIssuer configuration that uses the HTTP-01 challenge and the NGINX ingress controller.
+- Once cert-manager is installed, you can configure a ClusterIssuer that uses Let's Encrypt's ACME protocol to request certificates. Below is an example of a ClusterIssuer configuration that uses the HTTP-01 challenge and the NGINX ingress controller.
 
 ```yaml
 apiVersion: cert-manager.io/v1
