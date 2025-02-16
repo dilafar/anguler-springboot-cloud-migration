@@ -62,6 +62,9 @@ This project is a full-stack Employee Management System developed using **Spring
 #### 🔹 **Continuous Deployment & GitOps**
 - ArgoCD
 
+#### 🔹 **Certificate Manager**
+- lets encrypt
+
 
 ### Azure Services Used
 
