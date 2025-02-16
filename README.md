@@ -63,21 +63,21 @@ This project is a full-stack Employee Management System developed using **Spring
 - ArgoCD
 
 
-### AWS Services Used
+### 🏢 AWS Services Used
 
 - **Networking & Load Balancing**: ALB, Route 53, AWS Certificate Manager, VPC
 - **Compute & Container Management**: Amazon EKS, Amazon EC2
 - **Storage & Secrets Management**: AWS RDS (MySQL), AWS Secrets Manager, AWS S3 Bucket
 - **Container Registry & CDN**: Amazon ECR, Amazon CloudFront
 
-### AWS Load Balancer Controller Installation
+### 🏢 AWS Load Balancer Controller Installation
 #### To install the AWS Load Balancer Controller:
 
 - An IAM policy was created to grant the necessary permissions.
 - An IAM service account was created and linked to the policy.
 - The AWS Load Balancer Controller was installed using Helm, utilizing the created service account.
 
-### Domain & DNS Management
+### 🏢 Domain & DNS Management
 
 - The domain was registered on Google Cloud and hosted on AWS Route 53.
 - Kubernetes ExternalDNS was used to manage DNS records dynamically, ensuring a cloud-agnostic approach.
@@ -89,7 +89,7 @@ This project is a full-stack Employee Management System developed using **Spring
 ![aws-vault-cert](https://github.com/user-attachments/assets/873afc02-8386-4b46-a5fa-b4a5117a5df7)
 
 ## 🚀 Setup & Installation
-### Starting services locally without Docker
+### 🏢 Starting services locally without Docker
 
 ### 1️⃣ Clone the Repository
 
@@ -118,7 +118,7 @@ npm install
 ng serve --open
 ```
 
-### Starting services locally with docker-compose
+### 🏢 Starting services locally with docker-compose
 
 ### 1️⃣ Start All Services
 
@@ -169,7 +169,7 @@ docker-compose down
 
 ![Frame 3 (6)](https://github.com/user-attachments/assets/1a39213c-f513-4564-b832-083188eea7a9)
 
-## 🧾 server provisioning & monitoring
+## 🧾 Server Provisioning & Monitoring
 ![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
 
 ## 🧾 Backup and Restore
@@ -177,10 +177,7 @@ docker-compose down
 ![backup2](https://github.com/user-attachments/assets/c2ac3a8b-63bd-4698-a606-a35af3f9f95c)
 
 
-## Database Configuration
-
-### 🏢 Default Database (HSQLDB)
-By default, the Employee Management application uses an **in-memory database (HSQLDB)**. This database is automatically populated with data at startup. 
+## Database Configuration 
 
 ### 🛠️ MySQL Configuration
 If a persistent database is required, the application can be configured to use **MySQL**. The necessary **Connector/J (MySQL JDBC Driver)** dependency is already included in the `pom.xml` file.
@@ -230,7 +227,6 @@ mvn spring-boot:run
 Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
 
 ## 🧾 Argocd App
-Argocd UI : https://argocd.cloud-emgmt.com
 
 ![argo-aws-employee](https://github.com/user-attachments/assets/1e4241ca-e52c-4e94-82a1-8bf798187fc3)
 
@@ -239,7 +235,6 @@ Argocd UI : https://argocd.cloud-emgmt.com
 ![employee-prom](https://github.com/user-attachments/assets/c0509af9-585a-4a97-b487-3d5399b1b12b)
 
 ## 🧾 Hasicorp Vault
-Hasicorp Vault UI : https://kmsvault.cncloudnet.com:8200/
 
 ![vault-img](https://github.com/user-attachments/assets/5fb9d1f2-7d0d-4c25-9469-d2489e66f3a2)
 
