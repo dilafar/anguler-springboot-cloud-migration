@@ -86,16 +86,16 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
      "userAssignedIdentityID": "<your-msi-id>"  
    }
    ```
-- **The `external-dns.yml` file contains Kubernetes resources required for deploying ExternalDNS:
+- The `external-dns.yml` file contains Kubernetes resources required for deploying ExternalDNS:
    - **ServiceAccount**: Defines access permissions.
    - **ClusterRole & ClusterRoleBinding**: Grants necessary RBAC permissions.
    - **Deployment**: Deploys External DNS with the correct provider settings for Azure.
-- **Create Managed Service Identity (MSI) for External DNS
-- **Assign Azure Role to MSI
+- Create Managed Service Identity (MSI) for External DNS
+- Assign Azure Role to MSI
    - **Role**: `Contributor`
-- take **Client ID** from the MSI **Overview** tab and update `azure.json` under `userAssignedIdentityID`.
-- **Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
-- **Create Kubernetes Secret for the `azure.json` file and Deploy ExternalDNS
+- Take **Client ID** from the MSI **Overview** tab and update `azure.json` under `userAssignedIdentityID`.
+- Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
+- Create Kubernetes Secret for the `azure.json` file and Deploy ExternalDNS
 
 ### Cert-Manager Installation and Configuration with Let's Encrypt
   
