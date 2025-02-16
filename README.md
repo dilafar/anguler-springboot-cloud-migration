@@ -97,17 +97,13 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
 - **Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
 - **Create Kubernetes Secret for the `azure.json` file and Deploy ExternalDNS
 
-### cert-manager Installation and Configuration with Let's Encrypt
+### Cert-Manager Installation and Configuration with Let's Encrypt
   
-## Step 1: Install cert-manager
-
-To install cert-manager along with all necessary components (CustomResourceDefinitions, cert-manager, cainjector, and webhook), run the following command:
-
+- **Install cert-manager
 ```sh
   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.6.3/cert-manager.yaml
 ```
-
-Once cert-manager is installed, you can configure a ClusterIssuer that uses Let's Encrypt's ACME protocol to request certificates. Below is an example of a ClusterIssuer configuration that uses the HTTP-01 challenge and the NGINX ingress controller.
+- **Once cert-manager is installed, you can configure a ClusterIssuer that uses Let's Encrypt's ACME protocol to request certificates. Below is an example of a ClusterIssuer configuration that uses the HTTP-01 challenge and the NGINX ingress controller.
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -125,6 +121,7 @@ spec:
         ingress:
           ingressClassName: nginx
 ```
+
 ### Setting Up Azure Key Vault with External Secrets on AKS
 
 This guide outlines the steps to configure Azure Key Vault integration with External Secrets on Azure Kubernetes Service (AKS). This setup allows you to securely fetch secrets from Azure Key Vault into your Kubernetes workloads using Azure Workload Identity.
