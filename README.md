@@ -242,24 +242,6 @@ spec:
       key: secret/dbpassword
 ```
 
-### 11. Verify the Setup
-1. Ensure the External Secrets controller is running:
-
-   ```sh
-   kubectl get pods -n external-secrets
-   ```
-
-2. Verify the secret is created in the target namespace (`employee`):
-
-   ```sh
-   kubectl get secret mysql-db-password -n employee
-   ```
-
-3. Check the logs of the External Secrets controller for troubleshooting:
-
-   ```sh
-   kubectl logs -n external-secrets <external-secrets-pod-name>
-   ```
 
 ![azure-ui](https://github.com/user-attachments/assets/754fa815-84d4-4d54-b9dc-d56a2163788a)
 
