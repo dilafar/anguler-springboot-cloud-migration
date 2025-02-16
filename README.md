@@ -66,14 +66,14 @@ This project is a full-stack Employee Management System developed using **Spring
 - Let's Encrypt
 
 
-### Azure Services Used
+### 🏢 Azure Services Used
 
 - **Networking & Load Balancing**: Public IP Address , Azure LoadBalancer, Azure DNS, Azure Virtual Network
 - **Compute & Container Management**: AKS, Azure VM
 - **Storage & Secrets Management**: Azure Key Vault, Azure MySQL Database
 - **Container Registry & CDN**: Azure Container Registry, Azure CloudFront
 
-### Nginx Ingress Controller Installation
+### 🏢 Nginx Ingress Controller Installation
 #### To install the Nginx Ingress Controller:
 
 ### 1. Retrieve Node Resource Group
@@ -107,7 +107,7 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
      --set controller.service.loadBalancerIP="172.191.40.85"
    ```
 
-### Domain & DNS Management
+### 🏢 Domain & DNS Management
 
 - **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
 - **Azure Subscription ID**: Retrieve using `az account show --query "id"`
@@ -136,7 +136,7 @@ az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AK
 - Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
 - Create Kubernetes Secret for the `azure.json` file and Deploy ExternalDNS
 
-### Cert-Manager Installation and Configuration with Let's Encrypt
+### 🏢 Cert-Manager Installation and Configuration with Let's Encrypt
   
 - Install cert-manager
 ```sh
@@ -161,7 +161,7 @@ spec:
           ingressClassName: nginx
 ```
 
-### Setting Up Azure Key Vault with External Secrets on AKS
+### 🏢 Setting Up Azure Key Vault with External Secrets on AKS
 
 - Before setting up External Secrets, collect the necessary details:
    - **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
@@ -335,10 +335,7 @@ docker-compose down
 ![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
 
 
-## Database Configuration
-
-### 🏢 Default Database (HSQLDB)
-By default, the Employee Management application uses an **in-memory database (HSQLDB)**. This database is automatically populated with data at startup. 
+## Database Configuration 
 
 ### 🛠️ MySQL Configuration
 If a persistent database is required, the application can be configured to use **MySQL**. The necessary **Connector/J (MySQL JDBC Driver)** dependency is already included in the `pom.xml` file.
