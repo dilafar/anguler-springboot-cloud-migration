@@ -42,21 +42,11 @@ To get the node resource group for your AKS cluster, run:
 ```sh
 az aks show --resource-group aks-rg1 --name aksdemo1 --query nodeResourceGroup -o tsv
 ```
-Expected Output:
-```
-MC_aks-rg_aks-demo_eastus
-```
-
 ### 2. Create a Public IP Address for Ingress Controller
 Create a static public IP address for the ingress controller:
 ```sh
 az network public-ip create --resource-group MC_aks-rg_aks-demo_eastus --name AKSPublicIPForIngress --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
 ```
-Expected Output:
-```
-172.191.40.85
-```
-
 ### 3. Install NGINX Ingress Controller
 1. Create a namespace for the ingress controller:
    ```sh
@@ -105,25 +95,7 @@ Expected Output:
    - **Role**: `Contributor`
 - take **Client ID** from the MSI **Overview** tab and update `azure.json` under `userAssignedIdentityID`.
 - **Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
-
-### 7. Create Kubernetes Secret and Deploy ExternalDNS
-1. Navigate to `kube-manifests/01-ExternalDNS`
-2. Create a Kubernetes secret for the `azure.json` file:
-   ```sh
-     kubectl create secret generic azure-config-file --from-file=azure.json
-   ```
-3. Verify the created secret:
-   ```sh
-     kubectl get secrets
-   ```
-4. Deploy ExternalDNS:
-   ```sh
-     kubectl apply -f external-dns.yml
-   ```
-5. Check ExternalDNS logs to verify successful execution:
-   ```sh
-     kubectl logs -f $(kubectl get po | egrep -o 'external-dns[A-Za-z0-9-]+')
-   ```
+- **Create Kubernetes Secret for the `azure.json` file and Deploy ExternalDNS
 
 ### cert-manager Installation and Configuration with Let's Encrypt
   
