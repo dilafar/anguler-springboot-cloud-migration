@@ -97,7 +97,7 @@ This project is a full-stack Employee Management System developed using **Spring
 - TLS certificates are provisioned using Google Managed SSL Certificates. These certificates are integrated with Kubernetes ingress resources to enable secure HTTPS connections for applications running on GKE.
 - The final step involves deploying the ExternalDNS application in the Kubernetes cluster. This ensures that DNS records are dynamically managed and kept up to date based on Kubernetes resources.
 
-view the code on infrastructure-setup/gke/command.md
+#### 🔹 **view the code on infrastructure-setup/gke/command.md**
 
 
 ![ssl-certification-valied](https://github.com/user-attachments/assets/f0a8466c-436e-4583-a50f-b19d6c3a09bc)
