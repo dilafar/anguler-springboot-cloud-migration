@@ -251,7 +251,7 @@ spec:
 
 
 ## 🚀 Setup & Installation
-### Starting services locally without Docker
+### 🏢 Starting services locally without Docker
 
 ### 1️⃣ Clone the Repository
 
@@ -280,7 +280,7 @@ npm install
 ng serve --open
 ```
 
-### Starting services locally with docker-compose
+### 🏢 Starting services locally with docker-compose
 
 ### 1️⃣ Start All Services
 
