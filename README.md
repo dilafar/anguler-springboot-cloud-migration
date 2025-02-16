@@ -80,59 +80,31 @@ Expected Output:
 
 ### Domain & DNS Management
 
-### Steps to Configure External DNS on AKS
-
-### 1. Gather Required Information
-Before setting up External DNS, collect the necessary details:
 - **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
 - **Azure Subscription ID**: Retrieve using `az account show --query "id"`
-
-### 2. Create `azure.json` Configuration File
-The `azure.json` file contains authentication details for External DNS to interact with Azure DNS. It includes:
-- **Tenant ID**
-- **Subscription ID**
-- **Resource Group containing DNS zones**
-- **User Assigned Managed Identity ID**
-
-```json
-{
-  "tenantId": "<your-tenant-id>",
-  "subscriptionId": "<your-subscription-id>",
-  "resourceGroup": "dns-zones", 
-  "useManagedIdentityExtension": true,
-  "userAssignedIdentityID": "<your-msi-id>"  
-}
-```
-
-### 3. Review and Apply External DNS Manifests
-The `external-dns.yml` file contains Kubernetes resources required for deploying ExternalDNS:
-- **ServiceAccount**: Defines access permissions.
-- **ClusterRole & ClusterRoleBinding**: Grants necessary RBAC permissions.
-- **Deployment**: Deploys External DNS with the correct provider settings for Azure.
-
-### 4. Create Managed Service Identity (MSI) for External DNS
-1. Navigate to **Azure Portal** > **Managed Identities** > **Add**
-2. Provide the following details:
-   - **Resource Name**: `aksdemo1-externaldns-access-to-dnszones`
-   - **Subscription**: `Pay-as-you-go`
-   - **Resource Group**: `aks-rg1`
-   - **Location**: `Central US`
-3. Click **Create**
-
-### 5. Assign Azure Role to MSI
-1. Navigate to **MSI: aksdemo1-externaldns-access-to-dnszones**
-2. Click **Azure Role Assignments** > **Add role assignment**
-3. Provide the following details:
-   - **Scope**: `Resource group`
-   - **Subscription**: `Pay-as-you-go`
-   - **Resource Group**: `dns-zones`
+- **The `azure.json` file contains authentication details for External DNS to interact with Azure DNS. It includes:
+   - **Tenant ID**
+   - **Subscription ID**
+   - **Resource Group containing DNS zones**
+   - **User Assigned Managed Identity ID**
+   ```json
+   {
+     "tenantId": "<your-tenant-id>",
+     "subscriptionId": "<your-subscription-id>",
+     "resourceGroup": "dns-zones", 
+     "useManagedIdentityExtension": true,
+     "userAssignedIdentityID": "<your-msi-id>"  
+   }
+   ```
+- **The `external-dns.yml` file contains Kubernetes resources required for deploying ExternalDNS:
+   - **ServiceAccount**: Defines access permissions.
+   - **ClusterRole & ClusterRoleBinding**: Grants necessary RBAC permissions.
+   - **Deployment**: Deploys External DNS with the correct provider settings for Azure.
+- **Create Managed Service Identity (MSI) for External DNS
+- **Assign Azure Role to MSI
    - **Role**: `Contributor`
-4. Make a note of **Client ID** from the **Overview** tab and update `azure.json` under `userAssignedIdentityID`.
-
-### 6. Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
-1. Navigate to **Azure Portal** > **Virtual Machine Scale Sets (VMSS)**
-2. Open the relevant **AKS VMSS** (e.g., `aks-agentpool-27193923-vmss`)
-3. Go to **Settings** > **Identity** > **User assigned** > **Add** > `aksdemo1-externaldns-access-to-dnszones`
+- take **Client ID** from the MSI **Overview** tab and update `azure.json` under `userAssignedIdentityID`.
+- **Associate MSI with AKS Cluster Virtual Machine Scale Sets (VMSS)
 
 ### 7. Create Kubernetes Secret and Deploy ExternalDNS
 1. Navigate to `kube-manifests/01-ExternalDNS`
