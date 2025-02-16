@@ -184,7 +184,7 @@ docker-compose down
 
 ![Frame 2 (5)](https://github.com/user-attachments/assets/9c54b075-e467-42ee-8f00-b79b1a14a856)
 
-## 🧾 server provisioning & monitoring
+## 🧾 Server Provisioning & Monitoring
 ![6th one](https://github.com/user-attachments/assets/c6033846-b4f7-4395-963b-e213fd902442)
 
 
