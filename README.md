@@ -59,17 +59,15 @@ This project is a full-stack Employee Management System developed using **Spring
 #### 🔹 **Infrastructure as Code (IaC)**
 - Terraform
 
-#### 🔹 **Continuous Deployment & GitOps**
-- ArgoCD
 
-### GCP Services Used
+### 🏢 GCP Services Used
 
 - **Networking & Load Balancing**: cloud load balancing, cloud dns, google managed ssl sertificate, VPC networks, cloud external ip address
 - **Compute & Container Management**: gke, Compute Engine
 - **Storage & Secrets Management**: cloud sql, secret manager
 - **Container Registry & CDN**: google artifact repository, cloud cdn
 
-### External Secret Installation
+### 🏢 External Secret Installation
 #### To install the External Secret on GKE:
 
 - A new IAM service account is created for External Secrets to securely access Google Secret Manager.
@@ -87,7 +85,7 @@ This project is a full-stack Employee Management System developed using **Spring
   without manually managing them.
 
 
-### Domain & DNS Management
+### 🏢 Domain & DNS Management
 
 - The domain is registered on Google Cloud and hosted using Cloud DNS. This allows Kubernetes External DNS to manage DNS records dynamically in a cloud-native manner.
 - Kubernetes ExternalDNS is configured to automatically create, update, and delete DNS records based on Kubernetes ingress and service resources, ensuring a cloud-agnostic approach.
@@ -106,7 +104,7 @@ view the code on infrastructure-setup/gke/command.md
 
 
 ## 🚀 Setup & Installation
-### Starting services locally without Docker
+### 🏢 Starting services locally without Docker
 
 ### 1️⃣ Clone the Repository
 
@@ -135,7 +133,7 @@ npm install
 ng serve --open
 ```
 
-### Starting services locally with docker-compose
+### 🏢 Starting services locally with docker-compose
 
 ### 1️⃣ Start All Services
 
@@ -192,9 +190,6 @@ docker-compose down
 
 ## Database Configuration
 
-### 🏢 Default Database (HSQLDB)
-By default, the Employee Management application uses an **in-memory database (HSQLDB)**. This database is automatically populated with data at startup. 
-
 ### 🛠️ MySQL Configuration
 If a persistent database is required, the application can be configured to use **MySQL**. The necessary **Connector/J (MySQL JDBC Driver)** dependency is already included in the `pom.xml` file.
 
@@ -211,21 +206,21 @@ docker run -e MYSQL_ROOT_PASSWORD=petclinic \
 Alternatively, you can install **MySQL Community Server 5.7 GA** manually from the official [MySQL downloads page](https://dev.mysql.com/downloads/).
 
 ### 🔧 Configuring MySQL for Production
-For **production deployment**, it is recommended to use **AWS RDS (Relational Database Service)** to ensure scalability and reliability.
+For **production deployment**, it is recommended to use **Cloud SQL (Relational Database Service)** to ensure scalability and reliability.
 
-### 1️⃣ Set Up an AWS RDS Database
-- Create an **Amazon RDS instance** with **MySQL** as the database engine.
+### 1️⃣ Set Up an Cloud SQL Database
+- Create an **Cloud SQL instance** with **MySQL** as the database engine.
 - Configure **username, password, and host** details.
 
-### 2️⃣ Update `application.yml` with RDS Configuration
-Modify the `application.yml` file to include the **AWS RDS** database configuration:
+### 2️⃣ Update `application.yml` with Cloud SQL Configuration
+Modify the `application.yml` file to include the **Cloud SQL** database configuration:
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://<RDS_HOST>:3306/employeemanager
-    username: <RDS_USERNAME>
-    password: <RDS_PASSWORD>
+    url: jdbc:mysql://<Cloud SQL_HOST>:3306/employeemanager
+    username: <Cloud SQL_USERNAME>
+    password: <Cloud SQL_PASSWORD>
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -234,13 +229,13 @@ spring:
 ```
 
 ### 3️⃣ Start the Application
-Run the application with the configured **AWS RDS** database:
+Run the application with the configured **Cloud SQL** database:
 
 ```sh
 mvn spring-boot:run
 ```
 
-Now, the Employee Management application is connected to a persistent **AWS RDS MySQL database** and ready for production deployment. 🚀
+Now, the Employee Management application is connected to a persistent **Cloud SQL database** and ready for production deployment. 🚀
 
 
 ## 🧾 Prometheus and Grafana
