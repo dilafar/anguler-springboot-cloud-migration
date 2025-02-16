@@ -124,86 +124,54 @@ spec:
 
 ### Setting Up Azure Key Vault with External Secrets on AKS
 
-This guide outlines the steps to configure Azure Key Vault integration with External Secrets on Azure Kubernetes Service (AKS). This setup allows you to securely fetch secrets from Azure Key Vault into your Kubernetes workloads using Azure Workload Identity.
-
-### Steps to Configure Azure Key Vault with External Secrets on AKS
-
-### 1. Gather Required Information
-Before setting up External Secrets, collect the necessary details:
-- **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
-- **Azure Subscription ID**: Retrieve using `az account show --query "id"`
-
-### 2. Install External Secrets Chart
-Add the External Secrets Helm chart repository and install it in your AKS cluster to manage secrets.
-
-```sh
-helm repo add external-secrets https://charts.external-secrets.io
-helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
-```
-
-### 3. Create Azure Key Vault
-Create an Azure Key Vault to securely store your secrets.
-
-```sh
-az keyvault create --resource-group aks-rg --name keyvault-aks-db
-```
-
-### 4. Set a Secret in Azure Key Vault
-Add a secret, for example, a database password, to your Key Vault.
-
-```sh
-az keyvault secret set --vault-name keyvault-aks-db --name "dbpassword" --value "<password>"
-```
-
-### 5. Create a Managed Identity
-Create a managed identity that will be used by AKS to access the Azure Key Vault.
-
-```sh
-az identity create --name access-keyvault --resource-group aks-rg
-```
-
-### 6. Assign Key Vault Access Permissions
-Assign the necessary permissions for the managed identity to access secrets in Azure Key Vault.
-
-```sh
-export USER_ASSIGNED_IDENTITY_CLIENT_ID="$(az identity show --name access-keyvault --resource-group aks-rg --query 'clientId' -otsv)"
-export USER_ASSIGNED_IDENTITY_OBJECT_ID="$(az identity show --name access-keyvault --resource-group aks-rg --query 'principalId' -otsv)"
-az keyvault set-policy --name keyvault-aks-db --secret-permissions get --object-id "${USER_ASSIGNED_IDENTITY_OBJECT_ID}"
-```
-
-Additionally, assign the `Key Vault Secrets Officer` role to the managed identity.
-
-```sh
-az role assignment create --assignee "${USER_ASSIGNED_IDENTITY_OBJECT_ID}" --role "Key Vault Secrets Officer" --scope /subscriptions/<subscription-id>/resourceGroups/aks-rg/providers/Microsoft.KeyVault/vaults/keyvault-aks-db
-```
-
-### 7. Create a Kubernetes Service Account for External Secrets
-Create a Kubernetes service account for External Secrets with Azure Workload Identity annotations.
-
-```yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations:
-    azure.workload.identity/client-id: ${USER_ASSIGNED_IDENTITY_CLIENT_ID}
-    azure.workload.identity/tenant-id: ${TENANT_ID}
-  name: external-secrets-sa
-  namespace: external-secrets
-```
-
-Replace `${USER_ASSIGNED_IDENTITY_CLIENT_ID}` and `${TENANT_ID}` with the correct values.
-
-### 8. Configure Federated Identity Credential
-Federate the Azure Managed Identity with your AKS cluster by creating a federated identity credential.
-
-```sh
-export SERVICE_ACCOUNT_ISSUER="$(az aks show --resource-group aks-rg --name aks-demo --query 'oidcIssuerProfile.issuerUrl' -otsv)"
-az identity federated-credential create --name "kubernetes-federated-credential" --identity-name access-keyvault --resource-group aks-rg --issuer "${SERVICE_ACCOUNT_ISSUER}" --subject "system:serviceaccount:external-secrets:external-secrets-sa"
-```
-
-### 9. Set Up the External Secrets Provider
-Create a `ClusterSecretStore` resource to configure External Secrets to fetch secrets from Azure Key Vault.
-
+- Before setting up External Secrets, collect the necessary details:
+   - **Azure Tenant ID**: Retrieve using `az account show --query "tenantId"`
+   - **Azure Subscription ID**: Retrieve using `az account show --query "id"`
+- Add the External Secrets Helm chart repository and install it in your AKS cluster to manage secrets.
+   ```sh
+   helm repo add external-secrets https://charts.external-secrets.io
+   helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
+   ```
+- Create an Azure Key Vault to securely store your secrets.
+   ```sh
+   az keyvault create --resource-group aks-rg --name keyvault-aks-db
+   ```
+- Add a secret, for example, a database password, to your Key Vault.
+   ```sh
+   az keyvault secret set --vault-name keyvault-aks-db --name "dbpassword" --value "<password>"
+   ```
+- Create a managed identity that will be used by AKS to access the Azure Key Vault.
+   ```sh
+   az identity create --name access-keyvault --resource-group aks-rg
+   ```
+- Assign the necessary permissions for the managed identity to access secrets in Azure Key Vault.
+   ```sh
+   export USER_ASSIGNED_IDENTITY_CLIENT_ID="$(az identity show --name access-keyvault --resource-group aks-rg --query 'clientId' -otsv)"
+   export USER_ASSIGNED_IDENTITY_OBJECT_ID="$(az identity show --name access-keyvault --resource-group aks-rg --query 'principalId' -otsv)"
+   az keyvault set-policy --name keyvault-aks-db --secret-permissions get --object-id "${USER_ASSIGNED_IDENTITY_OBJECT_ID}"
+   ```
+- Additionally, assign the `Key Vault Secrets Officer` role to the managed identity.
+   ```sh
+   az role assignment create --assignee "${USER_ASSIGNED_IDENTITY_OBJECT_ID}" --role "Key Vault Secrets Officer" --scope /subscriptions/<subscription-id>/resourceGroups/aks-rg/providers/Microsoft.KeyVault/vaults/keyvault-aks-db
+   ```
+- Create a Kubernetes service account for External Secrets with Azure Workload Identity annotations.
+   ```yaml
+   apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+     annotations:
+       azure.workload.identity/client-id: ${USER_ASSIGNED_IDENTITY_CLIENT_ID}
+       azure.workload.identity/tenant-id: ${TENANT_ID}
+     name: external-secrets-sa
+     namespace: external-secrets
+   ```
+- Replace `${USER_ASSIGNED_IDENTITY_CLIENT_ID}` and `${TENANT_ID}` with the correct values.
+- Federate the Azure Managed Identity with your AKS cluster by creating a federated identity credential.
+   ```sh
+   export SERVICE_ACCOUNT_ISSUER="$(az aks show --resource-group aks-rg --name aks-demo --query 'oidcIssuerProfile.issuerUrl' -otsv)"
+   az identity federated-credential create --name "kubernetes-federated-credential" --identity-name access-keyvault --resource-group aks-rg --issuer "${SERVICE_ACCOUNT_ISSUER}" --subject       "system:serviceaccount:external-secrets:external-secrets-sa"
+   ```
+- Create a `ClusterSecretStore` resource to configure External Secrets to fetch secrets from Azure Key Vault.
 ```yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ClusterSecretStore
@@ -218,10 +186,7 @@ spec:
         name: external-secrets-sa
         namespace: external-secrets
 ```
-
-### 10. Create an ExternalSecret Resource
-Now, create an `ExternalSecret` resource to pull the secret from Azure Key Vault into Kubernetes.
-
+- Now, create an `ExternalSecret` resource to pull the secret from Azure Key Vault into Kubernetes.
 ```yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
