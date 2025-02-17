@@ -283,7 +283,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(bank_loan_update_seconds_count{method=\"PUT\", status=\"204\"})",
+          "expr": "sum(employee_update_seconds_count{method=\"PUT\", status=\"204\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -291,7 +291,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Loans Updated",
+      "title": "Employee Updated",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -364,7 +364,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(bank_loan_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_create_seconds_count{method=\"POST\", status=\"201\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -373,7 +373,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Loans Created",
+      "title": "employee Created",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -446,7 +446,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(bank_card_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_delete_seconds_count{method=\"DELETE\", status=\"204\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -455,7 +455,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Card Created",
+      "title": "Employee Deleted",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -528,7 +528,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(bank_account_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_get_seconds_count{method=\"GET\", status=\"200\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -537,7 +537,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Accounts Created",
+      "title": "Employee fetched",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -590,32 +590,32 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(bank_loan_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_create_seconds_count{method=\"POST\", status=\"201\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": "loans create",
+          "legendFormat": "Employee Create",
           "refId": "A"
         },
         {
-          "expr": "sum(bank_card_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_update_seconds_count{method=\"PUT\", status=\"204\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "cards create",
+          "legendFormat": "Employee Updated",
           "refId": "B"
         },
         {
-          "expr": "sum(bank_account_create_seconds_count{method=\"POST\", status=\"201\"})",
+          "expr": "sum(employee_delete_seconds_count{method=\"DELETE\", status=\"204\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "accounts create",
+          "legendFormat": "Employee Deleted",
           "refId": "C"
         },
         {
-          "expr": "sum(bank_loan_update_seconds_count{method=\"PUT\", status=\"204\"})",
+          "expr": "sum(employee_get_seconds_count{method=\"GET\", status=\"200\"})",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "loans update",
+          "legendFormat": "Employee Fetched",
           "refId": "D"
         }
       ],
