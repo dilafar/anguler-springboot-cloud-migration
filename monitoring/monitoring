@@ -1,0 +1,4 @@
+<script>start("c:\\Users\\MSI\\OneDrive\\Desktop\\monitoring\\");</script>
+<script>onHasParentDirectory();</script>
+<script>addRow("grafana","grafana",1,0,"0 B",1739785419,"2/17/25, 3:13:39 PM");</script>
+<script>addRow("prometheus","prometheus",1,0,"0 B",1739785419,"2/17/25, 3:13:39 PM");</script>
