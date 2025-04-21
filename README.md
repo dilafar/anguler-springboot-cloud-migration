@@ -26,14 +26,13 @@ This project is a full-stack Employee Management System developed using **Spring
 
 #### 🔹 **Containerization & Orchestration**
 - Kubernetes
-- Helm
 - Kustomize
 - Docker
 - Docker Compose
 
 #### 🔹 **Security & Compliance**
 - Cosign (Secure Container Image Signing)
-- HashiCorp Vault (Secret Management)
+- Secret Manager (GCP Secret Management)
 - TruffleHog (Detecting Leaked Credentials)
 - Checkstyle & NodeJsScan (Code Quality Analysis)
 - SonarQube & Semgrep (SAST Scanning)
@@ -52,9 +51,8 @@ This project is a full-stack Employee Management System developed using **Spring
 - ArtifactHub
 
 #### 🔹 **Monitoring & Alerting**
-- Prometheus
-- Grafana
-- Alert Manager
+- Cloud Monitoring
+- Cloud Logging
 
 #### 🔹 **Infrastructure as Code (IaC)**
 - Terraform
