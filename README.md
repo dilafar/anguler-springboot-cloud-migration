@@ -26,14 +26,13 @@ This project is a full-stack Employee Management System developed using **Spring
 
 #### 🔹 **Containerization & Orchestration**
 - Kubernetes
-- Helm
 - Kustomize
 - Docker
 - Docker Compose
 
 #### 🔹 **Security & Compliance**
 - Cosign (Secure Container Image Signing)
-- HashiCorp Vault (Secret Management)
+- Azure Key Vault (Secret Management)
 - TruffleHog (Detecting Leaked Credentials)
 - Checkstyle & NodeJsScan (Code Quality Analysis)
 - SonarQube & Semgrep (SAST Scanning)
